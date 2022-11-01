@@ -1,3 +1,3 @@
-module volley-api-connect
+module github.com/keegancraigcruickshank/volley-api-connect
 
 go 1.19
