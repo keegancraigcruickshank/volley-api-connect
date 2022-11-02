@@ -28,6 +28,7 @@ const (
 // UsersServiceClient is a client for the users.v1.UsersService service.
 type UsersServiceClient interface {
 	GetMe(context.Context, *connect_go.Request[v1.GetMeRequest]) (*connect_go.Response[v1.GetMeResponse], error)
+	Login(context.Context, *connect_go.Request[v1.LoginRequest]) (*connect_go.Response[v1.LoginResponse], error)
 }
 
 // NewUsersServiceClient constructs a client for the users.v1.UsersService service. By default, it
@@ -45,12 +46,18 @@ func NewUsersServiceClient(httpClient connect_go.HTTPClient, baseURL string, opt
 			baseURL+"/users.v1.UsersService/GetMe",
 			opts...,
 		),
+		login: connect_go.NewClient[v1.LoginRequest, v1.LoginResponse](
+			httpClient,
+			baseURL+"/users.v1.UsersService/Login",
+			opts...,
+		),
 	}
 }
 
 // usersServiceClient implements UsersServiceClient.
 type usersServiceClient struct {
 	getMe *connect_go.Client[v1.GetMeRequest, v1.GetMeResponse]
+	login *connect_go.Client[v1.LoginRequest, v1.LoginResponse]
 }
 
 // GetMe calls users.v1.UsersService.GetMe.
@@ -58,9 +65,15 @@ func (c *usersServiceClient) GetMe(ctx context.Context, req *connect_go.Request[
 	return c.getMe.CallUnary(ctx, req)
 }
 
+// Login calls users.v1.UsersService.Login.
+func (c *usersServiceClient) Login(ctx context.Context, req *connect_go.Request[v1.LoginRequest]) (*connect_go.Response[v1.LoginResponse], error) {
+	return c.login.CallUnary(ctx, req)
+}
+
 // UsersServiceHandler is an implementation of the users.v1.UsersService service.
 type UsersServiceHandler interface {
 	GetMe(context.Context, *connect_go.Request[v1.GetMeRequest]) (*connect_go.Response[v1.GetMeResponse], error)
+	Login(context.Context, *connect_go.Request[v1.LoginRequest]) (*connect_go.Response[v1.LoginResponse], error)
 }
 
 // NewUsersServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -75,6 +88,11 @@ func NewUsersServiceHandler(svc UsersServiceHandler, opts ...connect_go.HandlerO
 		svc.GetMe,
 		opts...,
 	))
+	mux.Handle("/users.v1.UsersService/Login", connect_go.NewUnaryHandler(
+		"/users.v1.UsersService/Login",
+		svc.Login,
+		opts...,
+	))
 	return "/users.v1.UsersService/", mux
 }
 
@@ -83,4 +101,8 @@ type UnimplementedUsersServiceHandler struct{}
 
 func (UnimplementedUsersServiceHandler) GetMe(context.Context, *connect_go.Request[v1.GetMeRequest]) (*connect_go.Response[v1.GetMeResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.UsersService.GetMe is not implemented"))
+}
+
+func (UnimplementedUsersServiceHandler) Login(context.Context, *connect_go.Request[v1.LoginRequest]) (*connect_go.Response[v1.LoginResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.UsersService.Login is not implemented"))
 }
