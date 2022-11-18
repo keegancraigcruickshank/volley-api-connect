@@ -28,7 +28,6 @@ const (
 // OrganisationServiceClient is a client for the organisation.v1.OrganisationService service.
 type OrganisationServiceClient interface {
 	CreateOrganisation(context.Context, *connect_go.Request[v1.CreateOrganisationRequest]) (*connect_go.Response[v1.CreateOrganisationResponse], error)
-	OrgDoesExist(context.Context, *connect_go.Request[v1.OrgDoesExistRequest]) (*connect_go.Response[v1.OrgDoesExistResponse], error)
 }
 
 // NewOrganisationServiceClient constructs a client for the organisation.v1.OrganisationService
@@ -46,18 +45,12 @@ func NewOrganisationServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 			baseURL+"/organisation.v1.OrganisationService/CreateOrganisation",
 			opts...,
 		),
-		orgDoesExist: connect_go.NewClient[v1.OrgDoesExistRequest, v1.OrgDoesExistResponse](
-			httpClient,
-			baseURL+"/organisation.v1.OrganisationService/OrgDoesExist",
-			opts...,
-		),
 	}
 }
 
 // organisationServiceClient implements OrganisationServiceClient.
 type organisationServiceClient struct {
 	createOrganisation *connect_go.Client[v1.CreateOrganisationRequest, v1.CreateOrganisationResponse]
-	orgDoesExist       *connect_go.Client[v1.OrgDoesExistRequest, v1.OrgDoesExistResponse]
 }
 
 // CreateOrganisation calls organisation.v1.OrganisationService.CreateOrganisation.
@@ -65,16 +58,10 @@ func (c *organisationServiceClient) CreateOrganisation(ctx context.Context, req 
 	return c.createOrganisation.CallUnary(ctx, req)
 }
 
-// OrgDoesExist calls organisation.v1.OrganisationService.OrgDoesExist.
-func (c *organisationServiceClient) OrgDoesExist(ctx context.Context, req *connect_go.Request[v1.OrgDoesExistRequest]) (*connect_go.Response[v1.OrgDoesExistResponse], error) {
-	return c.orgDoesExist.CallUnary(ctx, req)
-}
-
 // OrganisationServiceHandler is an implementation of the organisation.v1.OrganisationService
 // service.
 type OrganisationServiceHandler interface {
 	CreateOrganisation(context.Context, *connect_go.Request[v1.CreateOrganisationRequest]) (*connect_go.Response[v1.CreateOrganisationResponse], error)
-	OrgDoesExist(context.Context, *connect_go.Request[v1.OrgDoesExistRequest]) (*connect_go.Response[v1.OrgDoesExistResponse], error)
 }
 
 // NewOrganisationServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -89,11 +76,6 @@ func NewOrganisationServiceHandler(svc OrganisationServiceHandler, opts ...conne
 		svc.CreateOrganisation,
 		opts...,
 	))
-	mux.Handle("/organisation.v1.OrganisationService/OrgDoesExist", connect_go.NewUnaryHandler(
-		"/organisation.v1.OrganisationService/OrgDoesExist",
-		svc.OrgDoesExist,
-		opts...,
-	))
 	return "/organisation.v1.OrganisationService/", mux
 }
 
@@ -102,8 +84,4 @@ type UnimplementedOrganisationServiceHandler struct{}
 
 func (UnimplementedOrganisationServiceHandler) CreateOrganisation(context.Context, *connect_go.Request[v1.CreateOrganisationRequest]) (*connect_go.Response[v1.CreateOrganisationResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("organisation.v1.OrganisationService.CreateOrganisation is not implemented"))
-}
-
-func (UnimplementedOrganisationServiceHandler) OrgDoesExist(context.Context, *connect_go.Request[v1.OrgDoesExistRequest]) (*connect_go.Response[v1.OrgDoesExistResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("organisation.v1.OrganisationService.OrgDoesExist is not implemented"))
 }
