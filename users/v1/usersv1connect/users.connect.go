@@ -28,7 +28,6 @@ const (
 // UsersServiceClient is a client for the users.v1.UsersService service.
 type UsersServiceClient interface {
 	GetMe(context.Context, *connect_go.Request[v1.GetMeRequest]) (*connect_go.Response[v1.GetMeResponse], error)
-	CreateOrg(context.Context, *connect_go.Request[v1.CreateOrgRequest]) (*connect_go.Response[v1.CreateOrgResponse], error)
 }
 
 // NewUsersServiceClient constructs a client for the users.v1.UsersService service. By default, it
@@ -46,18 +45,12 @@ func NewUsersServiceClient(httpClient connect_go.HTTPClient, baseURL string, opt
 			baseURL+"/users.v1.UsersService/GetMe",
 			opts...,
 		),
-		createOrg: connect_go.NewClient[v1.CreateOrgRequest, v1.CreateOrgResponse](
-			httpClient,
-			baseURL+"/users.v1.UsersService/CreateOrg",
-			opts...,
-		),
 	}
 }
 
 // usersServiceClient implements UsersServiceClient.
 type usersServiceClient struct {
-	getMe     *connect_go.Client[v1.GetMeRequest, v1.GetMeResponse]
-	createOrg *connect_go.Client[v1.CreateOrgRequest, v1.CreateOrgResponse]
+	getMe *connect_go.Client[v1.GetMeRequest, v1.GetMeResponse]
 }
 
 // GetMe calls users.v1.UsersService.GetMe.
@@ -65,15 +58,9 @@ func (c *usersServiceClient) GetMe(ctx context.Context, req *connect_go.Request[
 	return c.getMe.CallUnary(ctx, req)
 }
 
-// CreateOrg calls users.v1.UsersService.CreateOrg.
-func (c *usersServiceClient) CreateOrg(ctx context.Context, req *connect_go.Request[v1.CreateOrgRequest]) (*connect_go.Response[v1.CreateOrgResponse], error) {
-	return c.createOrg.CallUnary(ctx, req)
-}
-
 // UsersServiceHandler is an implementation of the users.v1.UsersService service.
 type UsersServiceHandler interface {
 	GetMe(context.Context, *connect_go.Request[v1.GetMeRequest]) (*connect_go.Response[v1.GetMeResponse], error)
-	CreateOrg(context.Context, *connect_go.Request[v1.CreateOrgRequest]) (*connect_go.Response[v1.CreateOrgResponse], error)
 }
 
 // NewUsersServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -88,11 +75,6 @@ func NewUsersServiceHandler(svc UsersServiceHandler, opts ...connect_go.HandlerO
 		svc.GetMe,
 		opts...,
 	))
-	mux.Handle("/users.v1.UsersService/CreateOrg", connect_go.NewUnaryHandler(
-		"/users.v1.UsersService/CreateOrg",
-		svc.CreateOrg,
-		opts...,
-	))
 	return "/users.v1.UsersService/", mux
 }
 
@@ -101,8 +83,4 @@ type UnimplementedUsersServiceHandler struct{}
 
 func (UnimplementedUsersServiceHandler) GetMe(context.Context, *connect_go.Request[v1.GetMeRequest]) (*connect_go.Response[v1.GetMeResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.UsersService.GetMe is not implemented"))
-}
-
-func (UnimplementedUsersServiceHandler) CreateOrg(context.Context, *connect_go.Request[v1.CreateOrgRequest]) (*connect_go.Response[v1.CreateOrgResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.UsersService.CreateOrg is not implemented"))
 }

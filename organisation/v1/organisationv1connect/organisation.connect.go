@@ -27,7 +27,7 @@ const (
 
 // OrganisationServiceClient is a client for the organisation.v1.OrganisationService service.
 type OrganisationServiceClient interface {
-	CreateOrganisation(context.Context, *connect_go.Request[v1.CreateOrganisationRequest]) (*connect_go.Response[v1.CreateOrganisationResponse], error)
+	CreateOrganisation(context.Context, *connect_go.Request[v1.CreateOrgRequest]) (*connect_go.Response[v1.CreateOrgResponse], error)
 }
 
 // NewOrganisationServiceClient constructs a client for the organisation.v1.OrganisationService
@@ -40,7 +40,7 @@ type OrganisationServiceClient interface {
 func NewOrganisationServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) OrganisationServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
 	return &organisationServiceClient{
-		createOrganisation: connect_go.NewClient[v1.CreateOrganisationRequest, v1.CreateOrganisationResponse](
+		createOrganisation: connect_go.NewClient[v1.CreateOrgRequest, v1.CreateOrgResponse](
 			httpClient,
 			baseURL+"/organisation.v1.OrganisationService/CreateOrganisation",
 			opts...,
@@ -50,18 +50,18 @@ func NewOrganisationServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 
 // organisationServiceClient implements OrganisationServiceClient.
 type organisationServiceClient struct {
-	createOrganisation *connect_go.Client[v1.CreateOrganisationRequest, v1.CreateOrganisationResponse]
+	createOrganisation *connect_go.Client[v1.CreateOrgRequest, v1.CreateOrgResponse]
 }
 
 // CreateOrganisation calls organisation.v1.OrganisationService.CreateOrganisation.
-func (c *organisationServiceClient) CreateOrganisation(ctx context.Context, req *connect_go.Request[v1.CreateOrganisationRequest]) (*connect_go.Response[v1.CreateOrganisationResponse], error) {
+func (c *organisationServiceClient) CreateOrganisation(ctx context.Context, req *connect_go.Request[v1.CreateOrgRequest]) (*connect_go.Response[v1.CreateOrgResponse], error) {
 	return c.createOrganisation.CallUnary(ctx, req)
 }
 
 // OrganisationServiceHandler is an implementation of the organisation.v1.OrganisationService
 // service.
 type OrganisationServiceHandler interface {
-	CreateOrganisation(context.Context, *connect_go.Request[v1.CreateOrganisationRequest]) (*connect_go.Response[v1.CreateOrganisationResponse], error)
+	CreateOrganisation(context.Context, *connect_go.Request[v1.CreateOrgRequest]) (*connect_go.Response[v1.CreateOrgResponse], error)
 }
 
 // NewOrganisationServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -82,6 +82,6 @@ func NewOrganisationServiceHandler(svc OrganisationServiceHandler, opts ...conne
 // UnimplementedOrganisationServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedOrganisationServiceHandler struct{}
 
-func (UnimplementedOrganisationServiceHandler) CreateOrganisation(context.Context, *connect_go.Request[v1.CreateOrganisationRequest]) (*connect_go.Response[v1.CreateOrganisationResponse], error) {
+func (UnimplementedOrganisationServiceHandler) CreateOrganisation(context.Context, *connect_go.Request[v1.CreateOrgRequest]) (*connect_go.Response[v1.CreateOrgResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("organisation.v1.OrganisationService.CreateOrganisation is not implemented"))
 }
