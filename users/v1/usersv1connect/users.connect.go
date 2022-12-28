@@ -27,7 +27,8 @@ const (
 
 // UsersServiceClient is a client for the users.v1.UsersService service.
 type UsersServiceClient interface {
-	GetMe(context.Context, *connect_go.Request[v1.GetMeRequest]) (*connect_go.Response[v1.GetMeResponse], error)
+	RegisterUser(context.Context, *connect_go.Request[v1.RegisterUserRequest]) (*connect_go.Response[v1.RegisterUserResponse], error)
+	LoginUser(context.Context, *connect_go.Request[v1.LoginUserRequest]) (*connect_go.Response[v1.LoginUserResponse], error)
 }
 
 // NewUsersServiceClient constructs a client for the users.v1.UsersService service. By default, it
@@ -40,9 +41,14 @@ type UsersServiceClient interface {
 func NewUsersServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) UsersServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
 	return &usersServiceClient{
-		getMe: connect_go.NewClient[v1.GetMeRequest, v1.GetMeResponse](
+		registerUser: connect_go.NewClient[v1.RegisterUserRequest, v1.RegisterUserResponse](
 			httpClient,
-			baseURL+"/users.v1.UsersService/GetMe",
+			baseURL+"/users.v1.UsersService/RegisterUser",
+			opts...,
+		),
+		loginUser: connect_go.NewClient[v1.LoginUserRequest, v1.LoginUserResponse](
+			httpClient,
+			baseURL+"/users.v1.UsersService/LoginUser",
 			opts...,
 		),
 	}
@@ -50,17 +56,24 @@ func NewUsersServiceClient(httpClient connect_go.HTTPClient, baseURL string, opt
 
 // usersServiceClient implements UsersServiceClient.
 type usersServiceClient struct {
-	getMe *connect_go.Client[v1.GetMeRequest, v1.GetMeResponse]
+	registerUser *connect_go.Client[v1.RegisterUserRequest, v1.RegisterUserResponse]
+	loginUser    *connect_go.Client[v1.LoginUserRequest, v1.LoginUserResponse]
 }
 
-// GetMe calls users.v1.UsersService.GetMe.
-func (c *usersServiceClient) GetMe(ctx context.Context, req *connect_go.Request[v1.GetMeRequest]) (*connect_go.Response[v1.GetMeResponse], error) {
-	return c.getMe.CallUnary(ctx, req)
+// RegisterUser calls users.v1.UsersService.RegisterUser.
+func (c *usersServiceClient) RegisterUser(ctx context.Context, req *connect_go.Request[v1.RegisterUserRequest]) (*connect_go.Response[v1.RegisterUserResponse], error) {
+	return c.registerUser.CallUnary(ctx, req)
+}
+
+// LoginUser calls users.v1.UsersService.LoginUser.
+func (c *usersServiceClient) LoginUser(ctx context.Context, req *connect_go.Request[v1.LoginUserRequest]) (*connect_go.Response[v1.LoginUserResponse], error) {
+	return c.loginUser.CallUnary(ctx, req)
 }
 
 // UsersServiceHandler is an implementation of the users.v1.UsersService service.
 type UsersServiceHandler interface {
-	GetMe(context.Context, *connect_go.Request[v1.GetMeRequest]) (*connect_go.Response[v1.GetMeResponse], error)
+	RegisterUser(context.Context, *connect_go.Request[v1.RegisterUserRequest]) (*connect_go.Response[v1.RegisterUserResponse], error)
+	LoginUser(context.Context, *connect_go.Request[v1.LoginUserRequest]) (*connect_go.Response[v1.LoginUserResponse], error)
 }
 
 // NewUsersServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -70,9 +83,14 @@ type UsersServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewUsersServiceHandler(svc UsersServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle("/users.v1.UsersService/GetMe", connect_go.NewUnaryHandler(
-		"/users.v1.UsersService/GetMe",
-		svc.GetMe,
+	mux.Handle("/users.v1.UsersService/RegisterUser", connect_go.NewUnaryHandler(
+		"/users.v1.UsersService/RegisterUser",
+		svc.RegisterUser,
+		opts...,
+	))
+	mux.Handle("/users.v1.UsersService/LoginUser", connect_go.NewUnaryHandler(
+		"/users.v1.UsersService/LoginUser",
+		svc.LoginUser,
 		opts...,
 	))
 	return "/users.v1.UsersService/", mux
@@ -81,6 +99,10 @@ func NewUsersServiceHandler(svc UsersServiceHandler, opts ...connect_go.HandlerO
 // UnimplementedUsersServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedUsersServiceHandler struct{}
 
-func (UnimplementedUsersServiceHandler) GetMe(context.Context, *connect_go.Request[v1.GetMeRequest]) (*connect_go.Response[v1.GetMeResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.UsersService.GetMe is not implemented"))
+func (UnimplementedUsersServiceHandler) RegisterUser(context.Context, *connect_go.Request[v1.RegisterUserRequest]) (*connect_go.Response[v1.RegisterUserResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.UsersService.RegisterUser is not implemented"))
+}
+
+func (UnimplementedUsersServiceHandler) LoginUser(context.Context, *connect_go.Request[v1.LoginUserRequest]) (*connect_go.Response[v1.LoginUserResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.UsersService.LoginUser is not implemented"))
 }
