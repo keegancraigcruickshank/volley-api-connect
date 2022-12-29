@@ -29,6 +29,7 @@ const (
 type PublicUsersServiceClient interface {
 	RegisterUser(context.Context, *connect_go.Request[public.RegisterUserRequest]) (*connect_go.Response[public.RegisterUserResponse], error)
 	LoginUser(context.Context, *connect_go.Request[public.LoginUserRequest]) (*connect_go.Response[public.LoginUserResponse], error)
+	RefreshUser(context.Context, *connect_go.Request[public.RefreshUserRequest]) (*connect_go.Response[public.RefreshUserResponse], error)
 }
 
 // NewPublicUsersServiceClient constructs a client for the users.v1.public.PublicUsersService
@@ -51,6 +52,11 @@ func NewPublicUsersServiceClient(httpClient connect_go.HTTPClient, baseURL strin
 			baseURL+"/users.v1.public.PublicUsersService/LoginUser",
 			opts...,
 		),
+		refreshUser: connect_go.NewClient[public.RefreshUserRequest, public.RefreshUserResponse](
+			httpClient,
+			baseURL+"/users.v1.public.PublicUsersService/RefreshUser",
+			opts...,
+		),
 	}
 }
 
@@ -58,6 +64,7 @@ func NewPublicUsersServiceClient(httpClient connect_go.HTTPClient, baseURL strin
 type publicUsersServiceClient struct {
 	registerUser *connect_go.Client[public.RegisterUserRequest, public.RegisterUserResponse]
 	loginUser    *connect_go.Client[public.LoginUserRequest, public.LoginUserResponse]
+	refreshUser  *connect_go.Client[public.RefreshUserRequest, public.RefreshUserResponse]
 }
 
 // RegisterUser calls users.v1.public.PublicUsersService.RegisterUser.
@@ -70,10 +77,16 @@ func (c *publicUsersServiceClient) LoginUser(ctx context.Context, req *connect_g
 	return c.loginUser.CallUnary(ctx, req)
 }
 
+// RefreshUser calls users.v1.public.PublicUsersService.RefreshUser.
+func (c *publicUsersServiceClient) RefreshUser(ctx context.Context, req *connect_go.Request[public.RefreshUserRequest]) (*connect_go.Response[public.RefreshUserResponse], error) {
+	return c.refreshUser.CallUnary(ctx, req)
+}
+
 // PublicUsersServiceHandler is an implementation of the users.v1.public.PublicUsersService service.
 type PublicUsersServiceHandler interface {
 	RegisterUser(context.Context, *connect_go.Request[public.RegisterUserRequest]) (*connect_go.Response[public.RegisterUserResponse], error)
 	LoginUser(context.Context, *connect_go.Request[public.LoginUserRequest]) (*connect_go.Response[public.LoginUserResponse], error)
+	RefreshUser(context.Context, *connect_go.Request[public.RefreshUserRequest]) (*connect_go.Response[public.RefreshUserResponse], error)
 }
 
 // NewPublicUsersServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -93,6 +106,11 @@ func NewPublicUsersServiceHandler(svc PublicUsersServiceHandler, opts ...connect
 		svc.LoginUser,
 		opts...,
 	))
+	mux.Handle("/users.v1.public.PublicUsersService/RefreshUser", connect_go.NewUnaryHandler(
+		"/users.v1.public.PublicUsersService/RefreshUser",
+		svc.RefreshUser,
+		opts...,
+	))
 	return "/users.v1.public.PublicUsersService/", mux
 }
 
@@ -105,4 +123,8 @@ func (UnimplementedPublicUsersServiceHandler) RegisterUser(context.Context, *con
 
 func (UnimplementedPublicUsersServiceHandler) LoginUser(context.Context, *connect_go.Request[public.LoginUserRequest]) (*connect_go.Response[public.LoginUserResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.public.PublicUsersService.LoginUser is not implemented"))
+}
+
+func (UnimplementedPublicUsersServiceHandler) RefreshUser(context.Context, *connect_go.Request[public.RefreshUserRequest]) (*connect_go.Response[public.RefreshUserResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.public.PublicUsersService.RefreshUser is not implemented"))
 }
