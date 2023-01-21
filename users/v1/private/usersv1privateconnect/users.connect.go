@@ -27,7 +27,7 @@ const (
 
 // PrivateUsersServiceClient is a client for the users.v1.private.PrivateUsersService service.
 type PrivateUsersServiceClient interface {
-	Me(context.Context, *connect_go.Request[private.MeRequest]) (*connect_go.Response[private.MeResponse], error)
+	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
 }
 
 // NewPrivateUsersServiceClient constructs a client for the users.v1.private.PrivateUsersService
@@ -40,9 +40,9 @@ type PrivateUsersServiceClient interface {
 func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) PrivateUsersServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
 	return &privateUsersServiceClient{
-		me: connect_go.NewClient[private.MeRequest, private.MeResponse](
+		getMe: connect_go.NewClient[private.GetMeRequest, private.GetMeResponse](
 			httpClient,
-			baseURL+"/users.v1.private.PrivateUsersService/Me",
+			baseURL+"/users.v1.private.PrivateUsersService/GetMe",
 			opts...,
 		),
 	}
@@ -50,18 +50,18 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 
 // privateUsersServiceClient implements PrivateUsersServiceClient.
 type privateUsersServiceClient struct {
-	me *connect_go.Client[private.MeRequest, private.MeResponse]
+	getMe *connect_go.Client[private.GetMeRequest, private.GetMeResponse]
 }
 
-// Me calls users.v1.private.PrivateUsersService.Me.
-func (c *privateUsersServiceClient) Me(ctx context.Context, req *connect_go.Request[private.MeRequest]) (*connect_go.Response[private.MeResponse], error) {
-	return c.me.CallUnary(ctx, req)
+// GetMe calls users.v1.private.PrivateUsersService.GetMe.
+func (c *privateUsersServiceClient) GetMe(ctx context.Context, req *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error) {
+	return c.getMe.CallUnary(ctx, req)
 }
 
 // PrivateUsersServiceHandler is an implementation of the users.v1.private.PrivateUsersService
 // service.
 type PrivateUsersServiceHandler interface {
-	Me(context.Context, *connect_go.Request[private.MeRequest]) (*connect_go.Response[private.MeResponse], error)
+	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
 }
 
 // NewPrivateUsersServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -71,9 +71,9 @@ type PrivateUsersServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle("/users.v1.private.PrivateUsersService/Me", connect_go.NewUnaryHandler(
-		"/users.v1.private.PrivateUsersService/Me",
-		svc.Me,
+	mux.Handle("/users.v1.private.PrivateUsersService/GetMe", connect_go.NewUnaryHandler(
+		"/users.v1.private.PrivateUsersService/GetMe",
+		svc.GetMe,
 		opts...,
 	))
 	return "/users.v1.private.PrivateUsersService/", mux
@@ -82,6 +82,6 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 // UnimplementedPrivateUsersServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedPrivateUsersServiceHandler struct{}
 
-func (UnimplementedPrivateUsersServiceHandler) Me(context.Context, *connect_go.Request[private.MeRequest]) (*connect_go.Response[private.MeResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.Me is not implemented"))
+func (UnimplementedPrivateUsersServiceHandler) GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.GetMe is not implemented"))
 }
