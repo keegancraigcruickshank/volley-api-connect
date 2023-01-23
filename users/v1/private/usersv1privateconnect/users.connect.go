@@ -28,6 +28,7 @@ const (
 // PrivateUsersServiceClient is a client for the users.v1.private.PrivateUsersService service.
 type PrivateUsersServiceClient interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
+	Logout(context.Context, *connect_go.Request[private.LogoutRequest]) (*connect_go.Response[private.LogoutResponse], error)
 }
 
 // NewPrivateUsersServiceClient constructs a client for the users.v1.private.PrivateUsersService
@@ -45,12 +46,18 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 			baseURL+"/users.v1.private.PrivateUsersService/GetMe",
 			opts...,
 		),
+		logout: connect_go.NewClient[private.LogoutRequest, private.LogoutResponse](
+			httpClient,
+			baseURL+"/users.v1.private.PrivateUsersService/Logout",
+			opts...,
+		),
 	}
 }
 
 // privateUsersServiceClient implements PrivateUsersServiceClient.
 type privateUsersServiceClient struct {
-	getMe *connect_go.Client[private.GetMeRequest, private.GetMeResponse]
+	getMe  *connect_go.Client[private.GetMeRequest, private.GetMeResponse]
+	logout *connect_go.Client[private.LogoutRequest, private.LogoutResponse]
 }
 
 // GetMe calls users.v1.private.PrivateUsersService.GetMe.
@@ -58,10 +65,16 @@ func (c *privateUsersServiceClient) GetMe(ctx context.Context, req *connect_go.R
 	return c.getMe.CallUnary(ctx, req)
 }
 
+// Logout calls users.v1.private.PrivateUsersService.Logout.
+func (c *privateUsersServiceClient) Logout(ctx context.Context, req *connect_go.Request[private.LogoutRequest]) (*connect_go.Response[private.LogoutResponse], error) {
+	return c.logout.CallUnary(ctx, req)
+}
+
 // PrivateUsersServiceHandler is an implementation of the users.v1.private.PrivateUsersService
 // service.
 type PrivateUsersServiceHandler interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
+	Logout(context.Context, *connect_go.Request[private.LogoutRequest]) (*connect_go.Response[private.LogoutResponse], error)
 }
 
 // NewPrivateUsersServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -76,6 +89,11 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 		svc.GetMe,
 		opts...,
 	))
+	mux.Handle("/users.v1.private.PrivateUsersService/Logout", connect_go.NewUnaryHandler(
+		"/users.v1.private.PrivateUsersService/Logout",
+		svc.Logout,
+		opts...,
+	))
 	return "/users.v1.private.PrivateUsersService/", mux
 }
 
@@ -84,4 +102,8 @@ type UnimplementedPrivateUsersServiceHandler struct{}
 
 func (UnimplementedPrivateUsersServiceHandler) GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.GetMe is not implemented"))
+}
+
+func (UnimplementedPrivateUsersServiceHandler) Logout(context.Context, *connect_go.Request[private.LogoutRequest]) (*connect_go.Response[private.LogoutResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.Logout is not implemented"))
 }
