@@ -29,6 +29,7 @@ const (
 type PrivateUsersServiceClient interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
 	Logout(context.Context, *connect_go.Request[private.LogoutRequest]) (*connect_go.Response[private.LogoutResponse], error)
+	SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error)
 }
 
 // NewPrivateUsersServiceClient constructs a client for the users.v1.private.PrivateUsersService
@@ -51,13 +52,19 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 			baseURL+"/users.v1.private.PrivateUsersService/Logout",
 			opts...,
 		),
+		setDefaultOrg: connect_go.NewClient[private.SetDefaultOrgRequest, private.SetDefaultOrgResponse](
+			httpClient,
+			baseURL+"/users.v1.private.PrivateUsersService/SetDefaultOrg",
+			opts...,
+		),
 	}
 }
 
 // privateUsersServiceClient implements PrivateUsersServiceClient.
 type privateUsersServiceClient struct {
-	getMe  *connect_go.Client[private.GetMeRequest, private.GetMeResponse]
-	logout *connect_go.Client[private.LogoutRequest, private.LogoutResponse]
+	getMe         *connect_go.Client[private.GetMeRequest, private.GetMeResponse]
+	logout        *connect_go.Client[private.LogoutRequest, private.LogoutResponse]
+	setDefaultOrg *connect_go.Client[private.SetDefaultOrgRequest, private.SetDefaultOrgResponse]
 }
 
 // GetMe calls users.v1.private.PrivateUsersService.GetMe.
@@ -70,11 +77,17 @@ func (c *privateUsersServiceClient) Logout(ctx context.Context, req *connect_go.
 	return c.logout.CallUnary(ctx, req)
 }
 
+// SetDefaultOrg calls users.v1.private.PrivateUsersService.SetDefaultOrg.
+func (c *privateUsersServiceClient) SetDefaultOrg(ctx context.Context, req *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error) {
+	return c.setDefaultOrg.CallUnary(ctx, req)
+}
+
 // PrivateUsersServiceHandler is an implementation of the users.v1.private.PrivateUsersService
 // service.
 type PrivateUsersServiceHandler interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
 	Logout(context.Context, *connect_go.Request[private.LogoutRequest]) (*connect_go.Response[private.LogoutResponse], error)
+	SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error)
 }
 
 // NewPrivateUsersServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -94,6 +107,11 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 		svc.Logout,
 		opts...,
 	))
+	mux.Handle("/users.v1.private.PrivateUsersService/SetDefaultOrg", connect_go.NewUnaryHandler(
+		"/users.v1.private.PrivateUsersService/SetDefaultOrg",
+		svc.SetDefaultOrg,
+		opts...,
+	))
 	return "/users.v1.private.PrivateUsersService/", mux
 }
 
@@ -106,4 +124,8 @@ func (UnimplementedPrivateUsersServiceHandler) GetMe(context.Context, *connect_g
 
 func (UnimplementedPrivateUsersServiceHandler) Logout(context.Context, *connect_go.Request[private.LogoutRequest]) (*connect_go.Response[private.LogoutResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.Logout is not implemented"))
+}
+
+func (UnimplementedPrivateUsersServiceHandler) SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.SetDefaultOrg is not implemented"))
 }
