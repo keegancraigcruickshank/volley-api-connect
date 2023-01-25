@@ -21,89 +21,89 @@ import (
 const _ = connect_go.IsAtLeastVersion0_1_0
 
 const (
-	// PrivateTeamsServiceName is the fully-qualified name of the PrivateTeamsService service.
-	PrivateTeamsServiceName = "grades.v1.private.PrivateTeamsService"
+	// PrivateGradesServiceName is the fully-qualified name of the PrivateGradesService service.
+	PrivateGradesServiceName = "grades.v1.private.PrivateGradesService"
 )
 
-// PrivateTeamsServiceClient is a client for the grades.v1.private.PrivateTeamsService service.
-type PrivateTeamsServiceClient interface {
+// PrivateGradesServiceClient is a client for the grades.v1.private.PrivateGradesService service.
+type PrivateGradesServiceClient interface {
 	CreateGrade(context.Context, *connect_go.Request[grades.CreateGradeRequest]) (*connect_go.Response[grades.CreateGradeResponse], error)
 	ListGrades(context.Context, *connect_go.Request[grades.ListGradesRequest]) (*connect_go.Response[grades.ListGradesResponse], error)
 }
 
-// NewPrivateTeamsServiceClient constructs a client for the grades.v1.private.PrivateTeamsService
+// NewPrivateGradesServiceClient constructs a client for the grades.v1.private.PrivateGradesService
 // service. By default, it uses the Connect protocol with the binary Protobuf Codec, asks for
 // gzipped responses, and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply
 // the connect.WithGRPC() or connect.WithGRPCWeb() options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewPrivateTeamsServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) PrivateTeamsServiceClient {
+func NewPrivateGradesServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) PrivateGradesServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	return &privateTeamsServiceClient{
+	return &privateGradesServiceClient{
 		createGrade: connect_go.NewClient[grades.CreateGradeRequest, grades.CreateGradeResponse](
 			httpClient,
-			baseURL+"/grades.v1.private.PrivateTeamsService/CreateGrade",
+			baseURL+"/grades.v1.private.PrivateGradesService/CreateGrade",
 			opts...,
 		),
 		listGrades: connect_go.NewClient[grades.ListGradesRequest, grades.ListGradesResponse](
 			httpClient,
-			baseURL+"/grades.v1.private.PrivateTeamsService/ListGrades",
+			baseURL+"/grades.v1.private.PrivateGradesService/ListGrades",
 			opts...,
 		),
 	}
 }
 
-// privateTeamsServiceClient implements PrivateTeamsServiceClient.
-type privateTeamsServiceClient struct {
+// privateGradesServiceClient implements PrivateGradesServiceClient.
+type privateGradesServiceClient struct {
 	createGrade *connect_go.Client[grades.CreateGradeRequest, grades.CreateGradeResponse]
 	listGrades  *connect_go.Client[grades.ListGradesRequest, grades.ListGradesResponse]
 }
 
-// CreateGrade calls grades.v1.private.PrivateTeamsService.CreateGrade.
-func (c *privateTeamsServiceClient) CreateGrade(ctx context.Context, req *connect_go.Request[grades.CreateGradeRequest]) (*connect_go.Response[grades.CreateGradeResponse], error) {
+// CreateGrade calls grades.v1.private.PrivateGradesService.CreateGrade.
+func (c *privateGradesServiceClient) CreateGrade(ctx context.Context, req *connect_go.Request[grades.CreateGradeRequest]) (*connect_go.Response[grades.CreateGradeResponse], error) {
 	return c.createGrade.CallUnary(ctx, req)
 }
 
-// ListGrades calls grades.v1.private.PrivateTeamsService.ListGrades.
-func (c *privateTeamsServiceClient) ListGrades(ctx context.Context, req *connect_go.Request[grades.ListGradesRequest]) (*connect_go.Response[grades.ListGradesResponse], error) {
+// ListGrades calls grades.v1.private.PrivateGradesService.ListGrades.
+func (c *privateGradesServiceClient) ListGrades(ctx context.Context, req *connect_go.Request[grades.ListGradesRequest]) (*connect_go.Response[grades.ListGradesResponse], error) {
 	return c.listGrades.CallUnary(ctx, req)
 }
 
-// PrivateTeamsServiceHandler is an implementation of the grades.v1.private.PrivateTeamsService
+// PrivateGradesServiceHandler is an implementation of the grades.v1.private.PrivateGradesService
 // service.
-type PrivateTeamsServiceHandler interface {
+type PrivateGradesServiceHandler interface {
 	CreateGrade(context.Context, *connect_go.Request[grades.CreateGradeRequest]) (*connect_go.Response[grades.CreateGradeResponse], error)
 	ListGrades(context.Context, *connect_go.Request[grades.ListGradesRequest]) (*connect_go.Response[grades.ListGradesResponse], error)
 }
 
-// NewPrivateTeamsServiceHandler builds an HTTP handler from the service implementation. It returns
+// NewPrivateGradesServiceHandler builds an HTTP handler from the service implementation. It returns
 // the path on which to mount the handler and the handler itself.
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewPrivateTeamsServiceHandler(svc PrivateTeamsServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
+func NewPrivateGradesServiceHandler(svc PrivateGradesServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle("/grades.v1.private.PrivateTeamsService/CreateGrade", connect_go.NewUnaryHandler(
-		"/grades.v1.private.PrivateTeamsService/CreateGrade",
+	mux.Handle("/grades.v1.private.PrivateGradesService/CreateGrade", connect_go.NewUnaryHandler(
+		"/grades.v1.private.PrivateGradesService/CreateGrade",
 		svc.CreateGrade,
 		opts...,
 	))
-	mux.Handle("/grades.v1.private.PrivateTeamsService/ListGrades", connect_go.NewUnaryHandler(
-		"/grades.v1.private.PrivateTeamsService/ListGrades",
+	mux.Handle("/grades.v1.private.PrivateGradesService/ListGrades", connect_go.NewUnaryHandler(
+		"/grades.v1.private.PrivateGradesService/ListGrades",
 		svc.ListGrades,
 		opts...,
 	))
-	return "/grades.v1.private.PrivateTeamsService/", mux
+	return "/grades.v1.private.PrivateGradesService/", mux
 }
 
-// UnimplementedPrivateTeamsServiceHandler returns CodeUnimplemented from all methods.
-type UnimplementedPrivateTeamsServiceHandler struct{}
+// UnimplementedPrivateGradesServiceHandler returns CodeUnimplemented from all methods.
+type UnimplementedPrivateGradesServiceHandler struct{}
 
-func (UnimplementedPrivateTeamsServiceHandler) CreateGrade(context.Context, *connect_go.Request[grades.CreateGradeRequest]) (*connect_go.Response[grades.CreateGradeResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("grades.v1.private.PrivateTeamsService.CreateGrade is not implemented"))
+func (UnimplementedPrivateGradesServiceHandler) CreateGrade(context.Context, *connect_go.Request[grades.CreateGradeRequest]) (*connect_go.Response[grades.CreateGradeResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("grades.v1.private.PrivateGradesService.CreateGrade is not implemented"))
 }
 
-func (UnimplementedPrivateTeamsServiceHandler) ListGrades(context.Context, *connect_go.Request[grades.ListGradesRequest]) (*connect_go.Response[grades.ListGradesResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("grades.v1.private.PrivateTeamsService.ListGrades is not implemented"))
+func (UnimplementedPrivateGradesServiceHandler) ListGrades(context.Context, *connect_go.Request[grades.ListGradesRequest]) (*connect_go.Response[grades.ListGradesResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("grades.v1.private.PrivateGradesService.ListGrades is not implemented"))
 }
