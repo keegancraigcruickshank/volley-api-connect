@@ -8,7 +8,7 @@ import (
 	context "context"
 	errors "errors"
 	connect_go "github.com/bufbuild/connect-go"
-	grades "github.com/keegancraigcruickshank/volley-api-connect/teams/v1/grades"
+	grades "github.com/keegancraigcruickshank/volley-api-connect/grades/v1/grades"
 	http "net/http"
 	strings "strings"
 )
