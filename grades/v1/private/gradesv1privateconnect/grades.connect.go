@@ -8,7 +8,7 @@ import (
 	context "context"
 	errors "errors"
 	connect_go "github.com/bufbuild/connect-go"
-	grades "github.com/keegancraigcruickshank/volley-api-connect/grades/v1/grades"
+	private "github.com/keegancraigcruickshank/volley-api-connect/grades/v1/private"
 	http "net/http"
 	strings "strings"
 )
@@ -27,8 +27,8 @@ const (
 
 // PrivateGradesServiceClient is a client for the grades.v1.private.PrivateGradesService service.
 type PrivateGradesServiceClient interface {
-	CreateGrade(context.Context, *connect_go.Request[grades.CreateGradeRequest]) (*connect_go.Response[grades.CreateGradeResponse], error)
-	ListGrades(context.Context, *connect_go.Request[grades.ListGradesRequest]) (*connect_go.Response[grades.ListGradesResponse], error)
+	CreateGrade(context.Context, *connect_go.Request[private.CreateGradeRequest]) (*connect_go.Response[private.CreateGradeResponse], error)
+	ListGrades(context.Context, *connect_go.Request[private.ListGradesRequest]) (*connect_go.Response[private.ListGradesResponse], error)
 }
 
 // NewPrivateGradesServiceClient constructs a client for the grades.v1.private.PrivateGradesService
@@ -41,12 +41,12 @@ type PrivateGradesServiceClient interface {
 func NewPrivateGradesServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) PrivateGradesServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
 	return &privateGradesServiceClient{
-		createGrade: connect_go.NewClient[grades.CreateGradeRequest, grades.CreateGradeResponse](
+		createGrade: connect_go.NewClient[private.CreateGradeRequest, private.CreateGradeResponse](
 			httpClient,
 			baseURL+"/grades.v1.private.PrivateGradesService/CreateGrade",
 			opts...,
 		),
-		listGrades: connect_go.NewClient[grades.ListGradesRequest, grades.ListGradesResponse](
+		listGrades: connect_go.NewClient[private.ListGradesRequest, private.ListGradesResponse](
 			httpClient,
 			baseURL+"/grades.v1.private.PrivateGradesService/ListGrades",
 			opts...,
@@ -56,25 +56,25 @@ func NewPrivateGradesServiceClient(httpClient connect_go.HTTPClient, baseURL str
 
 // privateGradesServiceClient implements PrivateGradesServiceClient.
 type privateGradesServiceClient struct {
-	createGrade *connect_go.Client[grades.CreateGradeRequest, grades.CreateGradeResponse]
-	listGrades  *connect_go.Client[grades.ListGradesRequest, grades.ListGradesResponse]
+	createGrade *connect_go.Client[private.CreateGradeRequest, private.CreateGradeResponse]
+	listGrades  *connect_go.Client[private.ListGradesRequest, private.ListGradesResponse]
 }
 
 // CreateGrade calls grades.v1.private.PrivateGradesService.CreateGrade.
-func (c *privateGradesServiceClient) CreateGrade(ctx context.Context, req *connect_go.Request[grades.CreateGradeRequest]) (*connect_go.Response[grades.CreateGradeResponse], error) {
+func (c *privateGradesServiceClient) CreateGrade(ctx context.Context, req *connect_go.Request[private.CreateGradeRequest]) (*connect_go.Response[private.CreateGradeResponse], error) {
 	return c.createGrade.CallUnary(ctx, req)
 }
 
 // ListGrades calls grades.v1.private.PrivateGradesService.ListGrades.
-func (c *privateGradesServiceClient) ListGrades(ctx context.Context, req *connect_go.Request[grades.ListGradesRequest]) (*connect_go.Response[grades.ListGradesResponse], error) {
+func (c *privateGradesServiceClient) ListGrades(ctx context.Context, req *connect_go.Request[private.ListGradesRequest]) (*connect_go.Response[private.ListGradesResponse], error) {
 	return c.listGrades.CallUnary(ctx, req)
 }
 
 // PrivateGradesServiceHandler is an implementation of the grades.v1.private.PrivateGradesService
 // service.
 type PrivateGradesServiceHandler interface {
-	CreateGrade(context.Context, *connect_go.Request[grades.CreateGradeRequest]) (*connect_go.Response[grades.CreateGradeResponse], error)
-	ListGrades(context.Context, *connect_go.Request[grades.ListGradesRequest]) (*connect_go.Response[grades.ListGradesResponse], error)
+	CreateGrade(context.Context, *connect_go.Request[private.CreateGradeRequest]) (*connect_go.Response[private.CreateGradeResponse], error)
+	ListGrades(context.Context, *connect_go.Request[private.ListGradesRequest]) (*connect_go.Response[private.ListGradesResponse], error)
 }
 
 // NewPrivateGradesServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -100,10 +100,10 @@ func NewPrivateGradesServiceHandler(svc PrivateGradesServiceHandler, opts ...con
 // UnimplementedPrivateGradesServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedPrivateGradesServiceHandler struct{}
 
-func (UnimplementedPrivateGradesServiceHandler) CreateGrade(context.Context, *connect_go.Request[grades.CreateGradeRequest]) (*connect_go.Response[grades.CreateGradeResponse], error) {
+func (UnimplementedPrivateGradesServiceHandler) CreateGrade(context.Context, *connect_go.Request[private.CreateGradeRequest]) (*connect_go.Response[private.CreateGradeResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("grades.v1.private.PrivateGradesService.CreateGrade is not implemented"))
 }
 
-func (UnimplementedPrivateGradesServiceHandler) ListGrades(context.Context, *connect_go.Request[grades.ListGradesRequest]) (*connect_go.Response[grades.ListGradesResponse], error) {
+func (UnimplementedPrivateGradesServiceHandler) ListGrades(context.Context, *connect_go.Request[private.ListGradesRequest]) (*connect_go.Response[private.ListGradesResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("grades.v1.private.PrivateGradesService.ListGrades is not implemented"))
 }
