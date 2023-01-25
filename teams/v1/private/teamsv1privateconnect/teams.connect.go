@@ -28,6 +28,7 @@ const (
 // PrivateTeamsServiceClient is a client for the teams.v1.private.PrivateTeamsService service.
 type PrivateTeamsServiceClient interface {
 	CreateTeam(context.Context, *connect_go.Request[private.CreateTeamRequest]) (*connect_go.Response[private.CreateTeamResponse], error)
+	ListTeams(context.Context, *connect_go.Request[private.ListTeamsRequest]) (*connect_go.Response[private.ListTeamsResponse], error)
 }
 
 // NewPrivateTeamsServiceClient constructs a client for the teams.v1.private.PrivateTeamsService
@@ -45,12 +46,18 @@ func NewPrivateTeamsServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 			baseURL+"/teams.v1.private.PrivateTeamsService/CreateTeam",
 			opts...,
 		),
+		listTeams: connect_go.NewClient[private.ListTeamsRequest, private.ListTeamsResponse](
+			httpClient,
+			baseURL+"/teams.v1.private.PrivateTeamsService/ListTeams",
+			opts...,
+		),
 	}
 }
 
 // privateTeamsServiceClient implements PrivateTeamsServiceClient.
 type privateTeamsServiceClient struct {
 	createTeam *connect_go.Client[private.CreateTeamRequest, private.CreateTeamResponse]
+	listTeams  *connect_go.Client[private.ListTeamsRequest, private.ListTeamsResponse]
 }
 
 // CreateTeam calls teams.v1.private.PrivateTeamsService.CreateTeam.
@@ -58,10 +65,16 @@ func (c *privateTeamsServiceClient) CreateTeam(ctx context.Context, req *connect
 	return c.createTeam.CallUnary(ctx, req)
 }
 
+// ListTeams calls teams.v1.private.PrivateTeamsService.ListTeams.
+func (c *privateTeamsServiceClient) ListTeams(ctx context.Context, req *connect_go.Request[private.ListTeamsRequest]) (*connect_go.Response[private.ListTeamsResponse], error) {
+	return c.listTeams.CallUnary(ctx, req)
+}
+
 // PrivateTeamsServiceHandler is an implementation of the teams.v1.private.PrivateTeamsService
 // service.
 type PrivateTeamsServiceHandler interface {
 	CreateTeam(context.Context, *connect_go.Request[private.CreateTeamRequest]) (*connect_go.Response[private.CreateTeamResponse], error)
+	ListTeams(context.Context, *connect_go.Request[private.ListTeamsRequest]) (*connect_go.Response[private.ListTeamsResponse], error)
 }
 
 // NewPrivateTeamsServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -76,6 +89,11 @@ func NewPrivateTeamsServiceHandler(svc PrivateTeamsServiceHandler, opts ...conne
 		svc.CreateTeam,
 		opts...,
 	))
+	mux.Handle("/teams.v1.private.PrivateTeamsService/ListTeams", connect_go.NewUnaryHandler(
+		"/teams.v1.private.PrivateTeamsService/ListTeams",
+		svc.ListTeams,
+		opts...,
+	))
 	return "/teams.v1.private.PrivateTeamsService/", mux
 }
 
@@ -84,4 +102,8 @@ type UnimplementedPrivateTeamsServiceHandler struct{}
 
 func (UnimplementedPrivateTeamsServiceHandler) CreateTeam(context.Context, *connect_go.Request[private.CreateTeamRequest]) (*connect_go.Response[private.CreateTeamResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("teams.v1.private.PrivateTeamsService.CreateTeam is not implemented"))
+}
+
+func (UnimplementedPrivateTeamsServiceHandler) ListTeams(context.Context, *connect_go.Request[private.ListTeamsRequest]) (*connect_go.Response[private.ListTeamsResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("teams.v1.private.PrivateTeamsService.ListTeams is not implemented"))
 }
