@@ -21,89 +21,89 @@ import (
 const _ = connect_go.IsAtLeastVersion0_1_0
 
 const (
-	// PrivateGradesServiceName is the fully-qualified name of the PrivateGradesService service.
-	PrivateGradesServiceName = "courts.v1.private.PrivateGradesService"
+	// PrivateCourtsServiceName is the fully-qualified name of the PrivateCourtsService service.
+	PrivateCourtsServiceName = "courts.v1.private.PrivateCourtsService"
 )
 
-// PrivateGradesServiceClient is a client for the courts.v1.private.PrivateGradesService service.
-type PrivateGradesServiceClient interface {
-	CreateGrade(context.Context, *connect_go.Request[private.CreateCourtRequest]) (*connect_go.Response[private.CreateCourtResponse], error)
-	ListGrades(context.Context, *connect_go.Request[private.ListCourtsRequest]) (*connect_go.Response[private.ListCourtsResponse], error)
+// PrivateCourtsServiceClient is a client for the courts.v1.private.PrivateCourtsService service.
+type PrivateCourtsServiceClient interface {
+	CreateCourt(context.Context, *connect_go.Request[private.CreateCourtRequest]) (*connect_go.Response[private.CreateCourtResponse], error)
+	ListCourts(context.Context, *connect_go.Request[private.ListCourtsRequest]) (*connect_go.Response[private.ListCourtsResponse], error)
 }
 
-// NewPrivateGradesServiceClient constructs a client for the courts.v1.private.PrivateGradesService
+// NewPrivateCourtsServiceClient constructs a client for the courts.v1.private.PrivateCourtsService
 // service. By default, it uses the Connect protocol with the binary Protobuf Codec, asks for
 // gzipped responses, and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply
 // the connect.WithGRPC() or connect.WithGRPCWeb() options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewPrivateGradesServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) PrivateGradesServiceClient {
+func NewPrivateCourtsServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) PrivateCourtsServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	return &privateGradesServiceClient{
-		createGrade: connect_go.NewClient[private.CreateCourtRequest, private.CreateCourtResponse](
+	return &privateCourtsServiceClient{
+		createCourt: connect_go.NewClient[private.CreateCourtRequest, private.CreateCourtResponse](
 			httpClient,
-			baseURL+"/courts.v1.private.PrivateGradesService/CreateGrade",
+			baseURL+"/courts.v1.private.PrivateCourtsService/CreateCourt",
 			opts...,
 		),
-		listGrades: connect_go.NewClient[private.ListCourtsRequest, private.ListCourtsResponse](
+		listCourts: connect_go.NewClient[private.ListCourtsRequest, private.ListCourtsResponse](
 			httpClient,
-			baseURL+"/courts.v1.private.PrivateGradesService/ListGrades",
+			baseURL+"/courts.v1.private.PrivateCourtsService/ListCourts",
 			opts...,
 		),
 	}
 }
 
-// privateGradesServiceClient implements PrivateGradesServiceClient.
-type privateGradesServiceClient struct {
-	createGrade *connect_go.Client[private.CreateCourtRequest, private.CreateCourtResponse]
-	listGrades  *connect_go.Client[private.ListCourtsRequest, private.ListCourtsResponse]
+// privateCourtsServiceClient implements PrivateCourtsServiceClient.
+type privateCourtsServiceClient struct {
+	createCourt *connect_go.Client[private.CreateCourtRequest, private.CreateCourtResponse]
+	listCourts  *connect_go.Client[private.ListCourtsRequest, private.ListCourtsResponse]
 }
 
-// CreateGrade calls courts.v1.private.PrivateGradesService.CreateGrade.
-func (c *privateGradesServiceClient) CreateGrade(ctx context.Context, req *connect_go.Request[private.CreateCourtRequest]) (*connect_go.Response[private.CreateCourtResponse], error) {
-	return c.createGrade.CallUnary(ctx, req)
+// CreateCourt calls courts.v1.private.PrivateCourtsService.CreateCourt.
+func (c *privateCourtsServiceClient) CreateCourt(ctx context.Context, req *connect_go.Request[private.CreateCourtRequest]) (*connect_go.Response[private.CreateCourtResponse], error) {
+	return c.createCourt.CallUnary(ctx, req)
 }
 
-// ListGrades calls courts.v1.private.PrivateGradesService.ListGrades.
-func (c *privateGradesServiceClient) ListGrades(ctx context.Context, req *connect_go.Request[private.ListCourtsRequest]) (*connect_go.Response[private.ListCourtsResponse], error) {
-	return c.listGrades.CallUnary(ctx, req)
+// ListCourts calls courts.v1.private.PrivateCourtsService.ListCourts.
+func (c *privateCourtsServiceClient) ListCourts(ctx context.Context, req *connect_go.Request[private.ListCourtsRequest]) (*connect_go.Response[private.ListCourtsResponse], error) {
+	return c.listCourts.CallUnary(ctx, req)
 }
 
-// PrivateGradesServiceHandler is an implementation of the courts.v1.private.PrivateGradesService
+// PrivateCourtsServiceHandler is an implementation of the courts.v1.private.PrivateCourtsService
 // service.
-type PrivateGradesServiceHandler interface {
-	CreateGrade(context.Context, *connect_go.Request[private.CreateCourtRequest]) (*connect_go.Response[private.CreateCourtResponse], error)
-	ListGrades(context.Context, *connect_go.Request[private.ListCourtsRequest]) (*connect_go.Response[private.ListCourtsResponse], error)
+type PrivateCourtsServiceHandler interface {
+	CreateCourt(context.Context, *connect_go.Request[private.CreateCourtRequest]) (*connect_go.Response[private.CreateCourtResponse], error)
+	ListCourts(context.Context, *connect_go.Request[private.ListCourtsRequest]) (*connect_go.Response[private.ListCourtsResponse], error)
 }
 
-// NewPrivateGradesServiceHandler builds an HTTP handler from the service implementation. It returns
+// NewPrivateCourtsServiceHandler builds an HTTP handler from the service implementation. It returns
 // the path on which to mount the handler and the handler itself.
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewPrivateGradesServiceHandler(svc PrivateGradesServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
+func NewPrivateCourtsServiceHandler(svc PrivateCourtsServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle("/courts.v1.private.PrivateGradesService/CreateGrade", connect_go.NewUnaryHandler(
-		"/courts.v1.private.PrivateGradesService/CreateGrade",
-		svc.CreateGrade,
+	mux.Handle("/courts.v1.private.PrivateCourtsService/CreateCourt", connect_go.NewUnaryHandler(
+		"/courts.v1.private.PrivateCourtsService/CreateCourt",
+		svc.CreateCourt,
 		opts...,
 	))
-	mux.Handle("/courts.v1.private.PrivateGradesService/ListGrades", connect_go.NewUnaryHandler(
-		"/courts.v1.private.PrivateGradesService/ListGrades",
-		svc.ListGrades,
+	mux.Handle("/courts.v1.private.PrivateCourtsService/ListCourts", connect_go.NewUnaryHandler(
+		"/courts.v1.private.PrivateCourtsService/ListCourts",
+		svc.ListCourts,
 		opts...,
 	))
-	return "/courts.v1.private.PrivateGradesService/", mux
+	return "/courts.v1.private.PrivateCourtsService/", mux
 }
 
-// UnimplementedPrivateGradesServiceHandler returns CodeUnimplemented from all methods.
-type UnimplementedPrivateGradesServiceHandler struct{}
+// UnimplementedPrivateCourtsServiceHandler returns CodeUnimplemented from all methods.
+type UnimplementedPrivateCourtsServiceHandler struct{}
 
-func (UnimplementedPrivateGradesServiceHandler) CreateGrade(context.Context, *connect_go.Request[private.CreateCourtRequest]) (*connect_go.Response[private.CreateCourtResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("courts.v1.private.PrivateGradesService.CreateGrade is not implemented"))
+func (UnimplementedPrivateCourtsServiceHandler) CreateCourt(context.Context, *connect_go.Request[private.CreateCourtRequest]) (*connect_go.Response[private.CreateCourtResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("courts.v1.private.PrivateCourtsService.CreateCourt is not implemented"))
 }
 
-func (UnimplementedPrivateGradesServiceHandler) ListGrades(context.Context, *connect_go.Request[private.ListCourtsRequest]) (*connect_go.Response[private.ListCourtsResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("courts.v1.private.PrivateGradesService.ListGrades is not implemented"))
+func (UnimplementedPrivateCourtsServiceHandler) ListCourts(context.Context, *connect_go.Request[private.ListCourtsRequest]) (*connect_go.Response[private.ListCourtsResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("courts.v1.private.PrivateCourtsService.ListCourts is not implemented"))
 }
