@@ -25,6 +25,22 @@ const (
 	PrivateGradesServiceName = "grades.v1.private.PrivateGradesService"
 )
 
+// These constants are the fully-qualified names of the RPCs defined in this package. They're
+// exposed at runtime as Spec.Procedure and as the final two segments of the HTTP route.
+//
+// Note that these are different from the fully-qualified method names used by
+// google.golang.org/protobuf/reflect/protoreflect. To convert from these constants to
+// reflection-formatted method names, remove the leading slash and convert the remaining slash to a
+// period.
+const (
+	// PrivateGradesServiceCreateGradeProcedure is the fully-qualified name of the
+	// PrivateGradesService's CreateGrade RPC.
+	PrivateGradesServiceCreateGradeProcedure = "/grades.v1.private.PrivateGradesService/CreateGrade"
+	// PrivateGradesServiceListGradesProcedure is the fully-qualified name of the PrivateGradesService's
+	// ListGrades RPC.
+	PrivateGradesServiceListGradesProcedure = "/grades.v1.private.PrivateGradesService/ListGrades"
+)
+
 // PrivateGradesServiceClient is a client for the grades.v1.private.PrivateGradesService service.
 type PrivateGradesServiceClient interface {
 	CreateGrade(context.Context, *connect_go.Request[private.CreateGradeRequest]) (*connect_go.Response[private.CreateGradeResponse], error)
@@ -43,12 +59,12 @@ func NewPrivateGradesServiceClient(httpClient connect_go.HTTPClient, baseURL str
 	return &privateGradesServiceClient{
 		createGrade: connect_go.NewClient[private.CreateGradeRequest, private.CreateGradeResponse](
 			httpClient,
-			baseURL+"/grades.v1.private.PrivateGradesService/CreateGrade",
+			baseURL+PrivateGradesServiceCreateGradeProcedure,
 			opts...,
 		),
 		listGrades: connect_go.NewClient[private.ListGradesRequest, private.ListGradesResponse](
 			httpClient,
-			baseURL+"/grades.v1.private.PrivateGradesService/ListGrades",
+			baseURL+PrivateGradesServiceListGradesProcedure,
 			opts...,
 		),
 	}
@@ -84,13 +100,13 @@ type PrivateGradesServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewPrivateGradesServiceHandler(svc PrivateGradesServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle("/grades.v1.private.PrivateGradesService/CreateGrade", connect_go.NewUnaryHandler(
-		"/grades.v1.private.PrivateGradesService/CreateGrade",
+	mux.Handle(PrivateGradesServiceCreateGradeProcedure, connect_go.NewUnaryHandler(
+		PrivateGradesServiceCreateGradeProcedure,
 		svc.CreateGrade,
 		opts...,
 	))
-	mux.Handle("/grades.v1.private.PrivateGradesService/ListGrades", connect_go.NewUnaryHandler(
-		"/grades.v1.private.PrivateGradesService/ListGrades",
+	mux.Handle(PrivateGradesServiceListGradesProcedure, connect_go.NewUnaryHandler(
+		PrivateGradesServiceListGradesProcedure,
 		svc.ListGrades,
 		opts...,
 	))

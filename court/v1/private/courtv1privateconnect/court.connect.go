@@ -25,6 +25,22 @@ const (
 	PrivateCourtServiceName = "court.v1.private.PrivateCourtService"
 )
 
+// These constants are the fully-qualified names of the RPCs defined in this package. They're
+// exposed at runtime as Spec.Procedure and as the final two segments of the HTTP route.
+//
+// Note that these are different from the fully-qualified method names used by
+// google.golang.org/protobuf/reflect/protoreflect. To convert from these constants to
+// reflection-formatted method names, remove the leading slash and convert the remaining slash to a
+// period.
+const (
+	// PrivateCourtServiceCreateCourtProcedure is the fully-qualified name of the PrivateCourtService's
+	// CreateCourt RPC.
+	PrivateCourtServiceCreateCourtProcedure = "/court.v1.private.PrivateCourtService/CreateCourt"
+	// PrivateCourtServiceListCourtsProcedure is the fully-qualified name of the PrivateCourtService's
+	// ListCourts RPC.
+	PrivateCourtServiceListCourtsProcedure = "/court.v1.private.PrivateCourtService/ListCourts"
+)
+
 // PrivateCourtServiceClient is a client for the court.v1.private.PrivateCourtService service.
 type PrivateCourtServiceClient interface {
 	CreateCourt(context.Context, *connect_go.Request[private.CreateCourtRequest]) (*connect_go.Response[private.CreateCourtResponse], error)
@@ -43,12 +59,12 @@ func NewPrivateCourtServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 	return &privateCourtServiceClient{
 		createCourt: connect_go.NewClient[private.CreateCourtRequest, private.CreateCourtResponse](
 			httpClient,
-			baseURL+"/court.v1.private.PrivateCourtService/CreateCourt",
+			baseURL+PrivateCourtServiceCreateCourtProcedure,
 			opts...,
 		),
 		listCourts: connect_go.NewClient[private.ListCourtsRequest, private.ListCourtsResponse](
 			httpClient,
-			baseURL+"/court.v1.private.PrivateCourtService/ListCourts",
+			baseURL+PrivateCourtServiceListCourtsProcedure,
 			opts...,
 		),
 	}
@@ -84,13 +100,13 @@ type PrivateCourtServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewPrivateCourtServiceHandler(svc PrivateCourtServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle("/court.v1.private.PrivateCourtService/CreateCourt", connect_go.NewUnaryHandler(
-		"/court.v1.private.PrivateCourtService/CreateCourt",
+	mux.Handle(PrivateCourtServiceCreateCourtProcedure, connect_go.NewUnaryHandler(
+		PrivateCourtServiceCreateCourtProcedure,
 		svc.CreateCourt,
 		opts...,
 	))
-	mux.Handle("/court.v1.private.PrivateCourtService/ListCourts", connect_go.NewUnaryHandler(
-		"/court.v1.private.PrivateCourtService/ListCourts",
+	mux.Handle(PrivateCourtServiceListCourtsProcedure, connect_go.NewUnaryHandler(
+		PrivateCourtServiceListCourtsProcedure,
 		svc.ListCourts,
 		opts...,
 	))

@@ -25,6 +25,22 @@ const (
 	PrivateTeamsServiceName = "teams.v1.private.PrivateTeamsService"
 )
 
+// These constants are the fully-qualified names of the RPCs defined in this package. They're
+// exposed at runtime as Spec.Procedure and as the final two segments of the HTTP route.
+//
+// Note that these are different from the fully-qualified method names used by
+// google.golang.org/protobuf/reflect/protoreflect. To convert from these constants to
+// reflection-formatted method names, remove the leading slash and convert the remaining slash to a
+// period.
+const (
+	// PrivateTeamsServiceCreateTeamProcedure is the fully-qualified name of the PrivateTeamsService's
+	// CreateTeam RPC.
+	PrivateTeamsServiceCreateTeamProcedure = "/teams.v1.private.PrivateTeamsService/CreateTeam"
+	// PrivateTeamsServiceListTeamsProcedure is the fully-qualified name of the PrivateTeamsService's
+	// ListTeams RPC.
+	PrivateTeamsServiceListTeamsProcedure = "/teams.v1.private.PrivateTeamsService/ListTeams"
+)
+
 // PrivateTeamsServiceClient is a client for the teams.v1.private.PrivateTeamsService service.
 type PrivateTeamsServiceClient interface {
 	CreateTeam(context.Context, *connect_go.Request[private.CreateTeamRequest]) (*connect_go.Response[private.CreateTeamResponse], error)
@@ -43,12 +59,12 @@ func NewPrivateTeamsServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 	return &privateTeamsServiceClient{
 		createTeam: connect_go.NewClient[private.CreateTeamRequest, private.CreateTeamResponse](
 			httpClient,
-			baseURL+"/teams.v1.private.PrivateTeamsService/CreateTeam",
+			baseURL+PrivateTeamsServiceCreateTeamProcedure,
 			opts...,
 		),
 		listTeams: connect_go.NewClient[private.ListTeamsRequest, private.ListTeamsResponse](
 			httpClient,
-			baseURL+"/teams.v1.private.PrivateTeamsService/ListTeams",
+			baseURL+PrivateTeamsServiceListTeamsProcedure,
 			opts...,
 		),
 	}
@@ -84,13 +100,13 @@ type PrivateTeamsServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewPrivateTeamsServiceHandler(svc PrivateTeamsServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle("/teams.v1.private.PrivateTeamsService/CreateTeam", connect_go.NewUnaryHandler(
-		"/teams.v1.private.PrivateTeamsService/CreateTeam",
+	mux.Handle(PrivateTeamsServiceCreateTeamProcedure, connect_go.NewUnaryHandler(
+		PrivateTeamsServiceCreateTeamProcedure,
 		svc.CreateTeam,
 		opts...,
 	))
-	mux.Handle("/teams.v1.private.PrivateTeamsService/ListTeams", connect_go.NewUnaryHandler(
-		"/teams.v1.private.PrivateTeamsService/ListTeams",
+	mux.Handle(PrivateTeamsServiceListTeamsProcedure, connect_go.NewUnaryHandler(
+		PrivateTeamsServiceListTeamsProcedure,
 		svc.ListTeams,
 		opts...,
 	))

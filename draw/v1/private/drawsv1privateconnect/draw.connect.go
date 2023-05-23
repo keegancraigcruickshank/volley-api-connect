@@ -25,6 +25,19 @@ const (
 	PrivateDrawsServiceName = "draws.v1.private.PrivateDrawsService"
 )
 
+// These constants are the fully-qualified names of the RPCs defined in this package. They're
+// exposed at runtime as Spec.Procedure and as the final two segments of the HTTP route.
+//
+// Note that these are different from the fully-qualified method names used by
+// google.golang.org/protobuf/reflect/protoreflect. To convert from these constants to
+// reflection-formatted method names, remove the leading slash and convert the remaining slash to a
+// period.
+const (
+	// PrivateDrawsServiceCreateDrawProcedure is the fully-qualified name of the PrivateDrawsService's
+	// CreateDraw RPC.
+	PrivateDrawsServiceCreateDrawProcedure = "/draws.v1.private.PrivateDrawsService/CreateDraw"
+)
+
 // PrivateDrawsServiceClient is a client for the draws.v1.private.PrivateDrawsService service.
 type PrivateDrawsServiceClient interface {
 	CreateDraw(context.Context, *connect_go.Request[private.CreateDrawRequest]) (*connect_go.Response[private.CreateDrawResponse], error)
@@ -42,7 +55,7 @@ func NewPrivateDrawsServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 	return &privateDrawsServiceClient{
 		createDraw: connect_go.NewClient[private.CreateDrawRequest, private.CreateDrawResponse](
 			httpClient,
-			baseURL+"/draws.v1.private.PrivateDrawsService/CreateDraw",
+			baseURL+PrivateDrawsServiceCreateDrawProcedure,
 			opts...,
 		),
 	}
@@ -71,8 +84,8 @@ type PrivateDrawsServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewPrivateDrawsServiceHandler(svc PrivateDrawsServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle("/draws.v1.private.PrivateDrawsService/CreateDraw", connect_go.NewUnaryHandler(
-		"/draws.v1.private.PrivateDrawsService/CreateDraw",
+	mux.Handle(PrivateDrawsServiceCreateDrawProcedure, connect_go.NewUnaryHandler(
+		PrivateDrawsServiceCreateDrawProcedure,
 		svc.CreateDraw,
 		opts...,
 	))

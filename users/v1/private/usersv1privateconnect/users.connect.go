@@ -25,6 +25,28 @@ const (
 	PrivateUsersServiceName = "users.v1.private.PrivateUsersService"
 )
 
+// These constants are the fully-qualified names of the RPCs defined in this package. They're
+// exposed at runtime as Spec.Procedure and as the final two segments of the HTTP route.
+//
+// Note that these are different from the fully-qualified method names used by
+// google.golang.org/protobuf/reflect/protoreflect. To convert from these constants to
+// reflection-formatted method names, remove the leading slash and convert the remaining slash to a
+// period.
+const (
+	// PrivateUsersServiceGetMeProcedure is the fully-qualified name of the PrivateUsersService's GetMe
+	// RPC.
+	PrivateUsersServiceGetMeProcedure = "/users.v1.private.PrivateUsersService/GetMe"
+	// PrivateUsersServiceSetActiveOrgProcedure is the fully-qualified name of the PrivateUsersService's
+	// SetActiveOrg RPC.
+	PrivateUsersServiceSetActiveOrgProcedure = "/users.v1.private.PrivateUsersService/SetActiveOrg"
+	// PrivateUsersServiceLogoutProcedure is the fully-qualified name of the PrivateUsersService's
+	// Logout RPC.
+	PrivateUsersServiceLogoutProcedure = "/users.v1.private.PrivateUsersService/Logout"
+	// PrivateUsersServiceSetDefaultOrgProcedure is the fully-qualified name of the
+	// PrivateUsersService's SetDefaultOrg RPC.
+	PrivateUsersServiceSetDefaultOrgProcedure = "/users.v1.private.PrivateUsersService/SetDefaultOrg"
+)
+
 // PrivateUsersServiceClient is a client for the users.v1.private.PrivateUsersService service.
 type PrivateUsersServiceClient interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
@@ -45,22 +67,22 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 	return &privateUsersServiceClient{
 		getMe: connect_go.NewClient[private.GetMeRequest, private.GetMeResponse](
 			httpClient,
-			baseURL+"/users.v1.private.PrivateUsersService/GetMe",
+			baseURL+PrivateUsersServiceGetMeProcedure,
 			opts...,
 		),
 		setActiveOrg: connect_go.NewClient[private.SetActiveOrgRequest, private.SetActiveOrgResponse](
 			httpClient,
-			baseURL+"/users.v1.private.PrivateUsersService/SetActiveOrg",
+			baseURL+PrivateUsersServiceSetActiveOrgProcedure,
 			opts...,
 		),
 		logout: connect_go.NewClient[private.LogoutRequest, private.LogoutResponse](
 			httpClient,
-			baseURL+"/users.v1.private.PrivateUsersService/Logout",
+			baseURL+PrivateUsersServiceLogoutProcedure,
 			opts...,
 		),
 		setDefaultOrg: connect_go.NewClient[private.SetDefaultOrgRequest, private.SetDefaultOrgResponse](
 			httpClient,
-			baseURL+"/users.v1.private.PrivateUsersService/SetDefaultOrg",
+			baseURL+PrivateUsersServiceSetDefaultOrgProcedure,
 			opts...,
 		),
 	}
@@ -110,23 +132,23 @@ type PrivateUsersServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle("/users.v1.private.PrivateUsersService/GetMe", connect_go.NewUnaryHandler(
-		"/users.v1.private.PrivateUsersService/GetMe",
+	mux.Handle(PrivateUsersServiceGetMeProcedure, connect_go.NewUnaryHandler(
+		PrivateUsersServiceGetMeProcedure,
 		svc.GetMe,
 		opts...,
 	))
-	mux.Handle("/users.v1.private.PrivateUsersService/SetActiveOrg", connect_go.NewUnaryHandler(
-		"/users.v1.private.PrivateUsersService/SetActiveOrg",
+	mux.Handle(PrivateUsersServiceSetActiveOrgProcedure, connect_go.NewUnaryHandler(
+		PrivateUsersServiceSetActiveOrgProcedure,
 		svc.SetActiveOrg,
 		opts...,
 	))
-	mux.Handle("/users.v1.private.PrivateUsersService/Logout", connect_go.NewUnaryHandler(
-		"/users.v1.private.PrivateUsersService/Logout",
+	mux.Handle(PrivateUsersServiceLogoutProcedure, connect_go.NewUnaryHandler(
+		PrivateUsersServiceLogoutProcedure,
 		svc.Logout,
 		opts...,
 	))
-	mux.Handle("/users.v1.private.PrivateUsersService/SetDefaultOrg", connect_go.NewUnaryHandler(
-		"/users.v1.private.PrivateUsersService/SetDefaultOrg",
+	mux.Handle(PrivateUsersServiceSetDefaultOrgProcedure, connect_go.NewUnaryHandler(
+		PrivateUsersServiceSetDefaultOrgProcedure,
 		svc.SetDefaultOrg,
 		opts...,
 	))

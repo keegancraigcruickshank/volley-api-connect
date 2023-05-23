@@ -25,6 +25,25 @@ const (
 	PublicUsersServiceName = "users.v1.public.PublicUsersService"
 )
 
+// These constants are the fully-qualified names of the RPCs defined in this package. They're
+// exposed at runtime as Spec.Procedure and as the final two segments of the HTTP route.
+//
+// Note that these are different from the fully-qualified method names used by
+// google.golang.org/protobuf/reflect/protoreflect. To convert from these constants to
+// reflection-formatted method names, remove the leading slash and convert the remaining slash to a
+// period.
+const (
+	// PublicUsersServiceLoginProcedure is the fully-qualified name of the PublicUsersService's Login
+	// RPC.
+	PublicUsersServiceLoginProcedure = "/users.v1.public.PublicUsersService/Login"
+	// PublicUsersServiceRefreshTokenProcedure is the fully-qualified name of the PublicUsersService's
+	// RefreshToken RPC.
+	PublicUsersServiceRefreshTokenProcedure = "/users.v1.public.PublicUsersService/RefreshToken"
+	// PublicUsersServiceCreateUserProcedure is the fully-qualified name of the PublicUsersService's
+	// CreateUser RPC.
+	PublicUsersServiceCreateUserProcedure = "/users.v1.public.PublicUsersService/CreateUser"
+)
+
 // PublicUsersServiceClient is a client for the users.v1.public.PublicUsersService service.
 type PublicUsersServiceClient interface {
 	Login(context.Context, *connect_go.Request[public.LoginRequest]) (*connect_go.Response[public.LoginResponse], error)
@@ -44,17 +63,17 @@ func NewPublicUsersServiceClient(httpClient connect_go.HTTPClient, baseURL strin
 	return &publicUsersServiceClient{
 		login: connect_go.NewClient[public.LoginRequest, public.LoginResponse](
 			httpClient,
-			baseURL+"/users.v1.public.PublicUsersService/Login",
+			baseURL+PublicUsersServiceLoginProcedure,
 			opts...,
 		),
 		refreshToken: connect_go.NewClient[public.RefreshTokenRequest, public.RefreshTokenResponse](
 			httpClient,
-			baseURL+"/users.v1.public.PublicUsersService/RefreshToken",
+			baseURL+PublicUsersServiceRefreshTokenProcedure,
 			opts...,
 		),
 		createUser: connect_go.NewClient[public.CreateUserRequest, public.CreateUserResponse](
 			httpClient,
-			baseURL+"/users.v1.public.PublicUsersService/CreateUser",
+			baseURL+PublicUsersServiceCreateUserProcedure,
 			opts...,
 		),
 	}
@@ -96,18 +115,18 @@ type PublicUsersServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewPublicUsersServiceHandler(svc PublicUsersServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle("/users.v1.public.PublicUsersService/Login", connect_go.NewUnaryHandler(
-		"/users.v1.public.PublicUsersService/Login",
+	mux.Handle(PublicUsersServiceLoginProcedure, connect_go.NewUnaryHandler(
+		PublicUsersServiceLoginProcedure,
 		svc.Login,
 		opts...,
 	))
-	mux.Handle("/users.v1.public.PublicUsersService/RefreshToken", connect_go.NewUnaryHandler(
-		"/users.v1.public.PublicUsersService/RefreshToken",
+	mux.Handle(PublicUsersServiceRefreshTokenProcedure, connect_go.NewUnaryHandler(
+		PublicUsersServiceRefreshTokenProcedure,
 		svc.RefreshToken,
 		opts...,
 	))
-	mux.Handle("/users.v1.public.PublicUsersService/CreateUser", connect_go.NewUnaryHandler(
-		"/users.v1.public.PublicUsersService/CreateUser",
+	mux.Handle(PublicUsersServiceCreateUserProcedure, connect_go.NewUnaryHandler(
+		PublicUsersServiceCreateUserProcedure,
 		svc.CreateUser,
 		opts...,
 	))
