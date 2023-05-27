@@ -39,12 +39,20 @@ const (
 	// PublicUsersServiceModifyLocationProcedure is the fully-qualified name of the PublicUsersService's
 	// ModifyLocation RPC.
 	PublicUsersServiceModifyLocationProcedure = "/locations.v1.private.PublicUsersService/ModifyLocation"
+	// PublicUsersServiceListLocationsProcedure is the fully-qualified name of the PublicUsersService's
+	// ListLocations RPC.
+	PublicUsersServiceListLocationsProcedure = "/locations.v1.private.PublicUsersService/ListLocations"
+	// PublicUsersServiceRemoveLocationsProcedure is the fully-qualified name of the
+	// PublicUsersService's RemoveLocations RPC.
+	PublicUsersServiceRemoveLocationsProcedure = "/locations.v1.private.PublicUsersService/RemoveLocations"
 )
 
 // PublicUsersServiceClient is a client for the locations.v1.private.PublicUsersService service.
 type PublicUsersServiceClient interface {
 	AddLocation(context.Context, *connect_go.Request[private.AddLocationRequest]) (*connect_go.Response[private.AddLocationResponse], error)
 	ModifyLocation(context.Context, *connect_go.Request[private.ModifyLocationRequest]) (*connect_go.Response[private.ModifyLocationResponse], error)
+	ListLocations(context.Context, *connect_go.Request[private.ListLocationsRequest]) (*connect_go.Response[private.ListLocationsResponse], error)
+	RemoveLocations(context.Context, *connect_go.Request[private.RemoveLocationsRequest]) (*connect_go.Response[private.RemoveLocationsResponse], error)
 }
 
 // NewPublicUsersServiceClient constructs a client for the locations.v1.private.PublicUsersService
@@ -67,13 +75,25 @@ func NewPublicUsersServiceClient(httpClient connect_go.HTTPClient, baseURL strin
 			baseURL+PublicUsersServiceModifyLocationProcedure,
 			opts...,
 		),
+		listLocations: connect_go.NewClient[private.ListLocationsRequest, private.ListLocationsResponse](
+			httpClient,
+			baseURL+PublicUsersServiceListLocationsProcedure,
+			opts...,
+		),
+		removeLocations: connect_go.NewClient[private.RemoveLocationsRequest, private.RemoveLocationsResponse](
+			httpClient,
+			baseURL+PublicUsersServiceRemoveLocationsProcedure,
+			opts...,
+		),
 	}
 }
 
 // publicUsersServiceClient implements PublicUsersServiceClient.
 type publicUsersServiceClient struct {
-	addLocation    *connect_go.Client[private.AddLocationRequest, private.AddLocationResponse]
-	modifyLocation *connect_go.Client[private.ModifyLocationRequest, private.ModifyLocationResponse]
+	addLocation     *connect_go.Client[private.AddLocationRequest, private.AddLocationResponse]
+	modifyLocation  *connect_go.Client[private.ModifyLocationRequest, private.ModifyLocationResponse]
+	listLocations   *connect_go.Client[private.ListLocationsRequest, private.ListLocationsResponse]
+	removeLocations *connect_go.Client[private.RemoveLocationsRequest, private.RemoveLocationsResponse]
 }
 
 // AddLocation calls locations.v1.private.PublicUsersService.AddLocation.
@@ -86,11 +106,23 @@ func (c *publicUsersServiceClient) ModifyLocation(ctx context.Context, req *conn
 	return c.modifyLocation.CallUnary(ctx, req)
 }
 
+// ListLocations calls locations.v1.private.PublicUsersService.ListLocations.
+func (c *publicUsersServiceClient) ListLocations(ctx context.Context, req *connect_go.Request[private.ListLocationsRequest]) (*connect_go.Response[private.ListLocationsResponse], error) {
+	return c.listLocations.CallUnary(ctx, req)
+}
+
+// RemoveLocations calls locations.v1.private.PublicUsersService.RemoveLocations.
+func (c *publicUsersServiceClient) RemoveLocations(ctx context.Context, req *connect_go.Request[private.RemoveLocationsRequest]) (*connect_go.Response[private.RemoveLocationsResponse], error) {
+	return c.removeLocations.CallUnary(ctx, req)
+}
+
 // PublicUsersServiceHandler is an implementation of the locations.v1.private.PublicUsersService
 // service.
 type PublicUsersServiceHandler interface {
 	AddLocation(context.Context, *connect_go.Request[private.AddLocationRequest]) (*connect_go.Response[private.AddLocationResponse], error)
 	ModifyLocation(context.Context, *connect_go.Request[private.ModifyLocationRequest]) (*connect_go.Response[private.ModifyLocationResponse], error)
+	ListLocations(context.Context, *connect_go.Request[private.ListLocationsRequest]) (*connect_go.Response[private.ListLocationsResponse], error)
+	RemoveLocations(context.Context, *connect_go.Request[private.RemoveLocationsRequest]) (*connect_go.Response[private.RemoveLocationsResponse], error)
 }
 
 // NewPublicUsersServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -110,6 +142,16 @@ func NewPublicUsersServiceHandler(svc PublicUsersServiceHandler, opts ...connect
 		svc.ModifyLocation,
 		opts...,
 	))
+	mux.Handle(PublicUsersServiceListLocationsProcedure, connect_go.NewUnaryHandler(
+		PublicUsersServiceListLocationsProcedure,
+		svc.ListLocations,
+		opts...,
+	))
+	mux.Handle(PublicUsersServiceRemoveLocationsProcedure, connect_go.NewUnaryHandler(
+		PublicUsersServiceRemoveLocationsProcedure,
+		svc.RemoveLocations,
+		opts...,
+	))
 	return "/locations.v1.private.PublicUsersService/", mux
 }
 
@@ -122,4 +164,12 @@ func (UnimplementedPublicUsersServiceHandler) AddLocation(context.Context, *conn
 
 func (UnimplementedPublicUsersServiceHandler) ModifyLocation(context.Context, *connect_go.Request[private.ModifyLocationRequest]) (*connect_go.Response[private.ModifyLocationResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("locations.v1.private.PublicUsersService.ModifyLocation is not implemented"))
+}
+
+func (UnimplementedPublicUsersServiceHandler) ListLocations(context.Context, *connect_go.Request[private.ListLocationsRequest]) (*connect_go.Response[private.ListLocationsResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("locations.v1.private.PublicUsersService.ListLocations is not implemented"))
+}
+
+func (UnimplementedPublicUsersServiceHandler) RemoveLocations(context.Context, *connect_go.Request[private.RemoveLocationsRequest]) (*connect_go.Response[private.RemoveLocationsResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("locations.v1.private.PublicUsersService.RemoveLocations is not implemented"))
 }
