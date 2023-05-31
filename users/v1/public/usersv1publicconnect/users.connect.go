@@ -42,6 +42,9 @@ const (
 	// PublicUsersServiceCreateUserProcedure is the fully-qualified name of the PublicUsersService's
 	// CreateUser RPC.
 	PublicUsersServiceCreateUserProcedure = "/users.v1.public.PublicUsersService/CreateUser"
+	// PublicUsersServiceVerifyEmailProcedure is the fully-qualified name of the PublicUsersService's
+	// VerifyEmail RPC.
+	PublicUsersServiceVerifyEmailProcedure = "/users.v1.public.PublicUsersService/VerifyEmail"
 )
 
 // PublicUsersServiceClient is a client for the users.v1.public.PublicUsersService service.
@@ -49,6 +52,7 @@ type PublicUsersServiceClient interface {
 	Login(context.Context, *connect_go.Request[public.LoginRequest]) (*connect_go.Response[public.LoginResponse], error)
 	RefreshToken(context.Context, *connect_go.Request[public.RefreshTokenRequest]) (*connect_go.Response[public.RefreshTokenResponse], error)
 	CreateUser(context.Context, *connect_go.Request[public.CreateUserRequest]) (*connect_go.Response[public.CreateUserResponse], error)
+	VerifyEmail(context.Context, *connect_go.Request[public.VerifyEmailRequest]) (*connect_go.Response[public.VerifyEmailResponse], error)
 }
 
 // NewPublicUsersServiceClient constructs a client for the users.v1.public.PublicUsersService
@@ -76,6 +80,11 @@ func NewPublicUsersServiceClient(httpClient connect_go.HTTPClient, baseURL strin
 			baseURL+PublicUsersServiceCreateUserProcedure,
 			opts...,
 		),
+		verifyEmail: connect_go.NewClient[public.VerifyEmailRequest, public.VerifyEmailResponse](
+			httpClient,
+			baseURL+PublicUsersServiceVerifyEmailProcedure,
+			opts...,
+		),
 	}
 }
 
@@ -84,6 +93,7 @@ type publicUsersServiceClient struct {
 	login        *connect_go.Client[public.LoginRequest, public.LoginResponse]
 	refreshToken *connect_go.Client[public.RefreshTokenRequest, public.RefreshTokenResponse]
 	createUser   *connect_go.Client[public.CreateUserRequest, public.CreateUserResponse]
+	verifyEmail  *connect_go.Client[public.VerifyEmailRequest, public.VerifyEmailResponse]
 }
 
 // Login calls users.v1.public.PublicUsersService.Login.
@@ -101,11 +111,17 @@ func (c *publicUsersServiceClient) CreateUser(ctx context.Context, req *connect_
 	return c.createUser.CallUnary(ctx, req)
 }
 
+// VerifyEmail calls users.v1.public.PublicUsersService.VerifyEmail.
+func (c *publicUsersServiceClient) VerifyEmail(ctx context.Context, req *connect_go.Request[public.VerifyEmailRequest]) (*connect_go.Response[public.VerifyEmailResponse], error) {
+	return c.verifyEmail.CallUnary(ctx, req)
+}
+
 // PublicUsersServiceHandler is an implementation of the users.v1.public.PublicUsersService service.
 type PublicUsersServiceHandler interface {
 	Login(context.Context, *connect_go.Request[public.LoginRequest]) (*connect_go.Response[public.LoginResponse], error)
 	RefreshToken(context.Context, *connect_go.Request[public.RefreshTokenRequest]) (*connect_go.Response[public.RefreshTokenResponse], error)
 	CreateUser(context.Context, *connect_go.Request[public.CreateUserRequest]) (*connect_go.Response[public.CreateUserResponse], error)
+	VerifyEmail(context.Context, *connect_go.Request[public.VerifyEmailRequest]) (*connect_go.Response[public.VerifyEmailResponse], error)
 }
 
 // NewPublicUsersServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -130,6 +146,11 @@ func NewPublicUsersServiceHandler(svc PublicUsersServiceHandler, opts ...connect
 		svc.CreateUser,
 		opts...,
 	))
+	mux.Handle(PublicUsersServiceVerifyEmailProcedure, connect_go.NewUnaryHandler(
+		PublicUsersServiceVerifyEmailProcedure,
+		svc.VerifyEmail,
+		opts...,
+	))
 	return "/users.v1.public.PublicUsersService/", mux
 }
 
@@ -146,4 +167,8 @@ func (UnimplementedPublicUsersServiceHandler) RefreshToken(context.Context, *con
 
 func (UnimplementedPublicUsersServiceHandler) CreateUser(context.Context, *connect_go.Request[public.CreateUserRequest]) (*connect_go.Response[public.CreateUserResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.public.PublicUsersService.CreateUser is not implemented"))
+}
+
+func (UnimplementedPublicUsersServiceHandler) VerifyEmail(context.Context, *connect_go.Request[public.VerifyEmailRequest]) (*connect_go.Response[public.VerifyEmailResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.public.PublicUsersService.VerifyEmail is not implemented"))
 }
