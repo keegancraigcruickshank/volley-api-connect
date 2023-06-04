@@ -36,6 +36,9 @@ const (
 	// PrivateUsersServiceGetMeProcedure is the fully-qualified name of the PrivateUsersService's GetMe
 	// RPC.
 	PrivateUsersServiceGetMeProcedure = "/users.v1.private.PrivateUsersService/GetMe"
+	// PrivateUsersServiceResendVerificationProcedure is the fully-qualified name of the
+	// PrivateUsersService's ResendVerification RPC.
+	PrivateUsersServiceResendVerificationProcedure = "/users.v1.private.PrivateUsersService/ResendVerification"
 	// PrivateUsersServiceSetActiveOrgProcedure is the fully-qualified name of the PrivateUsersService's
 	// SetActiveOrg RPC.
 	PrivateUsersServiceSetActiveOrgProcedure = "/users.v1.private.PrivateUsersService/SetActiveOrg"
@@ -50,6 +53,7 @@ const (
 // PrivateUsersServiceClient is a client for the users.v1.private.PrivateUsersService service.
 type PrivateUsersServiceClient interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
+	ResendVerification(context.Context, *connect_go.Request[private.ResendVerificationRequest]) (*connect_go.Response[private.ResendVerificationResponse], error)
 	SetActiveOrg(context.Context, *connect_go.Request[private.SetActiveOrgRequest]) (*connect_go.Response[private.SetActiveOrgResponse], error)
 	Logout(context.Context, *connect_go.Request[private.LogoutRequest]) (*connect_go.Response[private.LogoutResponse], error)
 	SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error)
@@ -68,6 +72,11 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 		getMe: connect_go.NewClient[private.GetMeRequest, private.GetMeResponse](
 			httpClient,
 			baseURL+PrivateUsersServiceGetMeProcedure,
+			opts...,
+		),
+		resendVerification: connect_go.NewClient[private.ResendVerificationRequest, private.ResendVerificationResponse](
+			httpClient,
+			baseURL+PrivateUsersServiceResendVerificationProcedure,
 			opts...,
 		),
 		setActiveOrg: connect_go.NewClient[private.SetActiveOrgRequest, private.SetActiveOrgResponse](
@@ -90,15 +99,21 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 
 // privateUsersServiceClient implements PrivateUsersServiceClient.
 type privateUsersServiceClient struct {
-	getMe         *connect_go.Client[private.GetMeRequest, private.GetMeResponse]
-	setActiveOrg  *connect_go.Client[private.SetActiveOrgRequest, private.SetActiveOrgResponse]
-	logout        *connect_go.Client[private.LogoutRequest, private.LogoutResponse]
-	setDefaultOrg *connect_go.Client[private.SetDefaultOrgRequest, private.SetDefaultOrgResponse]
+	getMe              *connect_go.Client[private.GetMeRequest, private.GetMeResponse]
+	resendVerification *connect_go.Client[private.ResendVerificationRequest, private.ResendVerificationResponse]
+	setActiveOrg       *connect_go.Client[private.SetActiveOrgRequest, private.SetActiveOrgResponse]
+	logout             *connect_go.Client[private.LogoutRequest, private.LogoutResponse]
+	setDefaultOrg      *connect_go.Client[private.SetDefaultOrgRequest, private.SetDefaultOrgResponse]
 }
 
 // GetMe calls users.v1.private.PrivateUsersService.GetMe.
 func (c *privateUsersServiceClient) GetMe(ctx context.Context, req *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error) {
 	return c.getMe.CallUnary(ctx, req)
+}
+
+// ResendVerification calls users.v1.private.PrivateUsersService.ResendVerification.
+func (c *privateUsersServiceClient) ResendVerification(ctx context.Context, req *connect_go.Request[private.ResendVerificationRequest]) (*connect_go.Response[private.ResendVerificationResponse], error) {
+	return c.resendVerification.CallUnary(ctx, req)
 }
 
 // SetActiveOrg calls users.v1.private.PrivateUsersService.SetActiveOrg.
@@ -120,6 +135,7 @@ func (c *privateUsersServiceClient) SetDefaultOrg(ctx context.Context, req *conn
 // service.
 type PrivateUsersServiceHandler interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
+	ResendVerification(context.Context, *connect_go.Request[private.ResendVerificationRequest]) (*connect_go.Response[private.ResendVerificationResponse], error)
 	SetActiveOrg(context.Context, *connect_go.Request[private.SetActiveOrgRequest]) (*connect_go.Response[private.SetActiveOrgResponse], error)
 	Logout(context.Context, *connect_go.Request[private.LogoutRequest]) (*connect_go.Response[private.LogoutResponse], error)
 	SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error)
@@ -135,6 +151,11 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 	mux.Handle(PrivateUsersServiceGetMeProcedure, connect_go.NewUnaryHandler(
 		PrivateUsersServiceGetMeProcedure,
 		svc.GetMe,
+		opts...,
+	))
+	mux.Handle(PrivateUsersServiceResendVerificationProcedure, connect_go.NewUnaryHandler(
+		PrivateUsersServiceResendVerificationProcedure,
+		svc.ResendVerification,
 		opts...,
 	))
 	mux.Handle(PrivateUsersServiceSetActiveOrgProcedure, connect_go.NewUnaryHandler(
@@ -160,6 +181,10 @@ type UnimplementedPrivateUsersServiceHandler struct{}
 
 func (UnimplementedPrivateUsersServiceHandler) GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.GetMe is not implemented"))
+}
+
+func (UnimplementedPrivateUsersServiceHandler) ResendVerification(context.Context, *connect_go.Request[private.ResendVerificationRequest]) (*connect_go.Response[private.ResendVerificationResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.ResendVerification is not implemented"))
 }
 
 func (UnimplementedPrivateUsersServiceHandler) SetActiveOrg(context.Context, *connect_go.Request[private.SetActiveOrgRequest]) (*connect_go.Response[private.SetActiveOrgResponse], error) {
