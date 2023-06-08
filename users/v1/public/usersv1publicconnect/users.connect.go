@@ -45,6 +45,12 @@ const (
 	// PublicUsersServiceVerifyEmailProcedure is the fully-qualified name of the PublicUsersService's
 	// VerifyEmail RPC.
 	PublicUsersServiceVerifyEmailProcedure = "/users.v1.public.PublicUsersService/VerifyEmail"
+	// PublicUsersServiceSendResetPasswordLinkProcedure is the fully-qualified name of the
+	// PublicUsersService's SendResetPasswordLink RPC.
+	PublicUsersServiceSendResetPasswordLinkProcedure = "/users.v1.public.PublicUsersService/SendResetPasswordLink"
+	// PublicUsersServiceResetPasswordProcedure is the fully-qualified name of the PublicUsersService's
+	// ResetPassword RPC.
+	PublicUsersServiceResetPasswordProcedure = "/users.v1.public.PublicUsersService/ResetPassword"
 )
 
 // PublicUsersServiceClient is a client for the users.v1.public.PublicUsersService service.
@@ -53,6 +59,8 @@ type PublicUsersServiceClient interface {
 	RefreshToken(context.Context, *connect_go.Request[public.RefreshTokenRequest]) (*connect_go.Response[public.RefreshTokenResponse], error)
 	CreateUser(context.Context, *connect_go.Request[public.CreateUserRequest]) (*connect_go.Response[public.CreateUserResponse], error)
 	VerifyEmail(context.Context, *connect_go.Request[public.VerifyEmailRequest]) (*connect_go.Response[public.VerifyEmailResponse], error)
+	SendResetPasswordLink(context.Context, *connect_go.Request[public.SendResetPasswordLinkRequest]) (*connect_go.Response[public.SendResetPasswordLinkResponse], error)
+	ResetPassword(context.Context, *connect_go.Request[public.ResetPasswordRequest]) (*connect_go.Response[public.ResetPasswordResponse], error)
 }
 
 // NewPublicUsersServiceClient constructs a client for the users.v1.public.PublicUsersService
@@ -85,15 +93,27 @@ func NewPublicUsersServiceClient(httpClient connect_go.HTTPClient, baseURL strin
 			baseURL+PublicUsersServiceVerifyEmailProcedure,
 			opts...,
 		),
+		sendResetPasswordLink: connect_go.NewClient[public.SendResetPasswordLinkRequest, public.SendResetPasswordLinkResponse](
+			httpClient,
+			baseURL+PublicUsersServiceSendResetPasswordLinkProcedure,
+			opts...,
+		),
+		resetPassword: connect_go.NewClient[public.ResetPasswordRequest, public.ResetPasswordResponse](
+			httpClient,
+			baseURL+PublicUsersServiceResetPasswordProcedure,
+			opts...,
+		),
 	}
 }
 
 // publicUsersServiceClient implements PublicUsersServiceClient.
 type publicUsersServiceClient struct {
-	login        *connect_go.Client[public.LoginRequest, public.LoginResponse]
-	refreshToken *connect_go.Client[public.RefreshTokenRequest, public.RefreshTokenResponse]
-	createUser   *connect_go.Client[public.CreateUserRequest, public.CreateUserResponse]
-	verifyEmail  *connect_go.Client[public.VerifyEmailRequest, public.VerifyEmailResponse]
+	login                 *connect_go.Client[public.LoginRequest, public.LoginResponse]
+	refreshToken          *connect_go.Client[public.RefreshTokenRequest, public.RefreshTokenResponse]
+	createUser            *connect_go.Client[public.CreateUserRequest, public.CreateUserResponse]
+	verifyEmail           *connect_go.Client[public.VerifyEmailRequest, public.VerifyEmailResponse]
+	sendResetPasswordLink *connect_go.Client[public.SendResetPasswordLinkRequest, public.SendResetPasswordLinkResponse]
+	resetPassword         *connect_go.Client[public.ResetPasswordRequest, public.ResetPasswordResponse]
 }
 
 // Login calls users.v1.public.PublicUsersService.Login.
@@ -116,12 +136,24 @@ func (c *publicUsersServiceClient) VerifyEmail(ctx context.Context, req *connect
 	return c.verifyEmail.CallUnary(ctx, req)
 }
 
+// SendResetPasswordLink calls users.v1.public.PublicUsersService.SendResetPasswordLink.
+func (c *publicUsersServiceClient) SendResetPasswordLink(ctx context.Context, req *connect_go.Request[public.SendResetPasswordLinkRequest]) (*connect_go.Response[public.SendResetPasswordLinkResponse], error) {
+	return c.sendResetPasswordLink.CallUnary(ctx, req)
+}
+
+// ResetPassword calls users.v1.public.PublicUsersService.ResetPassword.
+func (c *publicUsersServiceClient) ResetPassword(ctx context.Context, req *connect_go.Request[public.ResetPasswordRequest]) (*connect_go.Response[public.ResetPasswordResponse], error) {
+	return c.resetPassword.CallUnary(ctx, req)
+}
+
 // PublicUsersServiceHandler is an implementation of the users.v1.public.PublicUsersService service.
 type PublicUsersServiceHandler interface {
 	Login(context.Context, *connect_go.Request[public.LoginRequest]) (*connect_go.Response[public.LoginResponse], error)
 	RefreshToken(context.Context, *connect_go.Request[public.RefreshTokenRequest]) (*connect_go.Response[public.RefreshTokenResponse], error)
 	CreateUser(context.Context, *connect_go.Request[public.CreateUserRequest]) (*connect_go.Response[public.CreateUserResponse], error)
 	VerifyEmail(context.Context, *connect_go.Request[public.VerifyEmailRequest]) (*connect_go.Response[public.VerifyEmailResponse], error)
+	SendResetPasswordLink(context.Context, *connect_go.Request[public.SendResetPasswordLinkRequest]) (*connect_go.Response[public.SendResetPasswordLinkResponse], error)
+	ResetPassword(context.Context, *connect_go.Request[public.ResetPasswordRequest]) (*connect_go.Response[public.ResetPasswordResponse], error)
 }
 
 // NewPublicUsersServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -151,6 +183,16 @@ func NewPublicUsersServiceHandler(svc PublicUsersServiceHandler, opts ...connect
 		svc.VerifyEmail,
 		opts...,
 	))
+	mux.Handle(PublicUsersServiceSendResetPasswordLinkProcedure, connect_go.NewUnaryHandler(
+		PublicUsersServiceSendResetPasswordLinkProcedure,
+		svc.SendResetPasswordLink,
+		opts...,
+	))
+	mux.Handle(PublicUsersServiceResetPasswordProcedure, connect_go.NewUnaryHandler(
+		PublicUsersServiceResetPasswordProcedure,
+		svc.ResetPassword,
+		opts...,
+	))
 	return "/users.v1.public.PublicUsersService/", mux
 }
 
@@ -171,4 +213,12 @@ func (UnimplementedPublicUsersServiceHandler) CreateUser(context.Context, *conne
 
 func (UnimplementedPublicUsersServiceHandler) VerifyEmail(context.Context, *connect_go.Request[public.VerifyEmailRequest]) (*connect_go.Response[public.VerifyEmailResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.public.PublicUsersService.VerifyEmail is not implemented"))
+}
+
+func (UnimplementedPublicUsersServiceHandler) SendResetPasswordLink(context.Context, *connect_go.Request[public.SendResetPasswordLinkRequest]) (*connect_go.Response[public.SendResetPasswordLinkResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.public.PublicUsersService.SendResetPasswordLink is not implemented"))
+}
+
+func (UnimplementedPublicUsersServiceHandler) ResetPassword(context.Context, *connect_go.Request[public.ResetPasswordRequest]) (*connect_go.Response[public.ResetPasswordResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.public.PublicUsersService.ResetPassword is not implemented"))
 }
