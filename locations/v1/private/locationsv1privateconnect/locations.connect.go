@@ -21,8 +21,8 @@ import (
 const _ = connect_go.IsAtLeastVersion0_1_0
 
 const (
-	// PublicUsersServiceName is the fully-qualified name of the PublicUsersService service.
-	PublicUsersServiceName = "locations.v1.private.PublicUsersService"
+	// PrivateLocationsServiceName is the fully-qualified name of the PrivateLocationsService service.
+	PrivateLocationsServiceName = "locations.v1.private.PrivateLocationsService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -33,143 +33,145 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// PublicUsersServiceAddLocationProcedure is the fully-qualified name of the PublicUsersService's
-	// AddLocation RPC.
-	PublicUsersServiceAddLocationProcedure = "/locations.v1.private.PublicUsersService/AddLocation"
-	// PublicUsersServiceModifyLocationProcedure is the fully-qualified name of the PublicUsersService's
-	// ModifyLocation RPC.
-	PublicUsersServiceModifyLocationProcedure = "/locations.v1.private.PublicUsersService/ModifyLocation"
-	// PublicUsersServiceListLocationsProcedure is the fully-qualified name of the PublicUsersService's
-	// ListLocations RPC.
-	PublicUsersServiceListLocationsProcedure = "/locations.v1.private.PublicUsersService/ListLocations"
-	// PublicUsersServiceRemoveLocationsProcedure is the fully-qualified name of the
-	// PublicUsersService's RemoveLocations RPC.
-	PublicUsersServiceRemoveLocationsProcedure = "/locations.v1.private.PublicUsersService/RemoveLocations"
+	// PrivateLocationsServiceAddLocationProcedure is the fully-qualified name of the
+	// PrivateLocationsService's AddLocation RPC.
+	PrivateLocationsServiceAddLocationProcedure = "/locations.v1.private.PrivateLocationsService/AddLocation"
+	// PrivateLocationsServiceModifyLocationProcedure is the fully-qualified name of the
+	// PrivateLocationsService's ModifyLocation RPC.
+	PrivateLocationsServiceModifyLocationProcedure = "/locations.v1.private.PrivateLocationsService/ModifyLocation"
+	// PrivateLocationsServiceListLocationsProcedure is the fully-qualified name of the
+	// PrivateLocationsService's ListLocations RPC.
+	PrivateLocationsServiceListLocationsProcedure = "/locations.v1.private.PrivateLocationsService/ListLocations"
+	// PrivateLocationsServiceRemoveLocationsProcedure is the fully-qualified name of the
+	// PrivateLocationsService's RemoveLocations RPC.
+	PrivateLocationsServiceRemoveLocationsProcedure = "/locations.v1.private.PrivateLocationsService/RemoveLocations"
 )
 
-// PublicUsersServiceClient is a client for the locations.v1.private.PublicUsersService service.
-type PublicUsersServiceClient interface {
+// PrivateLocationsServiceClient is a client for the locations.v1.private.PrivateLocationsService
+// service.
+type PrivateLocationsServiceClient interface {
 	AddLocation(context.Context, *connect_go.Request[private.AddLocationRequest]) (*connect_go.Response[private.AddLocationResponse], error)
 	ModifyLocation(context.Context, *connect_go.Request[private.ModifyLocationRequest]) (*connect_go.Response[private.ModifyLocationResponse], error)
 	ListLocations(context.Context, *connect_go.Request[private.ListLocationsRequest]) (*connect_go.Response[private.ListLocationsResponse], error)
 	RemoveLocations(context.Context, *connect_go.Request[private.RemoveLocationsRequest]) (*connect_go.Response[private.RemoveLocationsResponse], error)
 }
 
-// NewPublicUsersServiceClient constructs a client for the locations.v1.private.PublicUsersService
-// service. By default, it uses the Connect protocol with the binary Protobuf Codec, asks for
-// gzipped responses, and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply
-// the connect.WithGRPC() or connect.WithGRPCWeb() options.
+// NewPrivateLocationsServiceClient constructs a client for the
+// locations.v1.private.PrivateLocationsService service. By default, it uses the Connect protocol
+// with the binary Protobuf Codec, asks for gzipped responses, and sends uncompressed requests. To
+// use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC() or connect.WithGRPCWeb()
+// options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewPublicUsersServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) PublicUsersServiceClient {
+func NewPrivateLocationsServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) PrivateLocationsServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	return &publicUsersServiceClient{
+	return &privateLocationsServiceClient{
 		addLocation: connect_go.NewClient[private.AddLocationRequest, private.AddLocationResponse](
 			httpClient,
-			baseURL+PublicUsersServiceAddLocationProcedure,
+			baseURL+PrivateLocationsServiceAddLocationProcedure,
 			opts...,
 		),
 		modifyLocation: connect_go.NewClient[private.ModifyLocationRequest, private.ModifyLocationResponse](
 			httpClient,
-			baseURL+PublicUsersServiceModifyLocationProcedure,
+			baseURL+PrivateLocationsServiceModifyLocationProcedure,
 			opts...,
 		),
 		listLocations: connect_go.NewClient[private.ListLocationsRequest, private.ListLocationsResponse](
 			httpClient,
-			baseURL+PublicUsersServiceListLocationsProcedure,
+			baseURL+PrivateLocationsServiceListLocationsProcedure,
 			opts...,
 		),
 		removeLocations: connect_go.NewClient[private.RemoveLocationsRequest, private.RemoveLocationsResponse](
 			httpClient,
-			baseURL+PublicUsersServiceRemoveLocationsProcedure,
+			baseURL+PrivateLocationsServiceRemoveLocationsProcedure,
 			opts...,
 		),
 	}
 }
 
-// publicUsersServiceClient implements PublicUsersServiceClient.
-type publicUsersServiceClient struct {
+// privateLocationsServiceClient implements PrivateLocationsServiceClient.
+type privateLocationsServiceClient struct {
 	addLocation     *connect_go.Client[private.AddLocationRequest, private.AddLocationResponse]
 	modifyLocation  *connect_go.Client[private.ModifyLocationRequest, private.ModifyLocationResponse]
 	listLocations   *connect_go.Client[private.ListLocationsRequest, private.ListLocationsResponse]
 	removeLocations *connect_go.Client[private.RemoveLocationsRequest, private.RemoveLocationsResponse]
 }
 
-// AddLocation calls locations.v1.private.PublicUsersService.AddLocation.
-func (c *publicUsersServiceClient) AddLocation(ctx context.Context, req *connect_go.Request[private.AddLocationRequest]) (*connect_go.Response[private.AddLocationResponse], error) {
+// AddLocation calls locations.v1.private.PrivateLocationsService.AddLocation.
+func (c *privateLocationsServiceClient) AddLocation(ctx context.Context, req *connect_go.Request[private.AddLocationRequest]) (*connect_go.Response[private.AddLocationResponse], error) {
 	return c.addLocation.CallUnary(ctx, req)
 }
 
-// ModifyLocation calls locations.v1.private.PublicUsersService.ModifyLocation.
-func (c *publicUsersServiceClient) ModifyLocation(ctx context.Context, req *connect_go.Request[private.ModifyLocationRequest]) (*connect_go.Response[private.ModifyLocationResponse], error) {
+// ModifyLocation calls locations.v1.private.PrivateLocationsService.ModifyLocation.
+func (c *privateLocationsServiceClient) ModifyLocation(ctx context.Context, req *connect_go.Request[private.ModifyLocationRequest]) (*connect_go.Response[private.ModifyLocationResponse], error) {
 	return c.modifyLocation.CallUnary(ctx, req)
 }
 
-// ListLocations calls locations.v1.private.PublicUsersService.ListLocations.
-func (c *publicUsersServiceClient) ListLocations(ctx context.Context, req *connect_go.Request[private.ListLocationsRequest]) (*connect_go.Response[private.ListLocationsResponse], error) {
+// ListLocations calls locations.v1.private.PrivateLocationsService.ListLocations.
+func (c *privateLocationsServiceClient) ListLocations(ctx context.Context, req *connect_go.Request[private.ListLocationsRequest]) (*connect_go.Response[private.ListLocationsResponse], error) {
 	return c.listLocations.CallUnary(ctx, req)
 }
 
-// RemoveLocations calls locations.v1.private.PublicUsersService.RemoveLocations.
-func (c *publicUsersServiceClient) RemoveLocations(ctx context.Context, req *connect_go.Request[private.RemoveLocationsRequest]) (*connect_go.Response[private.RemoveLocationsResponse], error) {
+// RemoveLocations calls locations.v1.private.PrivateLocationsService.RemoveLocations.
+func (c *privateLocationsServiceClient) RemoveLocations(ctx context.Context, req *connect_go.Request[private.RemoveLocationsRequest]) (*connect_go.Response[private.RemoveLocationsResponse], error) {
 	return c.removeLocations.CallUnary(ctx, req)
 }
 
-// PublicUsersServiceHandler is an implementation of the locations.v1.private.PublicUsersService
-// service.
-type PublicUsersServiceHandler interface {
+// PrivateLocationsServiceHandler is an implementation of the
+// locations.v1.private.PrivateLocationsService service.
+type PrivateLocationsServiceHandler interface {
 	AddLocation(context.Context, *connect_go.Request[private.AddLocationRequest]) (*connect_go.Response[private.AddLocationResponse], error)
 	ModifyLocation(context.Context, *connect_go.Request[private.ModifyLocationRequest]) (*connect_go.Response[private.ModifyLocationResponse], error)
 	ListLocations(context.Context, *connect_go.Request[private.ListLocationsRequest]) (*connect_go.Response[private.ListLocationsResponse], error)
 	RemoveLocations(context.Context, *connect_go.Request[private.RemoveLocationsRequest]) (*connect_go.Response[private.RemoveLocationsResponse], error)
 }
 
-// NewPublicUsersServiceHandler builds an HTTP handler from the service implementation. It returns
-// the path on which to mount the handler and the handler itself.
+// NewPrivateLocationsServiceHandler builds an HTTP handler from the service implementation. It
+// returns the path on which to mount the handler and the handler itself.
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewPublicUsersServiceHandler(svc PublicUsersServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
+func NewPrivateLocationsServiceHandler(svc PrivateLocationsServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle(PublicUsersServiceAddLocationProcedure, connect_go.NewUnaryHandler(
-		PublicUsersServiceAddLocationProcedure,
+	mux.Handle(PrivateLocationsServiceAddLocationProcedure, connect_go.NewUnaryHandler(
+		PrivateLocationsServiceAddLocationProcedure,
 		svc.AddLocation,
 		opts...,
 	))
-	mux.Handle(PublicUsersServiceModifyLocationProcedure, connect_go.NewUnaryHandler(
-		PublicUsersServiceModifyLocationProcedure,
+	mux.Handle(PrivateLocationsServiceModifyLocationProcedure, connect_go.NewUnaryHandler(
+		PrivateLocationsServiceModifyLocationProcedure,
 		svc.ModifyLocation,
 		opts...,
 	))
-	mux.Handle(PublicUsersServiceListLocationsProcedure, connect_go.NewUnaryHandler(
-		PublicUsersServiceListLocationsProcedure,
+	mux.Handle(PrivateLocationsServiceListLocationsProcedure, connect_go.NewUnaryHandler(
+		PrivateLocationsServiceListLocationsProcedure,
 		svc.ListLocations,
 		opts...,
 	))
-	mux.Handle(PublicUsersServiceRemoveLocationsProcedure, connect_go.NewUnaryHandler(
-		PublicUsersServiceRemoveLocationsProcedure,
+	mux.Handle(PrivateLocationsServiceRemoveLocationsProcedure, connect_go.NewUnaryHandler(
+		PrivateLocationsServiceRemoveLocationsProcedure,
 		svc.RemoveLocations,
 		opts...,
 	))
-	return "/locations.v1.private.PublicUsersService/", mux
+	return "/locations.v1.private.PrivateLocationsService/", mux
 }
 
-// UnimplementedPublicUsersServiceHandler returns CodeUnimplemented from all methods.
-type UnimplementedPublicUsersServiceHandler struct{}
+// UnimplementedPrivateLocationsServiceHandler returns CodeUnimplemented from all methods.
+type UnimplementedPrivateLocationsServiceHandler struct{}
 
-func (UnimplementedPublicUsersServiceHandler) AddLocation(context.Context, *connect_go.Request[private.AddLocationRequest]) (*connect_go.Response[private.AddLocationResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("locations.v1.private.PublicUsersService.AddLocation is not implemented"))
+func (UnimplementedPrivateLocationsServiceHandler) AddLocation(context.Context, *connect_go.Request[private.AddLocationRequest]) (*connect_go.Response[private.AddLocationResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("locations.v1.private.PrivateLocationsService.AddLocation is not implemented"))
 }
 
-func (UnimplementedPublicUsersServiceHandler) ModifyLocation(context.Context, *connect_go.Request[private.ModifyLocationRequest]) (*connect_go.Response[private.ModifyLocationResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("locations.v1.private.PublicUsersService.ModifyLocation is not implemented"))
+func (UnimplementedPrivateLocationsServiceHandler) ModifyLocation(context.Context, *connect_go.Request[private.ModifyLocationRequest]) (*connect_go.Response[private.ModifyLocationResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("locations.v1.private.PrivateLocationsService.ModifyLocation is not implemented"))
 }
 
-func (UnimplementedPublicUsersServiceHandler) ListLocations(context.Context, *connect_go.Request[private.ListLocationsRequest]) (*connect_go.Response[private.ListLocationsResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("locations.v1.private.PublicUsersService.ListLocations is not implemented"))
+func (UnimplementedPrivateLocationsServiceHandler) ListLocations(context.Context, *connect_go.Request[private.ListLocationsRequest]) (*connect_go.Response[private.ListLocationsResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("locations.v1.private.PrivateLocationsService.ListLocations is not implemented"))
 }
 
-func (UnimplementedPublicUsersServiceHandler) RemoveLocations(context.Context, *connect_go.Request[private.RemoveLocationsRequest]) (*connect_go.Response[private.RemoveLocationsResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("locations.v1.private.PublicUsersService.RemoveLocations is not implemented"))
+func (UnimplementedPrivateLocationsServiceHandler) RemoveLocations(context.Context, *connect_go.Request[private.RemoveLocationsRequest]) (*connect_go.Response[private.RemoveLocationsResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("locations.v1.private.PrivateLocationsService.RemoveLocations is not implemented"))
 }
