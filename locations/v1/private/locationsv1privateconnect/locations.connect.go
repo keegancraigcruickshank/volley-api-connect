@@ -133,28 +133,40 @@ type PrivateLocationsServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewPrivateLocationsServiceHandler(svc PrivateLocationsServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	mux := http.NewServeMux()
-	mux.Handle(PrivateLocationsServiceAddLocationProcedure, connect_go.NewUnaryHandler(
+	privateLocationsServiceAddLocationHandler := connect_go.NewUnaryHandler(
 		PrivateLocationsServiceAddLocationProcedure,
 		svc.AddLocation,
 		opts...,
-	))
-	mux.Handle(PrivateLocationsServiceModifyLocationProcedure, connect_go.NewUnaryHandler(
+	)
+	privateLocationsServiceModifyLocationHandler := connect_go.NewUnaryHandler(
 		PrivateLocationsServiceModifyLocationProcedure,
 		svc.ModifyLocation,
 		opts...,
-	))
-	mux.Handle(PrivateLocationsServiceListLocationsProcedure, connect_go.NewUnaryHandler(
+	)
+	privateLocationsServiceListLocationsHandler := connect_go.NewUnaryHandler(
 		PrivateLocationsServiceListLocationsProcedure,
 		svc.ListLocations,
 		opts...,
-	))
-	mux.Handle(PrivateLocationsServiceRemoveLocationsProcedure, connect_go.NewUnaryHandler(
+	)
+	privateLocationsServiceRemoveLocationsHandler := connect_go.NewUnaryHandler(
 		PrivateLocationsServiceRemoveLocationsProcedure,
 		svc.RemoveLocations,
 		opts...,
-	))
-	return "/locations.v1.private.PrivateLocationsService/", mux
+	)
+	return "/locations.v1.private.PrivateLocationsService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case PrivateLocationsServiceAddLocationProcedure:
+			privateLocationsServiceAddLocationHandler.ServeHTTP(w, r)
+		case PrivateLocationsServiceModifyLocationProcedure:
+			privateLocationsServiceModifyLocationHandler.ServeHTTP(w, r)
+		case PrivateLocationsServiceListLocationsProcedure:
+			privateLocationsServiceListLocationsHandler.ServeHTTP(w, r)
+		case PrivateLocationsServiceRemoveLocationsProcedure:
+			privateLocationsServiceRemoveLocationsHandler.ServeHTTP(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	})
 }
 
 // UnimplementedPrivateLocationsServiceHandler returns CodeUnimplemented from all methods.

@@ -147,33 +147,47 @@ type PrivateUsersServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	mux := http.NewServeMux()
-	mux.Handle(PrivateUsersServiceGetMeProcedure, connect_go.NewUnaryHandler(
+	privateUsersServiceGetMeHandler := connect_go.NewUnaryHandler(
 		PrivateUsersServiceGetMeProcedure,
 		svc.GetMe,
 		opts...,
-	))
-	mux.Handle(PrivateUsersServiceResendVerificationProcedure, connect_go.NewUnaryHandler(
+	)
+	privateUsersServiceResendVerificationHandler := connect_go.NewUnaryHandler(
 		PrivateUsersServiceResendVerificationProcedure,
 		svc.ResendVerification,
 		opts...,
-	))
-	mux.Handle(PrivateUsersServiceSetActiveOrgProcedure, connect_go.NewUnaryHandler(
+	)
+	privateUsersServiceSetActiveOrgHandler := connect_go.NewUnaryHandler(
 		PrivateUsersServiceSetActiveOrgProcedure,
 		svc.SetActiveOrg,
 		opts...,
-	))
-	mux.Handle(PrivateUsersServiceLogoutProcedure, connect_go.NewUnaryHandler(
+	)
+	privateUsersServiceLogoutHandler := connect_go.NewUnaryHandler(
 		PrivateUsersServiceLogoutProcedure,
 		svc.Logout,
 		opts...,
-	))
-	mux.Handle(PrivateUsersServiceSetDefaultOrgProcedure, connect_go.NewUnaryHandler(
+	)
+	privateUsersServiceSetDefaultOrgHandler := connect_go.NewUnaryHandler(
 		PrivateUsersServiceSetDefaultOrgProcedure,
 		svc.SetDefaultOrg,
 		opts...,
-	))
-	return "/users.v1.private.PrivateUsersService/", mux
+	)
+	return "/users.v1.private.PrivateUsersService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case PrivateUsersServiceGetMeProcedure:
+			privateUsersServiceGetMeHandler.ServeHTTP(w, r)
+		case PrivateUsersServiceResendVerificationProcedure:
+			privateUsersServiceResendVerificationHandler.ServeHTTP(w, r)
+		case PrivateUsersServiceSetActiveOrgProcedure:
+			privateUsersServiceSetActiveOrgHandler.ServeHTTP(w, r)
+		case PrivateUsersServiceLogoutProcedure:
+			privateUsersServiceLogoutHandler.ServeHTTP(w, r)
+		case PrivateUsersServiceSetDefaultOrgProcedure:
+			privateUsersServiceSetDefaultOrgHandler.ServeHTTP(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	})
 }
 
 // UnimplementedPrivateUsersServiceHandler returns CodeUnimplemented from all methods.

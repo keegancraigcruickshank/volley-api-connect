@@ -162,38 +162,54 @@ type PublicUsersServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewPublicUsersServiceHandler(svc PublicUsersServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	mux := http.NewServeMux()
-	mux.Handle(PublicUsersServiceLoginProcedure, connect_go.NewUnaryHandler(
+	publicUsersServiceLoginHandler := connect_go.NewUnaryHandler(
 		PublicUsersServiceLoginProcedure,
 		svc.Login,
 		opts...,
-	))
-	mux.Handle(PublicUsersServiceRefreshTokenProcedure, connect_go.NewUnaryHandler(
+	)
+	publicUsersServiceRefreshTokenHandler := connect_go.NewUnaryHandler(
 		PublicUsersServiceRefreshTokenProcedure,
 		svc.RefreshToken,
 		opts...,
-	))
-	mux.Handle(PublicUsersServiceCreateUserProcedure, connect_go.NewUnaryHandler(
+	)
+	publicUsersServiceCreateUserHandler := connect_go.NewUnaryHandler(
 		PublicUsersServiceCreateUserProcedure,
 		svc.CreateUser,
 		opts...,
-	))
-	mux.Handle(PublicUsersServiceVerifyEmailProcedure, connect_go.NewUnaryHandler(
+	)
+	publicUsersServiceVerifyEmailHandler := connect_go.NewUnaryHandler(
 		PublicUsersServiceVerifyEmailProcedure,
 		svc.VerifyEmail,
 		opts...,
-	))
-	mux.Handle(PublicUsersServiceSendResetPasswordLinkProcedure, connect_go.NewUnaryHandler(
+	)
+	publicUsersServiceSendResetPasswordLinkHandler := connect_go.NewUnaryHandler(
 		PublicUsersServiceSendResetPasswordLinkProcedure,
 		svc.SendResetPasswordLink,
 		opts...,
-	))
-	mux.Handle(PublicUsersServiceResetPasswordProcedure, connect_go.NewUnaryHandler(
+	)
+	publicUsersServiceResetPasswordHandler := connect_go.NewUnaryHandler(
 		PublicUsersServiceResetPasswordProcedure,
 		svc.ResetPassword,
 		opts...,
-	))
-	return "/users.v1.public.PublicUsersService/", mux
+	)
+	return "/users.v1.public.PublicUsersService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case PublicUsersServiceLoginProcedure:
+			publicUsersServiceLoginHandler.ServeHTTP(w, r)
+		case PublicUsersServiceRefreshTokenProcedure:
+			publicUsersServiceRefreshTokenHandler.ServeHTTP(w, r)
+		case PublicUsersServiceCreateUserProcedure:
+			publicUsersServiceCreateUserHandler.ServeHTTP(w, r)
+		case PublicUsersServiceVerifyEmailProcedure:
+			publicUsersServiceVerifyEmailHandler.ServeHTTP(w, r)
+		case PublicUsersServiceSendResetPasswordLinkProcedure:
+			publicUsersServiceSendResetPasswordLinkHandler.ServeHTTP(w, r)
+		case PublicUsersServiceResetPasswordProcedure:
+			publicUsersServiceResetPasswordHandler.ServeHTTP(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	})
 }
 
 // UnimplementedPublicUsersServiceHandler returns CodeUnimplemented from all methods.
