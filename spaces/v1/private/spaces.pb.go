@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.26.0
 // 	protoc        (unknown)
-// source: playing-spaces/v1/private/playing_spaces.proto
+// source: spaces/v1/private/spaces.proto
 
 package playingspacesv1private
 
@@ -50,11 +50,11 @@ func (x SortDirection) String() string {
 }
 
 func (SortDirection) Descriptor() protoreflect.EnumDescriptor {
-	return file_playing_spaces_v1_private_playing_spaces_proto_enumTypes[0].Descriptor()
+	return file_spaces_v1_private_spaces_proto_enumTypes[0].Descriptor()
 }
 
 func (SortDirection) Type() protoreflect.EnumType {
-	return &file_playing_spaces_v1_private_playing_spaces_proto_enumTypes[0]
+	return &file_spaces_v1_private_spaces_proto_enumTypes[0]
 }
 
 func (x SortDirection) Number() protoreflect.EnumNumber {
@@ -63,7 +63,7 @@ func (x SortDirection) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use SortDirection.Descriptor instead.
 func (SortDirection) EnumDescriptor() ([]byte, []int) {
-	return file_playing_spaces_v1_private_playing_spaces_proto_rawDescGZIP(), []int{0}
+	return file_spaces_v1_private_spaces_proto_rawDescGZIP(), []int{0}
 }
 
 type PlayingSpace struct {
@@ -80,7 +80,7 @@ type PlayingSpace struct {
 func (x *PlayingSpace) Reset() {
 	*x = PlayingSpace{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[0]
+		mi := &file_spaces_v1_private_spaces_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -93,7 +93,7 @@ func (x *PlayingSpace) String() string {
 func (*PlayingSpace) ProtoMessage() {}
 
 func (x *PlayingSpace) ProtoReflect() protoreflect.Message {
-	mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[0]
+	mi := &file_spaces_v1_private_spaces_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -106,7 +106,7 @@ func (x *PlayingSpace) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlayingSpace.ProtoReflect.Descriptor instead.
 func (*PlayingSpace) Descriptor() ([]byte, []int) {
-	return file_playing_spaces_v1_private_playing_spaces_proto_rawDescGZIP(), []int{0}
+	return file_spaces_v1_private_spaces_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *PlayingSpace) GetId() string {
@@ -149,7 +149,7 @@ type CreatePlayingSpaceRequest struct {
 func (x *CreatePlayingSpaceRequest) Reset() {
 	*x = CreatePlayingSpaceRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[1]
+		mi := &file_spaces_v1_private_spaces_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -162,7 +162,7 @@ func (x *CreatePlayingSpaceRequest) String() string {
 func (*CreatePlayingSpaceRequest) ProtoMessage() {}
 
 func (x *CreatePlayingSpaceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[1]
+	mi := &file_spaces_v1_private_spaces_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -175,7 +175,7 @@ func (x *CreatePlayingSpaceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreatePlayingSpaceRequest.ProtoReflect.Descriptor instead.
 func (*CreatePlayingSpaceRequest) Descriptor() ([]byte, []int) {
-	return file_playing_spaces_v1_private_playing_spaces_proto_rawDescGZIP(), []int{1}
+	return file_spaces_v1_private_spaces_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CreatePlayingSpaceRequest) GetLocationId() string {
@@ -203,7 +203,7 @@ type CreatePlayingSpaceResponse struct {
 func (x *CreatePlayingSpaceResponse) Reset() {
 	*x = CreatePlayingSpaceResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[2]
+		mi := &file_spaces_v1_private_spaces_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -216,7 +216,7 @@ func (x *CreatePlayingSpaceResponse) String() string {
 func (*CreatePlayingSpaceResponse) ProtoMessage() {}
 
 func (x *CreatePlayingSpaceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[2]
+	mi := &file_spaces_v1_private_spaces_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -229,7 +229,7 @@ func (x *CreatePlayingSpaceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreatePlayingSpaceResponse.ProtoReflect.Descriptor instead.
 func (*CreatePlayingSpaceResponse) Descriptor() ([]byte, []int) {
-	return file_playing_spaces_v1_private_playing_spaces_proto_rawDescGZIP(), []int{2}
+	return file_spaces_v1_private_spaces_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CreatePlayingSpaceResponse) GetPlayingSpace() *PlayingSpace {
@@ -250,7 +250,7 @@ type RemovePlayingSpacesRequest struct {
 func (x *RemovePlayingSpacesRequest) Reset() {
 	*x = RemovePlayingSpacesRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[3]
+		mi := &file_spaces_v1_private_spaces_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -263,7 +263,7 @@ func (x *RemovePlayingSpacesRequest) String() string {
 func (*RemovePlayingSpacesRequest) ProtoMessage() {}
 
 func (x *RemovePlayingSpacesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[3]
+	mi := &file_spaces_v1_private_spaces_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -276,7 +276,7 @@ func (x *RemovePlayingSpacesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RemovePlayingSpacesRequest.ProtoReflect.Descriptor instead.
 func (*RemovePlayingSpacesRequest) Descriptor() ([]byte, []int) {
-	return file_playing_spaces_v1_private_playing_spaces_proto_rawDescGZIP(), []int{3}
+	return file_spaces_v1_private_spaces_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *RemovePlayingSpacesRequest) GetPlayingSpaceIds() []string {
@@ -295,7 +295,7 @@ type RemovePlayingSpacesResponse struct {
 func (x *RemovePlayingSpacesResponse) Reset() {
 	*x = RemovePlayingSpacesResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[4]
+		mi := &file_spaces_v1_private_spaces_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -308,7 +308,7 @@ func (x *RemovePlayingSpacesResponse) String() string {
 func (*RemovePlayingSpacesResponse) ProtoMessage() {}
 
 func (x *RemovePlayingSpacesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[4]
+	mi := &file_spaces_v1_private_spaces_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -321,7 +321,7 @@ func (x *RemovePlayingSpacesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RemovePlayingSpacesResponse.ProtoReflect.Descriptor instead.
 func (*RemovePlayingSpacesResponse) Descriptor() ([]byte, []int) {
-	return file_playing_spaces_v1_private_playing_spaces_proto_rawDescGZIP(), []int{4}
+	return file_spaces_v1_private_spaces_proto_rawDescGZIP(), []int{4}
 }
 
 type ModifyPlayingSpaceRequest struct {
@@ -337,7 +337,7 @@ type ModifyPlayingSpaceRequest struct {
 func (x *ModifyPlayingSpaceRequest) Reset() {
 	*x = ModifyPlayingSpaceRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[5]
+		mi := &file_spaces_v1_private_spaces_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -350,7 +350,7 @@ func (x *ModifyPlayingSpaceRequest) String() string {
 func (*ModifyPlayingSpaceRequest) ProtoMessage() {}
 
 func (x *ModifyPlayingSpaceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[5]
+	mi := &file_spaces_v1_private_spaces_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -363,7 +363,7 @@ func (x *ModifyPlayingSpaceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ModifyPlayingSpaceRequest.ProtoReflect.Descriptor instead.
 func (*ModifyPlayingSpaceRequest) Descriptor() ([]byte, []int) {
-	return file_playing_spaces_v1_private_playing_spaces_proto_rawDescGZIP(), []int{5}
+	return file_spaces_v1_private_spaces_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ModifyPlayingSpaceRequest) GetId() string {
@@ -398,7 +398,7 @@ type ModifyPlayingSpaceResponse struct {
 func (x *ModifyPlayingSpaceResponse) Reset() {
 	*x = ModifyPlayingSpaceResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[6]
+		mi := &file_spaces_v1_private_spaces_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -411,7 +411,7 @@ func (x *ModifyPlayingSpaceResponse) String() string {
 func (*ModifyPlayingSpaceResponse) ProtoMessage() {}
 
 func (x *ModifyPlayingSpaceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[6]
+	mi := &file_spaces_v1_private_spaces_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -424,7 +424,7 @@ func (x *ModifyPlayingSpaceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ModifyPlayingSpaceResponse.ProtoReflect.Descriptor instead.
 func (*ModifyPlayingSpaceResponse) Descriptor() ([]byte, []int) {
-	return file_playing_spaces_v1_private_playing_spaces_proto_rawDescGZIP(), []int{6}
+	return file_spaces_v1_private_spaces_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ModifyPlayingSpaceResponse) GetPlayingSpace() *PlayingSpace {
@@ -448,7 +448,7 @@ type ListPlayingSpacesRequest struct {
 func (x *ListPlayingSpacesRequest) Reset() {
 	*x = ListPlayingSpacesRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[7]
+		mi := &file_spaces_v1_private_spaces_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -461,7 +461,7 @@ func (x *ListPlayingSpacesRequest) String() string {
 func (*ListPlayingSpacesRequest) ProtoMessage() {}
 
 func (x *ListPlayingSpacesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[7]
+	mi := &file_spaces_v1_private_spaces_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -474,7 +474,7 @@ func (x *ListPlayingSpacesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListPlayingSpacesRequest.ProtoReflect.Descriptor instead.
 func (*ListPlayingSpacesRequest) Descriptor() ([]byte, []int) {
-	return file_playing_spaces_v1_private_playing_spaces_proto_rawDescGZIP(), []int{7}
+	return file_spaces_v1_private_spaces_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ListPlayingSpacesRequest) GetQuery() string {
@@ -517,7 +517,7 @@ type ListPlayingSpacesResponse struct {
 func (x *ListPlayingSpacesResponse) Reset() {
 	*x = ListPlayingSpacesResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[8]
+		mi := &file_spaces_v1_private_spaces_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -530,7 +530,7 @@ func (x *ListPlayingSpacesResponse) String() string {
 func (*ListPlayingSpacesResponse) ProtoMessage() {}
 
 func (x *ListPlayingSpacesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[8]
+	mi := &file_spaces_v1_private_spaces_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -543,7 +543,7 @@ func (x *ListPlayingSpacesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListPlayingSpacesResponse.ProtoReflect.Descriptor instead.
 func (*ListPlayingSpacesResponse) Descriptor() ([]byte, []int) {
-	return file_playing_spaces_v1_private_playing_spaces_proto_rawDescGZIP(), []int{8}
+	return file_spaces_v1_private_spaces_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ListPlayingSpacesResponse) GetPlayingSpaces() []*PlayingSpace {
@@ -560,12 +560,11 @@ func (x *ListPlayingSpacesResponse) GetTotalCount() int32 {
 	return 0
 }
 
-var File_playing_spaces_v1_private_playing_spaces_proto protoreflect.FileDescriptor
+var File_spaces_v1_private_spaces_proto protoreflect.FileDescriptor
 
-var file_playing_spaces_v1_private_playing_spaces_proto_rawDesc = []byte{
-	0x0a, 0x2e, 0x70, 0x6c, 0x61, 0x79, 0x69, 0x6e, 0x67, 0x2d, 0x73, 0x70, 0x61, 0x63, 0x65, 0x73,
-	0x2f, 0x76, 0x31, 0x2f, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x2f, 0x70, 0x6c, 0x61, 0x79,
-	0x69, 0x6e, 0x67, 0x5f, 0x73, 0x70, 0x61, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+var file_spaces_v1_private_spaces_proto_rawDesc = []byte{
+	0x0a, 0x1e, 0x73, 0x70, 0x61, 0x63, 0x65, 0x73, 0x2f, 0x76, 0x31, 0x2f, 0x70, 0x72, 0x69, 0x76,
+	0x61, 0x74, 0x65, 0x2f, 0x73, 0x70, 0x61, 0x63, 0x65, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x12, 0x18, 0x70, 0x6c, 0x61, 0x79, 0x69, 0x6e, 0x67, 0x73, 0x70, 0x61, 0x63, 0x65, 0x73, 0x2e,
 	0x76, 0x31, 0x2e, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x22, 0x78, 0x0a, 0x0c, 0x50, 0x6c,
 	0x61, 0x79, 0x69, 0x6e, 0x67, 0x53, 0x70, 0x61, 0x63, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
@@ -678,20 +677,20 @@ var file_playing_spaces_v1_private_playing_spaces_proto_rawDesc = []byte{
 }
 
 var (
-	file_playing_spaces_v1_private_playing_spaces_proto_rawDescOnce sync.Once
-	file_playing_spaces_v1_private_playing_spaces_proto_rawDescData = file_playing_spaces_v1_private_playing_spaces_proto_rawDesc
+	file_spaces_v1_private_spaces_proto_rawDescOnce sync.Once
+	file_spaces_v1_private_spaces_proto_rawDescData = file_spaces_v1_private_spaces_proto_rawDesc
 )
 
-func file_playing_spaces_v1_private_playing_spaces_proto_rawDescGZIP() []byte {
-	file_playing_spaces_v1_private_playing_spaces_proto_rawDescOnce.Do(func() {
-		file_playing_spaces_v1_private_playing_spaces_proto_rawDescData = protoimpl.X.CompressGZIP(file_playing_spaces_v1_private_playing_spaces_proto_rawDescData)
+func file_spaces_v1_private_spaces_proto_rawDescGZIP() []byte {
+	file_spaces_v1_private_spaces_proto_rawDescOnce.Do(func() {
+		file_spaces_v1_private_spaces_proto_rawDescData = protoimpl.X.CompressGZIP(file_spaces_v1_private_spaces_proto_rawDescData)
 	})
-	return file_playing_spaces_v1_private_playing_spaces_proto_rawDescData
+	return file_spaces_v1_private_spaces_proto_rawDescData
 }
 
-var file_playing_spaces_v1_private_playing_spaces_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_playing_spaces_v1_private_playing_spaces_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
-var file_playing_spaces_v1_private_playing_spaces_proto_goTypes = []interface{}{
+var file_spaces_v1_private_spaces_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_spaces_v1_private_spaces_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_spaces_v1_private_spaces_proto_goTypes = []interface{}{
 	(SortDirection)(0),                  // 0: playingspaces.v1.private.SortDirection
 	(*PlayingSpace)(nil),                // 1: playingspaces.v1.private.PlayingSpace
 	(*CreatePlayingSpaceRequest)(nil),   // 2: playingspaces.v1.private.CreatePlayingSpaceRequest
@@ -703,7 +702,7 @@ var file_playing_spaces_v1_private_playing_spaces_proto_goTypes = []interface{}{
 	(*ListPlayingSpacesRequest)(nil),    // 8: playingspaces.v1.private.ListPlayingSpacesRequest
 	(*ListPlayingSpacesResponse)(nil),   // 9: playingspaces.v1.private.ListPlayingSpacesResponse
 }
-var file_playing_spaces_v1_private_playing_spaces_proto_depIdxs = []int32{
+var file_spaces_v1_private_spaces_proto_depIdxs = []int32{
 	1, // 0: playingspaces.v1.private.CreatePlayingSpaceResponse.playingSpace:type_name -> playingspaces.v1.private.PlayingSpace
 	1, // 1: playingspaces.v1.private.ModifyPlayingSpaceResponse.playingSpace:type_name -> playingspaces.v1.private.PlayingSpace
 	0, // 2: playingspaces.v1.private.ListPlayingSpacesRequest.sortDirection:type_name -> playingspaces.v1.private.SortDirection
@@ -723,13 +722,13 @@ var file_playing_spaces_v1_private_playing_spaces_proto_depIdxs = []int32{
 	0, // [0:4] is the sub-list for field type_name
 }
 
-func init() { file_playing_spaces_v1_private_playing_spaces_proto_init() }
-func file_playing_spaces_v1_private_playing_spaces_proto_init() {
-	if File_playing_spaces_v1_private_playing_spaces_proto != nil {
+func init() { file_spaces_v1_private_spaces_proto_init() }
+func file_spaces_v1_private_spaces_proto_init() {
+	if File_spaces_v1_private_spaces_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_spaces_v1_private_spaces_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PlayingSpace); i {
 			case 0:
 				return &v.state
@@ -741,7 +740,7 @@ func file_playing_spaces_v1_private_playing_spaces_proto_init() {
 				return nil
 			}
 		}
-		file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_spaces_v1_private_spaces_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CreatePlayingSpaceRequest); i {
 			case 0:
 				return &v.state
@@ -753,7 +752,7 @@ func file_playing_spaces_v1_private_playing_spaces_proto_init() {
 				return nil
 			}
 		}
-		file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_spaces_v1_private_spaces_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CreatePlayingSpaceResponse); i {
 			case 0:
 				return &v.state
@@ -765,7 +764,7 @@ func file_playing_spaces_v1_private_playing_spaces_proto_init() {
 				return nil
 			}
 		}
-		file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_spaces_v1_private_spaces_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RemovePlayingSpacesRequest); i {
 			case 0:
 				return &v.state
@@ -777,7 +776,7 @@ func file_playing_spaces_v1_private_playing_spaces_proto_init() {
 				return nil
 			}
 		}
-		file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_spaces_v1_private_spaces_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RemovePlayingSpacesResponse); i {
 			case 0:
 				return &v.state
@@ -789,7 +788,7 @@ func file_playing_spaces_v1_private_playing_spaces_proto_init() {
 				return nil
 			}
 		}
-		file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_spaces_v1_private_spaces_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ModifyPlayingSpaceRequest); i {
 			case 0:
 				return &v.state
@@ -801,7 +800,7 @@ func file_playing_spaces_v1_private_playing_spaces_proto_init() {
 				return nil
 			}
 		}
-		file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_spaces_v1_private_spaces_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ModifyPlayingSpaceResponse); i {
 			case 0:
 				return &v.state
@@ -813,7 +812,7 @@ func file_playing_spaces_v1_private_playing_spaces_proto_init() {
 				return nil
 			}
 		}
-		file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+		file_spaces_v1_private_spaces_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ListPlayingSpacesRequest); i {
 			case 0:
 				return &v.state
@@ -825,7 +824,7 @@ func file_playing_spaces_v1_private_playing_spaces_proto_init() {
 				return nil
 			}
 		}
-		file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+		file_spaces_v1_private_spaces_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ListPlayingSpacesResponse); i {
 			case 0:
 				return &v.state
@@ -838,24 +837,24 @@ func file_playing_spaces_v1_private_playing_spaces_proto_init() {
 			}
 		}
 	}
-	file_playing_spaces_v1_private_playing_spaces_proto_msgTypes[7].OneofWrappers = []interface{}{}
+	file_spaces_v1_private_spaces_proto_msgTypes[7].OneofWrappers = []interface{}{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_playing_spaces_v1_private_playing_spaces_proto_rawDesc,
+			RawDescriptor: file_spaces_v1_private_spaces_proto_rawDesc,
 			NumEnums:      1,
 			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_playing_spaces_v1_private_playing_spaces_proto_goTypes,
-		DependencyIndexes: file_playing_spaces_v1_private_playing_spaces_proto_depIdxs,
-		EnumInfos:         file_playing_spaces_v1_private_playing_spaces_proto_enumTypes,
-		MessageInfos:      file_playing_spaces_v1_private_playing_spaces_proto_msgTypes,
+		GoTypes:           file_spaces_v1_private_spaces_proto_goTypes,
+		DependencyIndexes: file_spaces_v1_private_spaces_proto_depIdxs,
+		EnumInfos:         file_spaces_v1_private_spaces_proto_enumTypes,
+		MessageInfos:      file_spaces_v1_private_spaces_proto_msgTypes,
 	}.Build()
-	File_playing_spaces_v1_private_playing_spaces_proto = out.File
-	file_playing_spaces_v1_private_playing_spaces_proto_rawDesc = nil
-	file_playing_spaces_v1_private_playing_spaces_proto_goTypes = nil
-	file_playing_spaces_v1_private_playing_spaces_proto_depIdxs = nil
+	File_spaces_v1_private_spaces_proto = out.File
+	file_spaces_v1_private_spaces_proto_rawDesc = nil
+	file_spaces_v1_private_spaces_proto_goTypes = nil
+	file_spaces_v1_private_spaces_proto_depIdxs = nil
 }
