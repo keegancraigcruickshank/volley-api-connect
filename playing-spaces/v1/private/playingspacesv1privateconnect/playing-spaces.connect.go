@@ -2,13 +2,13 @@
 //
 // Source: playing-spaces/v1/private/playing-spaces.proto
 
-package playing_spacesv1privateconnect
+package playingspacesv1privateconnect
 
 import (
 	context "context"
 	errors "errors"
 	connect_go "github.com/bufbuild/connect-go"
-	private "github.com/keegancraigcruickshank/volley-api-connect/playing_spaces/v1/private"
+	private "github.com/keegancraigcruickshank/volley-api-connect/playing-spaces/v1/private"
 	http "net/http"
 	strings "strings"
 )
