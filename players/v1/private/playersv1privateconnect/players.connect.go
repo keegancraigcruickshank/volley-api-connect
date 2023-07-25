@@ -45,6 +45,9 @@ const (
 	// PrivatePlayersServiceListPlayersProcedure is the fully-qualified name of the
 	// PrivatePlayersService's ListPlayers RPC.
 	PrivatePlayersServiceListPlayersProcedure = "/players.v1.private.PrivatePlayersService/ListPlayers"
+	// PrivatePlayersServiceGetPlayerProcedure is the fully-qualified name of the
+	// PrivatePlayersService's GetPlayer RPC.
+	PrivatePlayersServiceGetPlayerProcedure = "/players.v1.private.PrivatePlayersService/GetPlayer"
 )
 
 // PrivatePlayersServiceClient is a client for the players.v1.private.PrivatePlayersService service.
@@ -53,6 +56,7 @@ type PrivatePlayersServiceClient interface {
 	RemovePlayers(context.Context, *connect_go.Request[private.RemovePlayersRequest]) (*connect_go.Response[private.RemovePlayersResponse], error)
 	ModifyPlayer(context.Context, *connect_go.Request[private.ModifyPlayerRequest]) (*connect_go.Response[private.ModifyPlayerResponse], error)
 	ListPlayers(context.Context, *connect_go.Request[private.ListPlayersRequest]) (*connect_go.Response[private.ListPlayersResponse], error)
+	GetPlayer(context.Context, *connect_go.Request[private.GetPlayerRequest]) (*connect_go.Response[private.GetPlayerResponse], error)
 }
 
 // NewPrivatePlayersServiceClient constructs a client for the
@@ -85,6 +89,11 @@ func NewPrivatePlayersServiceClient(httpClient connect_go.HTTPClient, baseURL st
 			baseURL+PrivatePlayersServiceListPlayersProcedure,
 			opts...,
 		),
+		getPlayer: connect_go.NewClient[private.GetPlayerRequest, private.GetPlayerResponse](
+			httpClient,
+			baseURL+PrivatePlayersServiceGetPlayerProcedure,
+			opts...,
+		),
 	}
 }
 
@@ -94,6 +103,7 @@ type privatePlayersServiceClient struct {
 	removePlayers *connect_go.Client[private.RemovePlayersRequest, private.RemovePlayersResponse]
 	modifyPlayer  *connect_go.Client[private.ModifyPlayerRequest, private.ModifyPlayerResponse]
 	listPlayers   *connect_go.Client[private.ListPlayersRequest, private.ListPlayersResponse]
+	getPlayer     *connect_go.Client[private.GetPlayerRequest, private.GetPlayerResponse]
 }
 
 // CreatePlayer calls players.v1.private.PrivatePlayersService.CreatePlayer.
@@ -116,6 +126,11 @@ func (c *privatePlayersServiceClient) ListPlayers(ctx context.Context, req *conn
 	return c.listPlayers.CallUnary(ctx, req)
 }
 
+// GetPlayer calls players.v1.private.PrivatePlayersService.GetPlayer.
+func (c *privatePlayersServiceClient) GetPlayer(ctx context.Context, req *connect_go.Request[private.GetPlayerRequest]) (*connect_go.Response[private.GetPlayerResponse], error) {
+	return c.getPlayer.CallUnary(ctx, req)
+}
+
 // PrivatePlayersServiceHandler is an implementation of the players.v1.private.PrivatePlayersService
 // service.
 type PrivatePlayersServiceHandler interface {
@@ -123,6 +138,7 @@ type PrivatePlayersServiceHandler interface {
 	RemovePlayers(context.Context, *connect_go.Request[private.RemovePlayersRequest]) (*connect_go.Response[private.RemovePlayersResponse], error)
 	ModifyPlayer(context.Context, *connect_go.Request[private.ModifyPlayerRequest]) (*connect_go.Response[private.ModifyPlayerResponse], error)
 	ListPlayers(context.Context, *connect_go.Request[private.ListPlayersRequest]) (*connect_go.Response[private.ListPlayersResponse], error)
+	GetPlayer(context.Context, *connect_go.Request[private.GetPlayerRequest]) (*connect_go.Response[private.GetPlayerResponse], error)
 }
 
 // NewPrivatePlayersServiceHandler builds an HTTP handler from the service implementation. It
@@ -151,6 +167,11 @@ func NewPrivatePlayersServiceHandler(svc PrivatePlayersServiceHandler, opts ...c
 		svc.ListPlayers,
 		opts...,
 	)
+	privatePlayersServiceGetPlayerHandler := connect_go.NewUnaryHandler(
+		PrivatePlayersServiceGetPlayerProcedure,
+		svc.GetPlayer,
+		opts...,
+	)
 	return "/players.v1.private.PrivatePlayersService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PrivatePlayersServiceCreatePlayerProcedure:
@@ -161,6 +182,8 @@ func NewPrivatePlayersServiceHandler(svc PrivatePlayersServiceHandler, opts ...c
 			privatePlayersServiceModifyPlayerHandler.ServeHTTP(w, r)
 		case PrivatePlayersServiceListPlayersProcedure:
 			privatePlayersServiceListPlayersHandler.ServeHTTP(w, r)
+		case PrivatePlayersServiceGetPlayerProcedure:
+			privatePlayersServiceGetPlayerHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -184,4 +207,8 @@ func (UnimplementedPrivatePlayersServiceHandler) ModifyPlayer(context.Context, *
 
 func (UnimplementedPrivatePlayersServiceHandler) ListPlayers(context.Context, *connect_go.Request[private.ListPlayersRequest]) (*connect_go.Response[private.ListPlayersResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("players.v1.private.PrivatePlayersService.ListPlayers is not implemented"))
+}
+
+func (UnimplementedPrivatePlayersServiceHandler) GetPlayer(context.Context, *connect_go.Request[private.GetPlayerRequest]) (*connect_go.Response[private.GetPlayerResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("players.v1.private.PrivatePlayersService.GetPlayer is not implemented"))
 }
