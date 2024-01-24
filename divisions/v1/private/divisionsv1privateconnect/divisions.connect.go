@@ -42,6 +42,12 @@ const (
 	// PrivateDivisionsServiceListDivisionsProcedure is the fully-qualified name of the
 	// PrivateDivisionsService's ListDivisions RPC.
 	PrivateDivisionsServiceListDivisionsProcedure = "/divisions.v1.private.PrivateDivisionsService/ListDivisions"
+	// PrivateDivisionsServiceUpdateDivisionProcedure is the fully-qualified name of the
+	// PrivateDivisionsService's UpdateDivision RPC.
+	PrivateDivisionsServiceUpdateDivisionProcedure = "/divisions.v1.private.PrivateDivisionsService/UpdateDivision"
+	// PrivateDivisionsServiceGetDivisionProcedure is the fully-qualified name of the
+	// PrivateDivisionsService's GetDivision RPC.
+	PrivateDivisionsServiceGetDivisionProcedure = "/divisions.v1.private.PrivateDivisionsService/GetDivision"
 )
 
 // PrivateDivisionsServiceClient is a client for the divisions.v1.private.PrivateDivisionsService
@@ -50,6 +56,8 @@ type PrivateDivisionsServiceClient interface {
 	AddDivision(context.Context, *connect_go.Request[private.AddDivisionRequest]) (*connect_go.Response[private.AddDivisionResponse], error)
 	RemoveDivisions(context.Context, *connect_go.Request[private.RemoveDivisionsRequest]) (*connect_go.Response[private.RemoveDivisionsResponse], error)
 	ListDivisions(context.Context, *connect_go.Request[private.ListDivisionsRequest]) (*connect_go.Response[private.ListDivisionsResponse], error)
+	UpdateDivision(context.Context, *connect_go.Request[private.UpdateDivisionRequest]) (*connect_go.Response[private.UpdateDivisionResponse], error)
+	GetDivision(context.Context, *connect_go.Request[private.GetDivisionRequest]) (*connect_go.Response[private.GetDivisionResponse], error)
 }
 
 // NewPrivateDivisionsServiceClient constructs a client for the
@@ -78,6 +86,16 @@ func NewPrivateDivisionsServiceClient(httpClient connect_go.HTTPClient, baseURL 
 			baseURL+PrivateDivisionsServiceListDivisionsProcedure,
 			opts...,
 		),
+		updateDivision: connect_go.NewClient[private.UpdateDivisionRequest, private.UpdateDivisionResponse](
+			httpClient,
+			baseURL+PrivateDivisionsServiceUpdateDivisionProcedure,
+			opts...,
+		),
+		getDivision: connect_go.NewClient[private.GetDivisionRequest, private.GetDivisionResponse](
+			httpClient,
+			baseURL+PrivateDivisionsServiceGetDivisionProcedure,
+			opts...,
+		),
 	}
 }
 
@@ -86,6 +104,8 @@ type privateDivisionsServiceClient struct {
 	addDivision     *connect_go.Client[private.AddDivisionRequest, private.AddDivisionResponse]
 	removeDivisions *connect_go.Client[private.RemoveDivisionsRequest, private.RemoveDivisionsResponse]
 	listDivisions   *connect_go.Client[private.ListDivisionsRequest, private.ListDivisionsResponse]
+	updateDivision  *connect_go.Client[private.UpdateDivisionRequest, private.UpdateDivisionResponse]
+	getDivision     *connect_go.Client[private.GetDivisionRequest, private.GetDivisionResponse]
 }
 
 // AddDivision calls divisions.v1.private.PrivateDivisionsService.AddDivision.
@@ -103,12 +123,24 @@ func (c *privateDivisionsServiceClient) ListDivisions(ctx context.Context, req *
 	return c.listDivisions.CallUnary(ctx, req)
 }
 
+// UpdateDivision calls divisions.v1.private.PrivateDivisionsService.UpdateDivision.
+func (c *privateDivisionsServiceClient) UpdateDivision(ctx context.Context, req *connect_go.Request[private.UpdateDivisionRequest]) (*connect_go.Response[private.UpdateDivisionResponse], error) {
+	return c.updateDivision.CallUnary(ctx, req)
+}
+
+// GetDivision calls divisions.v1.private.PrivateDivisionsService.GetDivision.
+func (c *privateDivisionsServiceClient) GetDivision(ctx context.Context, req *connect_go.Request[private.GetDivisionRequest]) (*connect_go.Response[private.GetDivisionResponse], error) {
+	return c.getDivision.CallUnary(ctx, req)
+}
+
 // PrivateDivisionsServiceHandler is an implementation of the
 // divisions.v1.private.PrivateDivisionsService service.
 type PrivateDivisionsServiceHandler interface {
 	AddDivision(context.Context, *connect_go.Request[private.AddDivisionRequest]) (*connect_go.Response[private.AddDivisionResponse], error)
 	RemoveDivisions(context.Context, *connect_go.Request[private.RemoveDivisionsRequest]) (*connect_go.Response[private.RemoveDivisionsResponse], error)
 	ListDivisions(context.Context, *connect_go.Request[private.ListDivisionsRequest]) (*connect_go.Response[private.ListDivisionsResponse], error)
+	UpdateDivision(context.Context, *connect_go.Request[private.UpdateDivisionRequest]) (*connect_go.Response[private.UpdateDivisionResponse], error)
+	GetDivision(context.Context, *connect_go.Request[private.GetDivisionRequest]) (*connect_go.Response[private.GetDivisionResponse], error)
 }
 
 // NewPrivateDivisionsServiceHandler builds an HTTP handler from the service implementation. It
@@ -132,6 +164,16 @@ func NewPrivateDivisionsServiceHandler(svc PrivateDivisionsServiceHandler, opts 
 		svc.ListDivisions,
 		opts...,
 	)
+	privateDivisionsServiceUpdateDivisionHandler := connect_go.NewUnaryHandler(
+		PrivateDivisionsServiceUpdateDivisionProcedure,
+		svc.UpdateDivision,
+		opts...,
+	)
+	privateDivisionsServiceGetDivisionHandler := connect_go.NewUnaryHandler(
+		PrivateDivisionsServiceGetDivisionProcedure,
+		svc.GetDivision,
+		opts...,
+	)
 	return "/divisions.v1.private.PrivateDivisionsService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PrivateDivisionsServiceAddDivisionProcedure:
@@ -140,6 +182,10 @@ func NewPrivateDivisionsServiceHandler(svc PrivateDivisionsServiceHandler, opts 
 			privateDivisionsServiceRemoveDivisionsHandler.ServeHTTP(w, r)
 		case PrivateDivisionsServiceListDivisionsProcedure:
 			privateDivisionsServiceListDivisionsHandler.ServeHTTP(w, r)
+		case PrivateDivisionsServiceUpdateDivisionProcedure:
+			privateDivisionsServiceUpdateDivisionHandler.ServeHTTP(w, r)
+		case PrivateDivisionsServiceGetDivisionProcedure:
+			privateDivisionsServiceGetDivisionHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -159,4 +205,12 @@ func (UnimplementedPrivateDivisionsServiceHandler) RemoveDivisions(context.Conte
 
 func (UnimplementedPrivateDivisionsServiceHandler) ListDivisions(context.Context, *connect_go.Request[private.ListDivisionsRequest]) (*connect_go.Response[private.ListDivisionsResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("divisions.v1.private.PrivateDivisionsService.ListDivisions is not implemented"))
+}
+
+func (UnimplementedPrivateDivisionsServiceHandler) UpdateDivision(context.Context, *connect_go.Request[private.UpdateDivisionRequest]) (*connect_go.Response[private.UpdateDivisionResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("divisions.v1.private.PrivateDivisionsService.UpdateDivision is not implemented"))
+}
+
+func (UnimplementedPrivateDivisionsServiceHandler) GetDivision(context.Context, *connect_go.Request[private.GetDivisionRequest]) (*connect_go.Response[private.GetDivisionResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("divisions.v1.private.PrivateDivisionsService.GetDivision is not implemented"))
 }
