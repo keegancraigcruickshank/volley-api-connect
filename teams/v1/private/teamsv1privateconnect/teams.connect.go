@@ -50,7 +50,7 @@ const (
 // PrivateTeamsServiceClient is a client for the teams.v1.private.PrivateTeamsService service.
 type PrivateTeamsServiceClient interface {
 	AddTeam(context.Context, *connect_go.Request[private.AddTeamRequest]) (*connect_go.Response[private.AddTeamResponse], error)
-	ListTeams(context.Context, *connect_go.Request[private.AddTeamRequest]) (*connect_go.Response[private.ListTeamsResponse], error)
+	ListTeams(context.Context, *connect_go.Request[private.ListTeamsRequest]) (*connect_go.Response[private.ListTeamsResponse], error)
 	RemoveTeams(context.Context, *connect_go.Request[private.RemoveTeamsRequest]) (*connect_go.Response[private.RemoveTeamsResponse], error)
 	UpdateTeam(context.Context, *connect_go.Request[private.UpdateTeamRequest]) (*connect_go.Response[private.UpdateTeamResponse], error)
 }
@@ -70,7 +70,7 @@ func NewPrivateTeamsServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 			baseURL+PrivateTeamsServiceAddTeamProcedure,
 			opts...,
 		),
-		listTeams: connect_go.NewClient[private.AddTeamRequest, private.ListTeamsResponse](
+		listTeams: connect_go.NewClient[private.ListTeamsRequest, private.ListTeamsResponse](
 			httpClient,
 			baseURL+PrivateTeamsServiceListTeamsProcedure,
 			opts...,
@@ -91,7 +91,7 @@ func NewPrivateTeamsServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 // privateTeamsServiceClient implements PrivateTeamsServiceClient.
 type privateTeamsServiceClient struct {
 	addTeam     *connect_go.Client[private.AddTeamRequest, private.AddTeamResponse]
-	listTeams   *connect_go.Client[private.AddTeamRequest, private.ListTeamsResponse]
+	listTeams   *connect_go.Client[private.ListTeamsRequest, private.ListTeamsResponse]
 	removeTeams *connect_go.Client[private.RemoveTeamsRequest, private.RemoveTeamsResponse]
 	updateTeam  *connect_go.Client[private.UpdateTeamRequest, private.UpdateTeamResponse]
 }
@@ -102,7 +102,7 @@ func (c *privateTeamsServiceClient) AddTeam(ctx context.Context, req *connect_go
 }
 
 // ListTeams calls teams.v1.private.PrivateTeamsService.ListTeams.
-func (c *privateTeamsServiceClient) ListTeams(ctx context.Context, req *connect_go.Request[private.AddTeamRequest]) (*connect_go.Response[private.ListTeamsResponse], error) {
+func (c *privateTeamsServiceClient) ListTeams(ctx context.Context, req *connect_go.Request[private.ListTeamsRequest]) (*connect_go.Response[private.ListTeamsResponse], error) {
 	return c.listTeams.CallUnary(ctx, req)
 }
 
@@ -120,7 +120,7 @@ func (c *privateTeamsServiceClient) UpdateTeam(ctx context.Context, req *connect
 // service.
 type PrivateTeamsServiceHandler interface {
 	AddTeam(context.Context, *connect_go.Request[private.AddTeamRequest]) (*connect_go.Response[private.AddTeamResponse], error)
-	ListTeams(context.Context, *connect_go.Request[private.AddTeamRequest]) (*connect_go.Response[private.ListTeamsResponse], error)
+	ListTeams(context.Context, *connect_go.Request[private.ListTeamsRequest]) (*connect_go.Response[private.ListTeamsResponse], error)
 	RemoveTeams(context.Context, *connect_go.Request[private.RemoveTeamsRequest]) (*connect_go.Response[private.RemoveTeamsResponse], error)
 	UpdateTeam(context.Context, *connect_go.Request[private.UpdateTeamRequest]) (*connect_go.Response[private.UpdateTeamResponse], error)
 }
@@ -174,7 +174,7 @@ func (UnimplementedPrivateTeamsServiceHandler) AddTeam(context.Context, *connect
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("teams.v1.private.PrivateTeamsService.AddTeam is not implemented"))
 }
 
-func (UnimplementedPrivateTeamsServiceHandler) ListTeams(context.Context, *connect_go.Request[private.AddTeamRequest]) (*connect_go.Response[private.ListTeamsResponse], error) {
+func (UnimplementedPrivateTeamsServiceHandler) ListTeams(context.Context, *connect_go.Request[private.ListTeamsRequest]) (*connect_go.Response[private.ListTeamsResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("teams.v1.private.PrivateTeamsService.ListTeams is not implemented"))
 }
 
