@@ -63,6 +63,9 @@ const (
 	// PrivateUsersServiceCreateNewOrganisationProcedure is the fully-qualified name of the
 	// PrivateUsersService's CreateNewOrganisation RPC.
 	PrivateUsersServiceCreateNewOrganisationProcedure = "/users.v1.private.PrivateUsersService/CreateNewOrganisation"
+	// PrivateUsersServiceDeleteOrganisationProcedure is the fully-qualified name of the
+	// PrivateUsersService's DeleteOrganisation RPC.
+	PrivateUsersServiceDeleteOrganisationProcedure = "/users.v1.private.PrivateUsersService/DeleteOrganisation"
 )
 
 // PrivateUsersServiceClient is a client for the users.v1.private.PrivateUsersService service.
@@ -77,6 +80,7 @@ type PrivateUsersServiceClient interface {
 	RemoveApiToken(context.Context, *connect_go.Request[private.RemoveApiTokenRequest]) (*connect_go.Response[private.RemoveApiTokenResponse], error)
 	ListOrganisations(context.Context, *connect_go.Request[private.ListOrganisationsRequest]) (*connect_go.Response[private.ListOrganisationsResponse], error)
 	CreateNewOrganisation(context.Context, *connect_go.Request[private.CreateNewOrganisationRequest]) (*connect_go.Response[private.CreateNewOrganisationResponse], error)
+	DeleteOrganisation(context.Context, *connect_go.Request[private.DeleteOrganisationRequest]) (*connect_go.Response[private.DeleteOrganisationResponse], error)
 }
 
 // NewPrivateUsersServiceClient constructs a client for the users.v1.private.PrivateUsersService
@@ -139,6 +143,11 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 			baseURL+PrivateUsersServiceCreateNewOrganisationProcedure,
 			opts...,
 		),
+		deleteOrganisation: connect_go.NewClient[private.DeleteOrganisationRequest, private.DeleteOrganisationResponse](
+			httpClient,
+			baseURL+PrivateUsersServiceDeleteOrganisationProcedure,
+			opts...,
+		),
 	}
 }
 
@@ -154,6 +163,7 @@ type privateUsersServiceClient struct {
 	removeApiToken        *connect_go.Client[private.RemoveApiTokenRequest, private.RemoveApiTokenResponse]
 	listOrganisations     *connect_go.Client[private.ListOrganisationsRequest, private.ListOrganisationsResponse]
 	createNewOrganisation *connect_go.Client[private.CreateNewOrganisationRequest, private.CreateNewOrganisationResponse]
+	deleteOrganisation    *connect_go.Client[private.DeleteOrganisationRequest, private.DeleteOrganisationResponse]
 }
 
 // GetMe calls users.v1.private.PrivateUsersService.GetMe.
@@ -206,6 +216,11 @@ func (c *privateUsersServiceClient) CreateNewOrganisation(ctx context.Context, r
 	return c.createNewOrganisation.CallUnary(ctx, req)
 }
 
+// DeleteOrganisation calls users.v1.private.PrivateUsersService.DeleteOrganisation.
+func (c *privateUsersServiceClient) DeleteOrganisation(ctx context.Context, req *connect_go.Request[private.DeleteOrganisationRequest]) (*connect_go.Response[private.DeleteOrganisationResponse], error) {
+	return c.deleteOrganisation.CallUnary(ctx, req)
+}
+
 // PrivateUsersServiceHandler is an implementation of the users.v1.private.PrivateUsersService
 // service.
 type PrivateUsersServiceHandler interface {
@@ -219,6 +234,7 @@ type PrivateUsersServiceHandler interface {
 	RemoveApiToken(context.Context, *connect_go.Request[private.RemoveApiTokenRequest]) (*connect_go.Response[private.RemoveApiTokenResponse], error)
 	ListOrganisations(context.Context, *connect_go.Request[private.ListOrganisationsRequest]) (*connect_go.Response[private.ListOrganisationsResponse], error)
 	CreateNewOrganisation(context.Context, *connect_go.Request[private.CreateNewOrganisationRequest]) (*connect_go.Response[private.CreateNewOrganisationResponse], error)
+	DeleteOrganisation(context.Context, *connect_go.Request[private.DeleteOrganisationRequest]) (*connect_go.Response[private.DeleteOrganisationResponse], error)
 }
 
 // NewPrivateUsersServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -277,6 +293,11 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 		svc.CreateNewOrganisation,
 		opts...,
 	)
+	privateUsersServiceDeleteOrganisationHandler := connect_go.NewUnaryHandler(
+		PrivateUsersServiceDeleteOrganisationProcedure,
+		svc.DeleteOrganisation,
+		opts...,
+	)
 	return "/users.v1.private.PrivateUsersService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PrivateUsersServiceGetMeProcedure:
@@ -299,6 +320,8 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 			privateUsersServiceListOrganisationsHandler.ServeHTTP(w, r)
 		case PrivateUsersServiceCreateNewOrganisationProcedure:
 			privateUsersServiceCreateNewOrganisationHandler.ServeHTTP(w, r)
+		case PrivateUsersServiceDeleteOrganisationProcedure:
+			privateUsersServiceDeleteOrganisationHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -346,4 +369,8 @@ func (UnimplementedPrivateUsersServiceHandler) ListOrganisations(context.Context
 
 func (UnimplementedPrivateUsersServiceHandler) CreateNewOrganisation(context.Context, *connect_go.Request[private.CreateNewOrganisationRequest]) (*connect_go.Response[private.CreateNewOrganisationResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.CreateNewOrganisation is not implemented"))
+}
+
+func (UnimplementedPrivateUsersServiceHandler) DeleteOrganisation(context.Context, *connect_go.Request[private.DeleteOrganisationRequest]) (*connect_go.Response[private.DeleteOrganisationResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.DeleteOrganisation is not implemented"))
 }
