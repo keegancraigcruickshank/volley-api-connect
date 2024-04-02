@@ -21,8 +21,8 @@ import (
 const _ = connect_go.IsAtLeastVersion0_1_0
 
 const (
-	// DrawServiceName is the fully-qualified name of the DrawService service.
-	DrawServiceName = "draw.v1.private.DrawService"
+	// PrivateDrawServiceName is the fully-qualified name of the PrivateDrawService service.
+	PrivateDrawServiceName = "draw.v1.private.PrivateDrawService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -33,21 +33,25 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// DrawServiceCreateDrawProcedure is the fully-qualified name of the DrawService's CreateDraw RPC.
-	DrawServiceCreateDrawProcedure = "/draw.v1.private.DrawService/CreateDraw"
-	// DrawServiceGetDrawProcedure is the fully-qualified name of the DrawService's GetDraw RPC.
-	DrawServiceGetDrawProcedure = "/draw.v1.private.DrawService/GetDraw"
-	// DrawServiceUpdateDrawProcedure is the fully-qualified name of the DrawService's UpdateDraw RPC.
-	DrawServiceUpdateDrawProcedure = "/draw.v1.private.DrawService/UpdateDraw"
-	// DrawServiceDeleteDrawProcedure is the fully-qualified name of the DrawService's DeleteDraw RPC.
-	DrawServiceDeleteDrawProcedure = "/draw.v1.private.DrawService/DeleteDraw"
-	// DrawServiceGetDrawRoundProcedure is the fully-qualified name of the DrawService's GetDrawRound
-	// RPC.
-	DrawServiceGetDrawRoundProcedure = "/draw.v1.private.DrawService/GetDrawRound"
+	// PrivateDrawServiceCreateDrawProcedure is the fully-qualified name of the PrivateDrawService's
+	// CreateDraw RPC.
+	PrivateDrawServiceCreateDrawProcedure = "/draw.v1.private.PrivateDrawService/CreateDraw"
+	// PrivateDrawServiceGetDrawProcedure is the fully-qualified name of the PrivateDrawService's
+	// GetDraw RPC.
+	PrivateDrawServiceGetDrawProcedure = "/draw.v1.private.PrivateDrawService/GetDraw"
+	// PrivateDrawServiceUpdateDrawProcedure is the fully-qualified name of the PrivateDrawService's
+	// UpdateDraw RPC.
+	PrivateDrawServiceUpdateDrawProcedure = "/draw.v1.private.PrivateDrawService/UpdateDraw"
+	// PrivateDrawServiceDeleteDrawProcedure is the fully-qualified name of the PrivateDrawService's
+	// DeleteDraw RPC.
+	PrivateDrawServiceDeleteDrawProcedure = "/draw.v1.private.PrivateDrawService/DeleteDraw"
+	// PrivateDrawServiceGetDrawRoundProcedure is the fully-qualified name of the PrivateDrawService's
+	// GetDrawRound RPC.
+	PrivateDrawServiceGetDrawRoundProcedure = "/draw.v1.private.PrivateDrawService/GetDrawRound"
 )
 
-// DrawServiceClient is a client for the draw.v1.private.DrawService service.
-type DrawServiceClient interface {
+// PrivateDrawServiceClient is a client for the draw.v1.private.PrivateDrawService service.
+type PrivateDrawServiceClient interface {
 	CreateDraw(context.Context, *connect_go.Request[private.CreateDrawRequest]) (*connect_go.Response[private.CreateDrawResponse], error)
 	GetDraw(context.Context, *connect_go.Request[private.GetDrawRequest]) (*connect_go.Response[private.GetDrawResponse], error)
 	UpdateDraw(context.Context, *connect_go.Request[private.UpdateDrawRequest]) (*connect_go.Response[private.UpdateDrawResponse], error)
@@ -55,46 +59,46 @@ type DrawServiceClient interface {
 	GetDrawRound(context.Context, *connect_go.Request[private.GetDrawRoundRequest]) (*connect_go.Response[private.GetDrawRoundResponse], error)
 }
 
-// NewDrawServiceClient constructs a client for the draw.v1.private.DrawService service. By default,
-// it uses the Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and
-// sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC()
-// or connect.WithGRPCWeb() options.
+// NewPrivateDrawServiceClient constructs a client for the draw.v1.private.PrivateDrawService
+// service. By default, it uses the Connect protocol with the binary Protobuf Codec, asks for
+// gzipped responses, and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply
+// the connect.WithGRPC() or connect.WithGRPCWeb() options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewDrawServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) DrawServiceClient {
+func NewPrivateDrawServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) PrivateDrawServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	return &drawServiceClient{
+	return &privateDrawServiceClient{
 		createDraw: connect_go.NewClient[private.CreateDrawRequest, private.CreateDrawResponse](
 			httpClient,
-			baseURL+DrawServiceCreateDrawProcedure,
+			baseURL+PrivateDrawServiceCreateDrawProcedure,
 			opts...,
 		),
 		getDraw: connect_go.NewClient[private.GetDrawRequest, private.GetDrawResponse](
 			httpClient,
-			baseURL+DrawServiceGetDrawProcedure,
+			baseURL+PrivateDrawServiceGetDrawProcedure,
 			opts...,
 		),
 		updateDraw: connect_go.NewClient[private.UpdateDrawRequest, private.UpdateDrawResponse](
 			httpClient,
-			baseURL+DrawServiceUpdateDrawProcedure,
+			baseURL+PrivateDrawServiceUpdateDrawProcedure,
 			opts...,
 		),
 		deleteDraw: connect_go.NewClient[private.DeleteDrawRequest, private.DeleteDrawResponse](
 			httpClient,
-			baseURL+DrawServiceDeleteDrawProcedure,
+			baseURL+PrivateDrawServiceDeleteDrawProcedure,
 			opts...,
 		),
 		getDrawRound: connect_go.NewClient[private.GetDrawRoundRequest, private.GetDrawRoundResponse](
 			httpClient,
-			baseURL+DrawServiceGetDrawRoundProcedure,
+			baseURL+PrivateDrawServiceGetDrawRoundProcedure,
 			opts...,
 		),
 	}
 }
 
-// drawServiceClient implements DrawServiceClient.
-type drawServiceClient struct {
+// privateDrawServiceClient implements PrivateDrawServiceClient.
+type privateDrawServiceClient struct {
 	createDraw   *connect_go.Client[private.CreateDrawRequest, private.CreateDrawResponse]
 	getDraw      *connect_go.Client[private.GetDrawRequest, private.GetDrawResponse]
 	updateDraw   *connect_go.Client[private.UpdateDrawRequest, private.UpdateDrawResponse]
@@ -102,33 +106,33 @@ type drawServiceClient struct {
 	getDrawRound *connect_go.Client[private.GetDrawRoundRequest, private.GetDrawRoundResponse]
 }
 
-// CreateDraw calls draw.v1.private.DrawService.CreateDraw.
-func (c *drawServiceClient) CreateDraw(ctx context.Context, req *connect_go.Request[private.CreateDrawRequest]) (*connect_go.Response[private.CreateDrawResponse], error) {
+// CreateDraw calls draw.v1.private.PrivateDrawService.CreateDraw.
+func (c *privateDrawServiceClient) CreateDraw(ctx context.Context, req *connect_go.Request[private.CreateDrawRequest]) (*connect_go.Response[private.CreateDrawResponse], error) {
 	return c.createDraw.CallUnary(ctx, req)
 }
 
-// GetDraw calls draw.v1.private.DrawService.GetDraw.
-func (c *drawServiceClient) GetDraw(ctx context.Context, req *connect_go.Request[private.GetDrawRequest]) (*connect_go.Response[private.GetDrawResponse], error) {
+// GetDraw calls draw.v1.private.PrivateDrawService.GetDraw.
+func (c *privateDrawServiceClient) GetDraw(ctx context.Context, req *connect_go.Request[private.GetDrawRequest]) (*connect_go.Response[private.GetDrawResponse], error) {
 	return c.getDraw.CallUnary(ctx, req)
 }
 
-// UpdateDraw calls draw.v1.private.DrawService.UpdateDraw.
-func (c *drawServiceClient) UpdateDraw(ctx context.Context, req *connect_go.Request[private.UpdateDrawRequest]) (*connect_go.Response[private.UpdateDrawResponse], error) {
+// UpdateDraw calls draw.v1.private.PrivateDrawService.UpdateDraw.
+func (c *privateDrawServiceClient) UpdateDraw(ctx context.Context, req *connect_go.Request[private.UpdateDrawRequest]) (*connect_go.Response[private.UpdateDrawResponse], error) {
 	return c.updateDraw.CallUnary(ctx, req)
 }
 
-// DeleteDraw calls draw.v1.private.DrawService.DeleteDraw.
-func (c *drawServiceClient) DeleteDraw(ctx context.Context, req *connect_go.Request[private.DeleteDrawRequest]) (*connect_go.Response[private.DeleteDrawResponse], error) {
+// DeleteDraw calls draw.v1.private.PrivateDrawService.DeleteDraw.
+func (c *privateDrawServiceClient) DeleteDraw(ctx context.Context, req *connect_go.Request[private.DeleteDrawRequest]) (*connect_go.Response[private.DeleteDrawResponse], error) {
 	return c.deleteDraw.CallUnary(ctx, req)
 }
 
-// GetDrawRound calls draw.v1.private.DrawService.GetDrawRound.
-func (c *drawServiceClient) GetDrawRound(ctx context.Context, req *connect_go.Request[private.GetDrawRoundRequest]) (*connect_go.Response[private.GetDrawRoundResponse], error) {
+// GetDrawRound calls draw.v1.private.PrivateDrawService.GetDrawRound.
+func (c *privateDrawServiceClient) GetDrawRound(ctx context.Context, req *connect_go.Request[private.GetDrawRoundRequest]) (*connect_go.Response[private.GetDrawRoundResponse], error) {
 	return c.getDrawRound.CallUnary(ctx, req)
 }
 
-// DrawServiceHandler is an implementation of the draw.v1.private.DrawService service.
-type DrawServiceHandler interface {
+// PrivateDrawServiceHandler is an implementation of the draw.v1.private.PrivateDrawService service.
+type PrivateDrawServiceHandler interface {
 	CreateDraw(context.Context, *connect_go.Request[private.CreateDrawRequest]) (*connect_go.Response[private.CreateDrawResponse], error)
 	GetDraw(context.Context, *connect_go.Request[private.GetDrawRequest]) (*connect_go.Response[private.GetDrawResponse], error)
 	UpdateDraw(context.Context, *connect_go.Request[private.UpdateDrawRequest]) (*connect_go.Response[private.UpdateDrawResponse], error)
@@ -136,74 +140,74 @@ type DrawServiceHandler interface {
 	GetDrawRound(context.Context, *connect_go.Request[private.GetDrawRoundRequest]) (*connect_go.Response[private.GetDrawRoundResponse], error)
 }
 
-// NewDrawServiceHandler builds an HTTP handler from the service implementation. It returns the path
-// on which to mount the handler and the handler itself.
+// NewPrivateDrawServiceHandler builds an HTTP handler from the service implementation. It returns
+// the path on which to mount the handler and the handler itself.
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewDrawServiceHandler(svc DrawServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	drawServiceCreateDrawHandler := connect_go.NewUnaryHandler(
-		DrawServiceCreateDrawProcedure,
+func NewPrivateDrawServiceHandler(svc PrivateDrawServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
+	privateDrawServiceCreateDrawHandler := connect_go.NewUnaryHandler(
+		PrivateDrawServiceCreateDrawProcedure,
 		svc.CreateDraw,
 		opts...,
 	)
-	drawServiceGetDrawHandler := connect_go.NewUnaryHandler(
-		DrawServiceGetDrawProcedure,
+	privateDrawServiceGetDrawHandler := connect_go.NewUnaryHandler(
+		PrivateDrawServiceGetDrawProcedure,
 		svc.GetDraw,
 		opts...,
 	)
-	drawServiceUpdateDrawHandler := connect_go.NewUnaryHandler(
-		DrawServiceUpdateDrawProcedure,
+	privateDrawServiceUpdateDrawHandler := connect_go.NewUnaryHandler(
+		PrivateDrawServiceUpdateDrawProcedure,
 		svc.UpdateDraw,
 		opts...,
 	)
-	drawServiceDeleteDrawHandler := connect_go.NewUnaryHandler(
-		DrawServiceDeleteDrawProcedure,
+	privateDrawServiceDeleteDrawHandler := connect_go.NewUnaryHandler(
+		PrivateDrawServiceDeleteDrawProcedure,
 		svc.DeleteDraw,
 		opts...,
 	)
-	drawServiceGetDrawRoundHandler := connect_go.NewUnaryHandler(
-		DrawServiceGetDrawRoundProcedure,
+	privateDrawServiceGetDrawRoundHandler := connect_go.NewUnaryHandler(
+		PrivateDrawServiceGetDrawRoundProcedure,
 		svc.GetDrawRound,
 		opts...,
 	)
-	return "/draw.v1.private.DrawService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return "/draw.v1.private.PrivateDrawService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case DrawServiceCreateDrawProcedure:
-			drawServiceCreateDrawHandler.ServeHTTP(w, r)
-		case DrawServiceGetDrawProcedure:
-			drawServiceGetDrawHandler.ServeHTTP(w, r)
-		case DrawServiceUpdateDrawProcedure:
-			drawServiceUpdateDrawHandler.ServeHTTP(w, r)
-		case DrawServiceDeleteDrawProcedure:
-			drawServiceDeleteDrawHandler.ServeHTTP(w, r)
-		case DrawServiceGetDrawRoundProcedure:
-			drawServiceGetDrawRoundHandler.ServeHTTP(w, r)
+		case PrivateDrawServiceCreateDrawProcedure:
+			privateDrawServiceCreateDrawHandler.ServeHTTP(w, r)
+		case PrivateDrawServiceGetDrawProcedure:
+			privateDrawServiceGetDrawHandler.ServeHTTP(w, r)
+		case PrivateDrawServiceUpdateDrawProcedure:
+			privateDrawServiceUpdateDrawHandler.ServeHTTP(w, r)
+		case PrivateDrawServiceDeleteDrawProcedure:
+			privateDrawServiceDeleteDrawHandler.ServeHTTP(w, r)
+		case PrivateDrawServiceGetDrawRoundProcedure:
+			privateDrawServiceGetDrawRoundHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
 	})
 }
 
-// UnimplementedDrawServiceHandler returns CodeUnimplemented from all methods.
-type UnimplementedDrawServiceHandler struct{}
+// UnimplementedPrivateDrawServiceHandler returns CodeUnimplemented from all methods.
+type UnimplementedPrivateDrawServiceHandler struct{}
 
-func (UnimplementedDrawServiceHandler) CreateDraw(context.Context, *connect_go.Request[private.CreateDrawRequest]) (*connect_go.Response[private.CreateDrawResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.DrawService.CreateDraw is not implemented"))
+func (UnimplementedPrivateDrawServiceHandler) CreateDraw(context.Context, *connect_go.Request[private.CreateDrawRequest]) (*connect_go.Response[private.CreateDrawResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.PrivateDrawService.CreateDraw is not implemented"))
 }
 
-func (UnimplementedDrawServiceHandler) GetDraw(context.Context, *connect_go.Request[private.GetDrawRequest]) (*connect_go.Response[private.GetDrawResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.DrawService.GetDraw is not implemented"))
+func (UnimplementedPrivateDrawServiceHandler) GetDraw(context.Context, *connect_go.Request[private.GetDrawRequest]) (*connect_go.Response[private.GetDrawResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.PrivateDrawService.GetDraw is not implemented"))
 }
 
-func (UnimplementedDrawServiceHandler) UpdateDraw(context.Context, *connect_go.Request[private.UpdateDrawRequest]) (*connect_go.Response[private.UpdateDrawResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.DrawService.UpdateDraw is not implemented"))
+func (UnimplementedPrivateDrawServiceHandler) UpdateDraw(context.Context, *connect_go.Request[private.UpdateDrawRequest]) (*connect_go.Response[private.UpdateDrawResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.PrivateDrawService.UpdateDraw is not implemented"))
 }
 
-func (UnimplementedDrawServiceHandler) DeleteDraw(context.Context, *connect_go.Request[private.DeleteDrawRequest]) (*connect_go.Response[private.DeleteDrawResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.DrawService.DeleteDraw is not implemented"))
+func (UnimplementedPrivateDrawServiceHandler) DeleteDraw(context.Context, *connect_go.Request[private.DeleteDrawRequest]) (*connect_go.Response[private.DeleteDrawResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.PrivateDrawService.DeleteDraw is not implemented"))
 }
 
-func (UnimplementedDrawServiceHandler) GetDrawRound(context.Context, *connect_go.Request[private.GetDrawRoundRequest]) (*connect_go.Response[private.GetDrawRoundResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.DrawService.GetDrawRound is not implemented"))
+func (UnimplementedPrivateDrawServiceHandler) GetDrawRound(context.Context, *connect_go.Request[private.GetDrawRoundRequest]) (*connect_go.Response[private.GetDrawRoundResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.PrivateDrawService.GetDrawRound is not implemented"))
 }
