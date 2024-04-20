@@ -45,6 +45,9 @@ const (
 	// PrivateTeamsServiceUpdateTeamProcedure is the fully-qualified name of the PrivateTeamsService's
 	// UpdateTeam RPC.
 	PrivateTeamsServiceUpdateTeamProcedure = "/teams.v1.private.PrivateTeamsService/UpdateTeam"
+	// PrivateTeamsServiceAssociatePlayersToTeamsProcedure is the fully-qualified name of the
+	// PrivateTeamsService's AssociatePlayersToTeams RPC.
+	PrivateTeamsServiceAssociatePlayersToTeamsProcedure = "/teams.v1.private.PrivateTeamsService/AssociatePlayersToTeams"
 )
 
 // PrivateTeamsServiceClient is a client for the teams.v1.private.PrivateTeamsService service.
@@ -53,6 +56,7 @@ type PrivateTeamsServiceClient interface {
 	ListTeams(context.Context, *connect_go.Request[private.ListTeamsRequest]) (*connect_go.Response[private.ListTeamsResponse], error)
 	RemoveTeams(context.Context, *connect_go.Request[private.RemoveTeamsRequest]) (*connect_go.Response[private.RemoveTeamsResponse], error)
 	UpdateTeam(context.Context, *connect_go.Request[private.UpdateTeamRequest]) (*connect_go.Response[private.UpdateTeamResponse], error)
+	AssociatePlayersToTeams(context.Context, *connect_go.Request[private.AssociatePlayersToTeamsRequest]) (*connect_go.Response[private.AssociatePlayersToTeamsResponse], error)
 }
 
 // NewPrivateTeamsServiceClient constructs a client for the teams.v1.private.PrivateTeamsService
@@ -85,15 +89,21 @@ func NewPrivateTeamsServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 			baseURL+PrivateTeamsServiceUpdateTeamProcedure,
 			opts...,
 		),
+		associatePlayersToTeams: connect_go.NewClient[private.AssociatePlayersToTeamsRequest, private.AssociatePlayersToTeamsResponse](
+			httpClient,
+			baseURL+PrivateTeamsServiceAssociatePlayersToTeamsProcedure,
+			opts...,
+		),
 	}
 }
 
 // privateTeamsServiceClient implements PrivateTeamsServiceClient.
 type privateTeamsServiceClient struct {
-	addTeam     *connect_go.Client[private.AddTeamRequest, private.AddTeamResponse]
-	listTeams   *connect_go.Client[private.ListTeamsRequest, private.ListTeamsResponse]
-	removeTeams *connect_go.Client[private.RemoveTeamsRequest, private.RemoveTeamsResponse]
-	updateTeam  *connect_go.Client[private.UpdateTeamRequest, private.UpdateTeamResponse]
+	addTeam                 *connect_go.Client[private.AddTeamRequest, private.AddTeamResponse]
+	listTeams               *connect_go.Client[private.ListTeamsRequest, private.ListTeamsResponse]
+	removeTeams             *connect_go.Client[private.RemoveTeamsRequest, private.RemoveTeamsResponse]
+	updateTeam              *connect_go.Client[private.UpdateTeamRequest, private.UpdateTeamResponse]
+	associatePlayersToTeams *connect_go.Client[private.AssociatePlayersToTeamsRequest, private.AssociatePlayersToTeamsResponse]
 }
 
 // AddTeam calls teams.v1.private.PrivateTeamsService.AddTeam.
@@ -116,6 +126,11 @@ func (c *privateTeamsServiceClient) UpdateTeam(ctx context.Context, req *connect
 	return c.updateTeam.CallUnary(ctx, req)
 }
 
+// AssociatePlayersToTeams calls teams.v1.private.PrivateTeamsService.AssociatePlayersToTeams.
+func (c *privateTeamsServiceClient) AssociatePlayersToTeams(ctx context.Context, req *connect_go.Request[private.AssociatePlayersToTeamsRequest]) (*connect_go.Response[private.AssociatePlayersToTeamsResponse], error) {
+	return c.associatePlayersToTeams.CallUnary(ctx, req)
+}
+
 // PrivateTeamsServiceHandler is an implementation of the teams.v1.private.PrivateTeamsService
 // service.
 type PrivateTeamsServiceHandler interface {
@@ -123,6 +138,7 @@ type PrivateTeamsServiceHandler interface {
 	ListTeams(context.Context, *connect_go.Request[private.ListTeamsRequest]) (*connect_go.Response[private.ListTeamsResponse], error)
 	RemoveTeams(context.Context, *connect_go.Request[private.RemoveTeamsRequest]) (*connect_go.Response[private.RemoveTeamsResponse], error)
 	UpdateTeam(context.Context, *connect_go.Request[private.UpdateTeamRequest]) (*connect_go.Response[private.UpdateTeamResponse], error)
+	AssociatePlayersToTeams(context.Context, *connect_go.Request[private.AssociatePlayersToTeamsRequest]) (*connect_go.Response[private.AssociatePlayersToTeamsResponse], error)
 }
 
 // NewPrivateTeamsServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -151,6 +167,11 @@ func NewPrivateTeamsServiceHandler(svc PrivateTeamsServiceHandler, opts ...conne
 		svc.UpdateTeam,
 		opts...,
 	)
+	privateTeamsServiceAssociatePlayersToTeamsHandler := connect_go.NewUnaryHandler(
+		PrivateTeamsServiceAssociatePlayersToTeamsProcedure,
+		svc.AssociatePlayersToTeams,
+		opts...,
+	)
 	return "/teams.v1.private.PrivateTeamsService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PrivateTeamsServiceAddTeamProcedure:
@@ -161,6 +182,8 @@ func NewPrivateTeamsServiceHandler(svc PrivateTeamsServiceHandler, opts ...conne
 			privateTeamsServiceRemoveTeamsHandler.ServeHTTP(w, r)
 		case PrivateTeamsServiceUpdateTeamProcedure:
 			privateTeamsServiceUpdateTeamHandler.ServeHTTP(w, r)
+		case PrivateTeamsServiceAssociatePlayersToTeamsProcedure:
+			privateTeamsServiceAssociatePlayersToTeamsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -184,4 +207,8 @@ func (UnimplementedPrivateTeamsServiceHandler) RemoveTeams(context.Context, *con
 
 func (UnimplementedPrivateTeamsServiceHandler) UpdateTeam(context.Context, *connect_go.Request[private.UpdateTeamRequest]) (*connect_go.Response[private.UpdateTeamResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("teams.v1.private.PrivateTeamsService.UpdateTeam is not implemented"))
+}
+
+func (UnimplementedPrivateTeamsServiceHandler) AssociatePlayersToTeams(context.Context, *connect_go.Request[private.AssociatePlayersToTeamsRequest]) (*connect_go.Response[private.AssociatePlayersToTeamsResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("teams.v1.private.PrivateTeamsService.AssociatePlayersToTeams is not implemented"))
 }
