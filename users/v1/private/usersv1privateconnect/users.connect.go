@@ -36,15 +36,6 @@ const (
 	// PrivateUsersServiceGetMeProcedure is the fully-qualified name of the PrivateUsersService's GetMe
 	// RPC.
 	PrivateUsersServiceGetMeProcedure = "/users.v1.private.PrivateUsersService/GetMe"
-	// PrivateUsersServiceResendVerificationProcedure is the fully-qualified name of the
-	// PrivateUsersService's ResendVerification RPC.
-	PrivateUsersServiceResendVerificationProcedure = "/users.v1.private.PrivateUsersService/ResendVerification"
-	// PrivateUsersServiceSetActiveOrgProcedure is the fully-qualified name of the PrivateUsersService's
-	// SetActiveOrg RPC.
-	PrivateUsersServiceSetActiveOrgProcedure = "/users.v1.private.PrivateUsersService/SetActiveOrg"
-	// PrivateUsersServiceLogoutProcedure is the fully-qualified name of the PrivateUsersService's
-	// Logout RPC.
-	PrivateUsersServiceLogoutProcedure = "/users.v1.private.PrivateUsersService/Logout"
 	// PrivateUsersServiceSetDefaultOrgProcedure is the fully-qualified name of the
 	// PrivateUsersService's SetDefaultOrg RPC.
 	PrivateUsersServiceSetDefaultOrgProcedure = "/users.v1.private.PrivateUsersService/SetDefaultOrg"
@@ -74,9 +65,6 @@ const (
 // PrivateUsersServiceClient is a client for the users.v1.private.PrivateUsersService service.
 type PrivateUsersServiceClient interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
-	ResendVerification(context.Context, *connect_go.Request[private.ResendVerificationRequest]) (*connect_go.Response[private.ResendVerificationResponse], error)
-	SetActiveOrg(context.Context, *connect_go.Request[private.SetActiveOrgRequest]) (*connect_go.Response[private.SetActiveOrgResponse], error)
-	Logout(context.Context, *connect_go.Request[private.LogoutRequest]) (*connect_go.Response[private.LogoutResponse], error)
 	SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error)
 	CreateApiToken(context.Context, *connect_go.Request[private.CreateApiTokenRequest]) (*connect_go.Response[private.CreateApiTokenResponse], error)
 	ListApiTokens(context.Context, *connect_go.Request[private.ListApiTokensRequest]) (*connect_go.Response[private.ListApiTokensResponse], error)
@@ -100,21 +88,6 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 		getMe: connect_go.NewClient[private.GetMeRequest, private.GetMeResponse](
 			httpClient,
 			baseURL+PrivateUsersServiceGetMeProcedure,
-			opts...,
-		),
-		resendVerification: connect_go.NewClient[private.ResendVerificationRequest, private.ResendVerificationResponse](
-			httpClient,
-			baseURL+PrivateUsersServiceResendVerificationProcedure,
-			opts...,
-		),
-		setActiveOrg: connect_go.NewClient[private.SetActiveOrgRequest, private.SetActiveOrgResponse](
-			httpClient,
-			baseURL+PrivateUsersServiceSetActiveOrgProcedure,
-			opts...,
-		),
-		logout: connect_go.NewClient[private.LogoutRequest, private.LogoutResponse](
-			httpClient,
-			baseURL+PrivateUsersServiceLogoutProcedure,
 			opts...,
 		),
 		setDefaultOrg: connect_go.NewClient[private.SetDefaultOrgRequest, private.SetDefaultOrgResponse](
@@ -163,9 +136,6 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 // privateUsersServiceClient implements PrivateUsersServiceClient.
 type privateUsersServiceClient struct {
 	getMe                 *connect_go.Client[private.GetMeRequest, private.GetMeResponse]
-	resendVerification    *connect_go.Client[private.ResendVerificationRequest, private.ResendVerificationResponse]
-	setActiveOrg          *connect_go.Client[private.SetActiveOrgRequest, private.SetActiveOrgResponse]
-	logout                *connect_go.Client[private.LogoutRequest, private.LogoutResponse]
 	setDefaultOrg         *connect_go.Client[private.SetDefaultOrgRequest, private.SetDefaultOrgResponse]
 	createApiToken        *connect_go.Client[private.CreateApiTokenRequest, private.CreateApiTokenResponse]
 	listApiTokens         *connect_go.Client[private.ListApiTokensRequest, private.ListApiTokensResponse]
@@ -179,21 +149,6 @@ type privateUsersServiceClient struct {
 // GetMe calls users.v1.private.PrivateUsersService.GetMe.
 func (c *privateUsersServiceClient) GetMe(ctx context.Context, req *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error) {
 	return c.getMe.CallUnary(ctx, req)
-}
-
-// ResendVerification calls users.v1.private.PrivateUsersService.ResendVerification.
-func (c *privateUsersServiceClient) ResendVerification(ctx context.Context, req *connect_go.Request[private.ResendVerificationRequest]) (*connect_go.Response[private.ResendVerificationResponse], error) {
-	return c.resendVerification.CallUnary(ctx, req)
-}
-
-// SetActiveOrg calls users.v1.private.PrivateUsersService.SetActiveOrg.
-func (c *privateUsersServiceClient) SetActiveOrg(ctx context.Context, req *connect_go.Request[private.SetActiveOrgRequest]) (*connect_go.Response[private.SetActiveOrgResponse], error) {
-	return c.setActiveOrg.CallUnary(ctx, req)
-}
-
-// Logout calls users.v1.private.PrivateUsersService.Logout.
-func (c *privateUsersServiceClient) Logout(ctx context.Context, req *connect_go.Request[private.LogoutRequest]) (*connect_go.Response[private.LogoutResponse], error) {
-	return c.logout.CallUnary(ctx, req)
 }
 
 // SetDefaultOrg calls users.v1.private.PrivateUsersService.SetDefaultOrg.
@@ -240,9 +195,6 @@ func (c *privateUsersServiceClient) DeleteOrganisation(ctx context.Context, req 
 // service.
 type PrivateUsersServiceHandler interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
-	ResendVerification(context.Context, *connect_go.Request[private.ResendVerificationRequest]) (*connect_go.Response[private.ResendVerificationResponse], error)
-	SetActiveOrg(context.Context, *connect_go.Request[private.SetActiveOrgRequest]) (*connect_go.Response[private.SetActiveOrgResponse], error)
-	Logout(context.Context, *connect_go.Request[private.LogoutRequest]) (*connect_go.Response[private.LogoutResponse], error)
 	SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error)
 	CreateApiToken(context.Context, *connect_go.Request[private.CreateApiTokenRequest]) (*connect_go.Response[private.CreateApiTokenResponse], error)
 	ListApiTokens(context.Context, *connect_go.Request[private.ListApiTokensRequest]) (*connect_go.Response[private.ListApiTokensResponse], error)
@@ -262,21 +214,6 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 	privateUsersServiceGetMeHandler := connect_go.NewUnaryHandler(
 		PrivateUsersServiceGetMeProcedure,
 		svc.GetMe,
-		opts...,
-	)
-	privateUsersServiceResendVerificationHandler := connect_go.NewUnaryHandler(
-		PrivateUsersServiceResendVerificationProcedure,
-		svc.ResendVerification,
-		opts...,
-	)
-	privateUsersServiceSetActiveOrgHandler := connect_go.NewUnaryHandler(
-		PrivateUsersServiceSetActiveOrgProcedure,
-		svc.SetActiveOrg,
-		opts...,
-	)
-	privateUsersServiceLogoutHandler := connect_go.NewUnaryHandler(
-		PrivateUsersServiceLogoutProcedure,
-		svc.Logout,
 		opts...,
 	)
 	privateUsersServiceSetDefaultOrgHandler := connect_go.NewUnaryHandler(
@@ -323,12 +260,6 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 		switch r.URL.Path {
 		case PrivateUsersServiceGetMeProcedure:
 			privateUsersServiceGetMeHandler.ServeHTTP(w, r)
-		case PrivateUsersServiceResendVerificationProcedure:
-			privateUsersServiceResendVerificationHandler.ServeHTTP(w, r)
-		case PrivateUsersServiceSetActiveOrgProcedure:
-			privateUsersServiceSetActiveOrgHandler.ServeHTTP(w, r)
-		case PrivateUsersServiceLogoutProcedure:
-			privateUsersServiceLogoutHandler.ServeHTTP(w, r)
 		case PrivateUsersServiceSetDefaultOrgProcedure:
 			privateUsersServiceSetDefaultOrgHandler.ServeHTTP(w, r)
 		case PrivateUsersServiceCreateApiTokenProcedure:
@@ -356,18 +287,6 @@ type UnimplementedPrivateUsersServiceHandler struct{}
 
 func (UnimplementedPrivateUsersServiceHandler) GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.GetMe is not implemented"))
-}
-
-func (UnimplementedPrivateUsersServiceHandler) ResendVerification(context.Context, *connect_go.Request[private.ResendVerificationRequest]) (*connect_go.Response[private.ResendVerificationResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.ResendVerification is not implemented"))
-}
-
-func (UnimplementedPrivateUsersServiceHandler) SetActiveOrg(context.Context, *connect_go.Request[private.SetActiveOrgRequest]) (*connect_go.Response[private.SetActiveOrgResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.SetActiveOrg is not implemented"))
-}
-
-func (UnimplementedPrivateUsersServiceHandler) Logout(context.Context, *connect_go.Request[private.LogoutRequest]) (*connect_go.Response[private.LogoutResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.Logout is not implemented"))
 }
 
 func (UnimplementedPrivateUsersServiceHandler) SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error) {
