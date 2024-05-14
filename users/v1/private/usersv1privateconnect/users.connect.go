@@ -63,6 +63,9 @@ const (
 	// PrivateUsersServiceDeleteOrganisationProcedure is the fully-qualified name of the
 	// PrivateUsersService's DeleteOrganisation RPC.
 	PrivateUsersServiceDeleteOrganisationProcedure = "/users.v1.private.PrivateUsersService/DeleteOrganisation"
+	// PrivateUsersServiceResendVerificationProcedure is the fully-qualified name of the
+	// PrivateUsersService's ResendVerification RPC.
+	PrivateUsersServiceResendVerificationProcedure = "/users.v1.private.PrivateUsersService/ResendVerification"
 )
 
 // PrivateUsersServiceClient is a client for the users.v1.private.PrivateUsersService service.
@@ -77,6 +80,7 @@ type PrivateUsersServiceClient interface {
 	CreateNewOrganisation(context.Context, *connect_go.Request[private.CreateNewOrganisationRequest]) (*connect_go.Response[private.CreateNewOrganisationResponse], error)
 	FreshUserSetup(context.Context, *connect_go.Request[private.FreshUserSetupRequest]) (*connect_go.Response[private.FreshUserSetupResponse], error)
 	DeleteOrganisation(context.Context, *connect_go.Request[private.DeleteOrganisationRequest]) (*connect_go.Response[private.DeleteOrganisationResponse], error)
+	ResendVerification(context.Context, *connect_go.Request[private.ResendVerificationRequest]) (*connect_go.Response[private.ResendVerificationResponse], error)
 }
 
 // NewPrivateUsersServiceClient constructs a client for the users.v1.private.PrivateUsersService
@@ -139,6 +143,11 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 			baseURL+PrivateUsersServiceDeleteOrganisationProcedure,
 			opts...,
 		),
+		resendVerification: connect_go.NewClient[private.ResendVerificationRequest, private.ResendVerificationResponse](
+			httpClient,
+			baseURL+PrivateUsersServiceResendVerificationProcedure,
+			opts...,
+		),
 	}
 }
 
@@ -154,6 +163,7 @@ type privateUsersServiceClient struct {
 	createNewOrganisation *connect_go.Client[private.CreateNewOrganisationRequest, private.CreateNewOrganisationResponse]
 	freshUserSetup        *connect_go.Client[private.FreshUserSetupRequest, private.FreshUserSetupResponse]
 	deleteOrganisation    *connect_go.Client[private.DeleteOrganisationRequest, private.DeleteOrganisationResponse]
+	resendVerification    *connect_go.Client[private.ResendVerificationRequest, private.ResendVerificationResponse]
 }
 
 // GetMe calls users.v1.private.PrivateUsersService.GetMe.
@@ -206,6 +216,11 @@ func (c *privateUsersServiceClient) DeleteOrganisation(ctx context.Context, req 
 	return c.deleteOrganisation.CallUnary(ctx, req)
 }
 
+// ResendVerification calls users.v1.private.PrivateUsersService.ResendVerification.
+func (c *privateUsersServiceClient) ResendVerification(ctx context.Context, req *connect_go.Request[private.ResendVerificationRequest]) (*connect_go.Response[private.ResendVerificationResponse], error) {
+	return c.resendVerification.CallUnary(ctx, req)
+}
+
 // PrivateUsersServiceHandler is an implementation of the users.v1.private.PrivateUsersService
 // service.
 type PrivateUsersServiceHandler interface {
@@ -219,6 +234,7 @@ type PrivateUsersServiceHandler interface {
 	CreateNewOrganisation(context.Context, *connect_go.Request[private.CreateNewOrganisationRequest]) (*connect_go.Response[private.CreateNewOrganisationResponse], error)
 	FreshUserSetup(context.Context, *connect_go.Request[private.FreshUserSetupRequest]) (*connect_go.Response[private.FreshUserSetupResponse], error)
 	DeleteOrganisation(context.Context, *connect_go.Request[private.DeleteOrganisationRequest]) (*connect_go.Response[private.DeleteOrganisationResponse], error)
+	ResendVerification(context.Context, *connect_go.Request[private.ResendVerificationRequest]) (*connect_go.Response[private.ResendVerificationResponse], error)
 }
 
 // NewPrivateUsersServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -277,6 +293,11 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 		svc.DeleteOrganisation,
 		opts...,
 	)
+	privateUsersServiceResendVerificationHandler := connect_go.NewUnaryHandler(
+		PrivateUsersServiceResendVerificationProcedure,
+		svc.ResendVerification,
+		opts...,
+	)
 	return "/users.v1.private.PrivateUsersService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PrivateUsersServiceGetMeProcedure:
@@ -299,6 +320,8 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 			privateUsersServiceFreshUserSetupHandler.ServeHTTP(w, r)
 		case PrivateUsersServiceDeleteOrganisationProcedure:
 			privateUsersServiceDeleteOrganisationHandler.ServeHTTP(w, r)
+		case PrivateUsersServiceResendVerificationProcedure:
+			privateUsersServiceResendVerificationHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -346,4 +369,8 @@ func (UnimplementedPrivateUsersServiceHandler) FreshUserSetup(context.Context, *
 
 func (UnimplementedPrivateUsersServiceHandler) DeleteOrganisation(context.Context, *connect_go.Request[private.DeleteOrganisationRequest]) (*connect_go.Response[private.DeleteOrganisationResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.DeleteOrganisation is not implemented"))
+}
+
+func (UnimplementedPrivateUsersServiceHandler) ResendVerification(context.Context, *connect_go.Request[private.ResendVerificationRequest]) (*connect_go.Response[private.ResendVerificationResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.ResendVerification is not implemented"))
 }
