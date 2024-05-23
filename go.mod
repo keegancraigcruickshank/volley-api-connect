@@ -1,3 +1,3 @@
 module github.com/keegancraigcruickshank/volley-api-connect
 
-go 1.22.2
+go 1.22.3
