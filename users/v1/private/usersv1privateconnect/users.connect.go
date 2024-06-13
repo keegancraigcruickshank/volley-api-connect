@@ -36,6 +36,9 @@ const (
 	// PrivateUsersServiceGetMeProcedure is the fully-qualified name of the PrivateUsersService's GetMe
 	// RPC.
 	PrivateUsersServiceGetMeProcedure = "/users.v1.private.PrivateUsersService/GetMe"
+	// PrivateUsersServiceUpdateMeProcedure is the fully-qualified name of the PrivateUsersService's
+	// UpdateMe RPC.
+	PrivateUsersServiceUpdateMeProcedure = "/users.v1.private.PrivateUsersService/UpdateMe"
 	// PrivateUsersServiceSetDefaultOrgProcedure is the fully-qualified name of the
 	// PrivateUsersService's SetDefaultOrg RPC.
 	PrivateUsersServiceSetDefaultOrgProcedure = "/users.v1.private.PrivateUsersService/SetDefaultOrg"
@@ -71,6 +74,7 @@ const (
 // PrivateUsersServiceClient is a client for the users.v1.private.PrivateUsersService service.
 type PrivateUsersServiceClient interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
+	UpdateMe(context.Context, *connect_go.Request[private.UpdateMeRequest]) (*connect_go.Response[private.UpdateMeResponse], error)
 	SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error)
 	CreateApiToken(context.Context, *connect_go.Request[private.CreateApiTokenRequest]) (*connect_go.Response[private.CreateApiTokenResponse], error)
 	ListApiTokens(context.Context, *connect_go.Request[private.ListApiTokensRequest]) (*connect_go.Response[private.ListApiTokensResponse], error)
@@ -96,6 +100,11 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 		getMe: connect_go.NewClient[private.GetMeRequest, private.GetMeResponse](
 			httpClient,
 			baseURL+PrivateUsersServiceGetMeProcedure,
+			opts...,
+		),
+		updateMe: connect_go.NewClient[private.UpdateMeRequest, private.UpdateMeResponse](
+			httpClient,
+			baseURL+PrivateUsersServiceUpdateMeProcedure,
 			opts...,
 		),
 		setDefaultOrg: connect_go.NewClient[private.SetDefaultOrgRequest, private.SetDefaultOrgResponse](
@@ -154,6 +163,7 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 // privateUsersServiceClient implements PrivateUsersServiceClient.
 type privateUsersServiceClient struct {
 	getMe                 *connect_go.Client[private.GetMeRequest, private.GetMeResponse]
+	updateMe              *connect_go.Client[private.UpdateMeRequest, private.UpdateMeResponse]
 	setDefaultOrg         *connect_go.Client[private.SetDefaultOrgRequest, private.SetDefaultOrgResponse]
 	createApiToken        *connect_go.Client[private.CreateApiTokenRequest, private.CreateApiTokenResponse]
 	listApiTokens         *connect_go.Client[private.ListApiTokensRequest, private.ListApiTokensResponse]
@@ -169,6 +179,11 @@ type privateUsersServiceClient struct {
 // GetMe calls users.v1.private.PrivateUsersService.GetMe.
 func (c *privateUsersServiceClient) GetMe(ctx context.Context, req *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error) {
 	return c.getMe.CallUnary(ctx, req)
+}
+
+// UpdateMe calls users.v1.private.PrivateUsersService.UpdateMe.
+func (c *privateUsersServiceClient) UpdateMe(ctx context.Context, req *connect_go.Request[private.UpdateMeRequest]) (*connect_go.Response[private.UpdateMeResponse], error) {
+	return c.updateMe.CallUnary(ctx, req)
 }
 
 // SetDefaultOrg calls users.v1.private.PrivateUsersService.SetDefaultOrg.
@@ -225,6 +240,7 @@ func (c *privateUsersServiceClient) ResendVerification(ctx context.Context, req 
 // service.
 type PrivateUsersServiceHandler interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
+	UpdateMe(context.Context, *connect_go.Request[private.UpdateMeRequest]) (*connect_go.Response[private.UpdateMeResponse], error)
 	SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error)
 	CreateApiToken(context.Context, *connect_go.Request[private.CreateApiTokenRequest]) (*connect_go.Response[private.CreateApiTokenResponse], error)
 	ListApiTokens(context.Context, *connect_go.Request[private.ListApiTokensRequest]) (*connect_go.Response[private.ListApiTokensResponse], error)
@@ -246,6 +262,11 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 	privateUsersServiceGetMeHandler := connect_go.NewUnaryHandler(
 		PrivateUsersServiceGetMeProcedure,
 		svc.GetMe,
+		opts...,
+	)
+	privateUsersServiceUpdateMeHandler := connect_go.NewUnaryHandler(
+		PrivateUsersServiceUpdateMeProcedure,
+		svc.UpdateMe,
 		opts...,
 	)
 	privateUsersServiceSetDefaultOrgHandler := connect_go.NewUnaryHandler(
@@ -302,6 +323,8 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 		switch r.URL.Path {
 		case PrivateUsersServiceGetMeProcedure:
 			privateUsersServiceGetMeHandler.ServeHTTP(w, r)
+		case PrivateUsersServiceUpdateMeProcedure:
+			privateUsersServiceUpdateMeHandler.ServeHTTP(w, r)
 		case PrivateUsersServiceSetDefaultOrgProcedure:
 			privateUsersServiceSetDefaultOrgHandler.ServeHTTP(w, r)
 		case PrivateUsersServiceCreateApiTokenProcedure:
@@ -333,6 +356,10 @@ type UnimplementedPrivateUsersServiceHandler struct{}
 
 func (UnimplementedPrivateUsersServiceHandler) GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.GetMe is not implemented"))
+}
+
+func (UnimplementedPrivateUsersServiceHandler) UpdateMe(context.Context, *connect_go.Request[private.UpdateMeRequest]) (*connect_go.Response[private.UpdateMeResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.UpdateMe is not implemented"))
 }
 
 func (UnimplementedPrivateUsersServiceHandler) SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error) {
