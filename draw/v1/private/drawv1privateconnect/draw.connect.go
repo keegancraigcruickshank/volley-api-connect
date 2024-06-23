@@ -48,6 +48,9 @@ const (
 	// PrivateDrawServiceGetFlexibleRoundRobinDrawRoundProcedure is the fully-qualified name of the
 	// PrivateDrawService's GetFlexibleRoundRobinDrawRound RPC.
 	PrivateDrawServiceGetFlexibleRoundRobinDrawRoundProcedure = "/draw.v1.private.PrivateDrawService/GetFlexibleRoundRobinDrawRound"
+	// PrivateDrawServiceListDrawsProcedure is the fully-qualified name of the PrivateDrawService's
+	// ListDraws RPC.
+	PrivateDrawServiceListDrawsProcedure = "/draw.v1.private.PrivateDrawService/ListDraws"
 )
 
 // PrivateDrawServiceClient is a client for the draw.v1.private.PrivateDrawService service.
@@ -57,6 +60,7 @@ type PrivateDrawServiceClient interface {
 	CreateFlexibleRoundRobinDraw(context.Context, *connect_go.Request[private.CreateFlexibleRoundRobinDrawRequest]) (*connect_go.Response[private.CreateFlexibleRoundRobinDrawResponse], error)
 	UpdateFlexibleRoundRobinDraw(context.Context, *connect_go.Request[private.UpdateFlexibleRoundRobinDrawRequest]) (*connect_go.Response[private.UpdateFlexibleRoundRobinDrawResponse], error)
 	GetFlexibleRoundRobinDrawRound(context.Context, *connect_go.Request[private.GetFlexibleRoundRobinDrawRoundRequest]) (*connect_go.Response[private.GetFlexibleRoundRobinDrawRoundResponse], error)
+	ListDraws(context.Context, *connect_go.Request[private.ListDrawsRequest]) (*connect_go.Response[private.ListDrawsResponse], error)
 }
 
 // NewPrivateDrawServiceClient constructs a client for the draw.v1.private.PrivateDrawService
@@ -94,6 +98,11 @@ func NewPrivateDrawServiceClient(httpClient connect_go.HTTPClient, baseURL strin
 			baseURL+PrivateDrawServiceGetFlexibleRoundRobinDrawRoundProcedure,
 			opts...,
 		),
+		listDraws: connect_go.NewClient[private.ListDrawsRequest, private.ListDrawsResponse](
+			httpClient,
+			baseURL+PrivateDrawServiceListDrawsProcedure,
+			opts...,
+		),
 	}
 }
 
@@ -104,6 +113,7 @@ type privateDrawServiceClient struct {
 	createFlexibleRoundRobinDraw   *connect_go.Client[private.CreateFlexibleRoundRobinDrawRequest, private.CreateFlexibleRoundRobinDrawResponse]
 	updateFlexibleRoundRobinDraw   *connect_go.Client[private.UpdateFlexibleRoundRobinDrawRequest, private.UpdateFlexibleRoundRobinDrawResponse]
 	getFlexibleRoundRobinDrawRound *connect_go.Client[private.GetFlexibleRoundRobinDrawRoundRequest, private.GetFlexibleRoundRobinDrawRoundResponse]
+	listDraws                      *connect_go.Client[private.ListDrawsRequest, private.ListDrawsResponse]
 }
 
 // GetDraw calls draw.v1.private.PrivateDrawService.GetDraw.
@@ -134,6 +144,11 @@ func (c *privateDrawServiceClient) GetFlexibleRoundRobinDrawRound(ctx context.Co
 	return c.getFlexibleRoundRobinDrawRound.CallUnary(ctx, req)
 }
 
+// ListDraws calls draw.v1.private.PrivateDrawService.ListDraws.
+func (c *privateDrawServiceClient) ListDraws(ctx context.Context, req *connect_go.Request[private.ListDrawsRequest]) (*connect_go.Response[private.ListDrawsResponse], error) {
+	return c.listDraws.CallUnary(ctx, req)
+}
+
 // PrivateDrawServiceHandler is an implementation of the draw.v1.private.PrivateDrawService service.
 type PrivateDrawServiceHandler interface {
 	GetDraw(context.Context, *connect_go.Request[private.GetDrawRequest]) (*connect_go.Response[private.GetDrawResponse], error)
@@ -141,6 +156,7 @@ type PrivateDrawServiceHandler interface {
 	CreateFlexibleRoundRobinDraw(context.Context, *connect_go.Request[private.CreateFlexibleRoundRobinDrawRequest]) (*connect_go.Response[private.CreateFlexibleRoundRobinDrawResponse], error)
 	UpdateFlexibleRoundRobinDraw(context.Context, *connect_go.Request[private.UpdateFlexibleRoundRobinDrawRequest]) (*connect_go.Response[private.UpdateFlexibleRoundRobinDrawResponse], error)
 	GetFlexibleRoundRobinDrawRound(context.Context, *connect_go.Request[private.GetFlexibleRoundRobinDrawRoundRequest]) (*connect_go.Response[private.GetFlexibleRoundRobinDrawRoundResponse], error)
+	ListDraws(context.Context, *connect_go.Request[private.ListDrawsRequest]) (*connect_go.Response[private.ListDrawsResponse], error)
 }
 
 // NewPrivateDrawServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -174,6 +190,11 @@ func NewPrivateDrawServiceHandler(svc PrivateDrawServiceHandler, opts ...connect
 		svc.GetFlexibleRoundRobinDrawRound,
 		opts...,
 	)
+	privateDrawServiceListDrawsHandler := connect_go.NewUnaryHandler(
+		PrivateDrawServiceListDrawsProcedure,
+		svc.ListDraws,
+		opts...,
+	)
 	return "/draw.v1.private.PrivateDrawService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PrivateDrawServiceGetDrawProcedure:
@@ -186,6 +207,8 @@ func NewPrivateDrawServiceHandler(svc PrivateDrawServiceHandler, opts ...connect
 			privateDrawServiceUpdateFlexibleRoundRobinDrawHandler.ServeHTTP(w, r)
 		case PrivateDrawServiceGetFlexibleRoundRobinDrawRoundProcedure:
 			privateDrawServiceGetFlexibleRoundRobinDrawRoundHandler.ServeHTTP(w, r)
+		case PrivateDrawServiceListDrawsProcedure:
+			privateDrawServiceListDrawsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -213,4 +236,8 @@ func (UnimplementedPrivateDrawServiceHandler) UpdateFlexibleRoundRobinDraw(conte
 
 func (UnimplementedPrivateDrawServiceHandler) GetFlexibleRoundRobinDrawRound(context.Context, *connect_go.Request[private.GetFlexibleRoundRobinDrawRoundRequest]) (*connect_go.Response[private.GetFlexibleRoundRobinDrawRoundResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.PrivateDrawService.GetFlexibleRoundRobinDrawRound is not implemented"))
+}
+
+func (UnimplementedPrivateDrawServiceHandler) ListDraws(context.Context, *connect_go.Request[private.ListDrawsRequest]) (*connect_go.Response[private.ListDrawsResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.PrivateDrawService.ListDraws is not implemented"))
 }
