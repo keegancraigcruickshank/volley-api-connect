@@ -36,6 +36,9 @@ const (
 	// PrivateUsersServiceGetMeProcedure is the fully-qualified name of the PrivateUsersService's GetMe
 	// RPC.
 	PrivateUsersServiceGetMeProcedure = "/users.v1.private.PrivateUsersService/GetMe"
+	// PrivateUsersServiceGetBillingLinkProcedure is the fully-qualified name of the
+	// PrivateUsersService's GetBillingLink RPC.
+	PrivateUsersServiceGetBillingLinkProcedure = "/users.v1.private.PrivateUsersService/GetBillingLink"
 	// PrivateUsersServiceUpdateMeProcedure is the fully-qualified name of the PrivateUsersService's
 	// UpdateMe RPC.
 	PrivateUsersServiceUpdateMeProcedure = "/users.v1.private.PrivateUsersService/UpdateMe"
@@ -74,6 +77,7 @@ const (
 // PrivateUsersServiceClient is a client for the users.v1.private.PrivateUsersService service.
 type PrivateUsersServiceClient interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
+	GetBillingLink(context.Context, *connect_go.Request[private.GetBillingLinkRequest]) (*connect_go.Response[private.GetBillingLinkResponse], error)
 	UpdateMe(context.Context, *connect_go.Request[private.UpdateMeRequest]) (*connect_go.Response[private.UpdateMeResponse], error)
 	SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error)
 	CreateApiToken(context.Context, *connect_go.Request[private.CreateApiTokenRequest]) (*connect_go.Response[private.CreateApiTokenResponse], error)
@@ -100,6 +104,11 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 		getMe: connect_go.NewClient[private.GetMeRequest, private.GetMeResponse](
 			httpClient,
 			baseURL+PrivateUsersServiceGetMeProcedure,
+			opts...,
+		),
+		getBillingLink: connect_go.NewClient[private.GetBillingLinkRequest, private.GetBillingLinkResponse](
+			httpClient,
+			baseURL+PrivateUsersServiceGetBillingLinkProcedure,
 			opts...,
 		),
 		updateMe: connect_go.NewClient[private.UpdateMeRequest, private.UpdateMeResponse](
@@ -163,6 +172,7 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 // privateUsersServiceClient implements PrivateUsersServiceClient.
 type privateUsersServiceClient struct {
 	getMe                 *connect_go.Client[private.GetMeRequest, private.GetMeResponse]
+	getBillingLink        *connect_go.Client[private.GetBillingLinkRequest, private.GetBillingLinkResponse]
 	updateMe              *connect_go.Client[private.UpdateMeRequest, private.UpdateMeResponse]
 	setDefaultOrg         *connect_go.Client[private.SetDefaultOrgRequest, private.SetDefaultOrgResponse]
 	createApiToken        *connect_go.Client[private.CreateApiTokenRequest, private.CreateApiTokenResponse]
@@ -179,6 +189,11 @@ type privateUsersServiceClient struct {
 // GetMe calls users.v1.private.PrivateUsersService.GetMe.
 func (c *privateUsersServiceClient) GetMe(ctx context.Context, req *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error) {
 	return c.getMe.CallUnary(ctx, req)
+}
+
+// GetBillingLink calls users.v1.private.PrivateUsersService.GetBillingLink.
+func (c *privateUsersServiceClient) GetBillingLink(ctx context.Context, req *connect_go.Request[private.GetBillingLinkRequest]) (*connect_go.Response[private.GetBillingLinkResponse], error) {
+	return c.getBillingLink.CallUnary(ctx, req)
 }
 
 // UpdateMe calls users.v1.private.PrivateUsersService.UpdateMe.
@@ -240,6 +255,7 @@ func (c *privateUsersServiceClient) ResendVerification(ctx context.Context, req 
 // service.
 type PrivateUsersServiceHandler interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
+	GetBillingLink(context.Context, *connect_go.Request[private.GetBillingLinkRequest]) (*connect_go.Response[private.GetBillingLinkResponse], error)
 	UpdateMe(context.Context, *connect_go.Request[private.UpdateMeRequest]) (*connect_go.Response[private.UpdateMeResponse], error)
 	SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error)
 	CreateApiToken(context.Context, *connect_go.Request[private.CreateApiTokenRequest]) (*connect_go.Response[private.CreateApiTokenResponse], error)
@@ -262,6 +278,11 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 	privateUsersServiceGetMeHandler := connect_go.NewUnaryHandler(
 		PrivateUsersServiceGetMeProcedure,
 		svc.GetMe,
+		opts...,
+	)
+	privateUsersServiceGetBillingLinkHandler := connect_go.NewUnaryHandler(
+		PrivateUsersServiceGetBillingLinkProcedure,
+		svc.GetBillingLink,
 		opts...,
 	)
 	privateUsersServiceUpdateMeHandler := connect_go.NewUnaryHandler(
@@ -323,6 +344,8 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 		switch r.URL.Path {
 		case PrivateUsersServiceGetMeProcedure:
 			privateUsersServiceGetMeHandler.ServeHTTP(w, r)
+		case PrivateUsersServiceGetBillingLinkProcedure:
+			privateUsersServiceGetBillingLinkHandler.ServeHTTP(w, r)
 		case PrivateUsersServiceUpdateMeProcedure:
 			privateUsersServiceUpdateMeHandler.ServeHTTP(w, r)
 		case PrivateUsersServiceSetDefaultOrgProcedure:
@@ -356,6 +379,10 @@ type UnimplementedPrivateUsersServiceHandler struct{}
 
 func (UnimplementedPrivateUsersServiceHandler) GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.GetMe is not implemented"))
+}
+
+func (UnimplementedPrivateUsersServiceHandler) GetBillingLink(context.Context, *connect_go.Request[private.GetBillingLinkRequest]) (*connect_go.Response[private.GetBillingLinkResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.GetBillingLink is not implemented"))
 }
 
 func (UnimplementedPrivateUsersServiceHandler) UpdateMe(context.Context, *connect_go.Request[private.UpdateMeRequest]) (*connect_go.Response[private.UpdateMeResponse], error) {
