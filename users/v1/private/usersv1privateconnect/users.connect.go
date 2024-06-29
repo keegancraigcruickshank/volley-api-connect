@@ -39,6 +39,9 @@ const (
 	// PrivateUsersServiceGetBillingLinkProcedure is the fully-qualified name of the
 	// PrivateUsersService's GetBillingLink RPC.
 	PrivateUsersServiceGetBillingLinkProcedure = "/users.v1.private.PrivateUsersService/GetBillingLink"
+	// PrivateUsersServiceGetSubscriptionProcedure is the fully-qualified name of the
+	// PrivateUsersService's GetSubscription RPC.
+	PrivateUsersServiceGetSubscriptionProcedure = "/users.v1.private.PrivateUsersService/GetSubscription"
 	// PrivateUsersServiceUpdateMeProcedure is the fully-qualified name of the PrivateUsersService's
 	// UpdateMe RPC.
 	PrivateUsersServiceUpdateMeProcedure = "/users.v1.private.PrivateUsersService/UpdateMe"
@@ -78,6 +81,7 @@ const (
 type PrivateUsersServiceClient interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
 	GetBillingLink(context.Context, *connect_go.Request[private.GetBillingLinkRequest]) (*connect_go.Response[private.GetBillingLinkResponse], error)
+	GetSubscription(context.Context, *connect_go.Request[private.GetSubscriptionRequest]) (*connect_go.Response[private.GetSubscriptionResponse], error)
 	UpdateMe(context.Context, *connect_go.Request[private.UpdateMeRequest]) (*connect_go.Response[private.UpdateMeResponse], error)
 	SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error)
 	CreateApiToken(context.Context, *connect_go.Request[private.CreateApiTokenRequest]) (*connect_go.Response[private.CreateApiTokenResponse], error)
@@ -109,6 +113,11 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 		getBillingLink: connect_go.NewClient[private.GetBillingLinkRequest, private.GetBillingLinkResponse](
 			httpClient,
 			baseURL+PrivateUsersServiceGetBillingLinkProcedure,
+			opts...,
+		),
+		getSubscription: connect_go.NewClient[private.GetSubscriptionRequest, private.GetSubscriptionResponse](
+			httpClient,
+			baseURL+PrivateUsersServiceGetSubscriptionProcedure,
 			opts...,
 		),
 		updateMe: connect_go.NewClient[private.UpdateMeRequest, private.UpdateMeResponse](
@@ -173,6 +182,7 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 type privateUsersServiceClient struct {
 	getMe                 *connect_go.Client[private.GetMeRequest, private.GetMeResponse]
 	getBillingLink        *connect_go.Client[private.GetBillingLinkRequest, private.GetBillingLinkResponse]
+	getSubscription       *connect_go.Client[private.GetSubscriptionRequest, private.GetSubscriptionResponse]
 	updateMe              *connect_go.Client[private.UpdateMeRequest, private.UpdateMeResponse]
 	setDefaultOrg         *connect_go.Client[private.SetDefaultOrgRequest, private.SetDefaultOrgResponse]
 	createApiToken        *connect_go.Client[private.CreateApiTokenRequest, private.CreateApiTokenResponse]
@@ -194,6 +204,11 @@ func (c *privateUsersServiceClient) GetMe(ctx context.Context, req *connect_go.R
 // GetBillingLink calls users.v1.private.PrivateUsersService.GetBillingLink.
 func (c *privateUsersServiceClient) GetBillingLink(ctx context.Context, req *connect_go.Request[private.GetBillingLinkRequest]) (*connect_go.Response[private.GetBillingLinkResponse], error) {
 	return c.getBillingLink.CallUnary(ctx, req)
+}
+
+// GetSubscription calls users.v1.private.PrivateUsersService.GetSubscription.
+func (c *privateUsersServiceClient) GetSubscription(ctx context.Context, req *connect_go.Request[private.GetSubscriptionRequest]) (*connect_go.Response[private.GetSubscriptionResponse], error) {
+	return c.getSubscription.CallUnary(ctx, req)
 }
 
 // UpdateMe calls users.v1.private.PrivateUsersService.UpdateMe.
@@ -256,6 +271,7 @@ func (c *privateUsersServiceClient) ResendVerification(ctx context.Context, req 
 type PrivateUsersServiceHandler interface {
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
 	GetBillingLink(context.Context, *connect_go.Request[private.GetBillingLinkRequest]) (*connect_go.Response[private.GetBillingLinkResponse], error)
+	GetSubscription(context.Context, *connect_go.Request[private.GetSubscriptionRequest]) (*connect_go.Response[private.GetSubscriptionResponse], error)
 	UpdateMe(context.Context, *connect_go.Request[private.UpdateMeRequest]) (*connect_go.Response[private.UpdateMeResponse], error)
 	SetDefaultOrg(context.Context, *connect_go.Request[private.SetDefaultOrgRequest]) (*connect_go.Response[private.SetDefaultOrgResponse], error)
 	CreateApiToken(context.Context, *connect_go.Request[private.CreateApiTokenRequest]) (*connect_go.Response[private.CreateApiTokenResponse], error)
@@ -283,6 +299,11 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 	privateUsersServiceGetBillingLinkHandler := connect_go.NewUnaryHandler(
 		PrivateUsersServiceGetBillingLinkProcedure,
 		svc.GetBillingLink,
+		opts...,
+	)
+	privateUsersServiceGetSubscriptionHandler := connect_go.NewUnaryHandler(
+		PrivateUsersServiceGetSubscriptionProcedure,
+		svc.GetSubscription,
 		opts...,
 	)
 	privateUsersServiceUpdateMeHandler := connect_go.NewUnaryHandler(
@@ -346,6 +367,8 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 			privateUsersServiceGetMeHandler.ServeHTTP(w, r)
 		case PrivateUsersServiceGetBillingLinkProcedure:
 			privateUsersServiceGetBillingLinkHandler.ServeHTTP(w, r)
+		case PrivateUsersServiceGetSubscriptionProcedure:
+			privateUsersServiceGetSubscriptionHandler.ServeHTTP(w, r)
 		case PrivateUsersServiceUpdateMeProcedure:
 			privateUsersServiceUpdateMeHandler.ServeHTTP(w, r)
 		case PrivateUsersServiceSetDefaultOrgProcedure:
@@ -383,6 +406,10 @@ func (UnimplementedPrivateUsersServiceHandler) GetMe(context.Context, *connect_g
 
 func (UnimplementedPrivateUsersServiceHandler) GetBillingLink(context.Context, *connect_go.Request[private.GetBillingLinkRequest]) (*connect_go.Response[private.GetBillingLinkResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.GetBillingLink is not implemented"))
+}
+
+func (UnimplementedPrivateUsersServiceHandler) GetSubscription(context.Context, *connect_go.Request[private.GetSubscriptionRequest]) (*connect_go.Response[private.GetSubscriptionResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.GetSubscription is not implemented"))
 }
 
 func (UnimplementedPrivateUsersServiceHandler) UpdateMe(context.Context, *connect_go.Request[private.UpdateMeRequest]) (*connect_go.Response[private.UpdateMeResponse], error) {
