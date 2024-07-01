@@ -46,6 +46,9 @@ const (
 	// PrivateDrawServiceCreateFlexibleRoundRobinDrawProcedure is the fully-qualified name of the
 	// PrivateDrawService's CreateFlexibleRoundRobinDraw RPC.
 	PrivateDrawServiceCreateFlexibleRoundRobinDrawProcedure = "/draw.v1.private.PrivateDrawService/CreateFlexibleRoundRobinDraw"
+	// PrivateDrawServiceGetFlexibleRoundRobinDrawProcedure is the fully-qualified name of the
+	// PrivateDrawService's GetFlexibleRoundRobinDraw RPC.
+	PrivateDrawServiceGetFlexibleRoundRobinDrawProcedure = "/draw.v1.private.PrivateDrawService/GetFlexibleRoundRobinDraw"
 	// PrivateDrawServiceUpdateFlexibleRoundRobinDrawProcedure is the fully-qualified name of the
 	// PrivateDrawService's UpdateFlexibleRoundRobinDraw RPC.
 	PrivateDrawServiceUpdateFlexibleRoundRobinDrawProcedure = "/draw.v1.private.PrivateDrawService/UpdateFlexibleRoundRobinDraw"
@@ -62,6 +65,7 @@ type PrivateDrawServiceClient interface {
 	ListDraws(context.Context, *connect_go.Request[private.ListDrawsRequest]) (*connect_go.Response[private.ListDrawsResponse], error)
 	// Flexible round robin
 	CreateFlexibleRoundRobinDraw(context.Context, *connect_go.Request[flexible_round_robin.CreateFlexibleRoundRobinDrawRequest]) (*connect_go.Response[flexible_round_robin.CreateFlexibleRoundRobinDrawResponse], error)
+	GetFlexibleRoundRobinDraw(context.Context, *connect_go.Request[flexible_round_robin.GetFlexibleRoundRobinDrawRequest]) (*connect_go.Response[flexible_round_robin.GetFlexibleRoundRobinDrawResponse], error)
 	UpdateFlexibleRoundRobinDraw(context.Context, *connect_go.Request[flexible_round_robin.UpdateFlexibleRoundRobinDrawRequest]) (*connect_go.Response[flexible_round_robin.UpdateFlexibleRoundRobinDrawResponse], error)
 	GetFlexibleRoundRobinDrawRound(context.Context, *connect_go.Request[flexible_round_robin.GetFlexibleRoundRobinDrawRoundRequest]) (*connect_go.Response[flexible_round_robin.GetFlexibleRoundRobinDrawRoundResponse], error)
 }
@@ -96,6 +100,11 @@ func NewPrivateDrawServiceClient(httpClient connect_go.HTTPClient, baseURL strin
 			baseURL+PrivateDrawServiceCreateFlexibleRoundRobinDrawProcedure,
 			opts...,
 		),
+		getFlexibleRoundRobinDraw: connect_go.NewClient[flexible_round_robin.GetFlexibleRoundRobinDrawRequest, flexible_round_robin.GetFlexibleRoundRobinDrawResponse](
+			httpClient,
+			baseURL+PrivateDrawServiceGetFlexibleRoundRobinDrawProcedure,
+			opts...,
+		),
 		updateFlexibleRoundRobinDraw: connect_go.NewClient[flexible_round_robin.UpdateFlexibleRoundRobinDrawRequest, flexible_round_robin.UpdateFlexibleRoundRobinDrawResponse](
 			httpClient,
 			baseURL+PrivateDrawServiceUpdateFlexibleRoundRobinDrawProcedure,
@@ -115,6 +124,7 @@ type privateDrawServiceClient struct {
 	deleteDraw                     *connect_go.Client[private.DeleteDrawRequest, private.DeleteDrawResponse]
 	listDraws                      *connect_go.Client[private.ListDrawsRequest, private.ListDrawsResponse]
 	createFlexibleRoundRobinDraw   *connect_go.Client[flexible_round_robin.CreateFlexibleRoundRobinDrawRequest, flexible_round_robin.CreateFlexibleRoundRobinDrawResponse]
+	getFlexibleRoundRobinDraw      *connect_go.Client[flexible_round_robin.GetFlexibleRoundRobinDrawRequest, flexible_round_robin.GetFlexibleRoundRobinDrawResponse]
 	updateFlexibleRoundRobinDraw   *connect_go.Client[flexible_round_robin.UpdateFlexibleRoundRobinDrawRequest, flexible_round_robin.UpdateFlexibleRoundRobinDrawResponse]
 	getFlexibleRoundRobinDrawRound *connect_go.Client[flexible_round_robin.GetFlexibleRoundRobinDrawRoundRequest, flexible_round_robin.GetFlexibleRoundRobinDrawRoundResponse]
 }
@@ -140,6 +150,11 @@ func (c *privateDrawServiceClient) CreateFlexibleRoundRobinDraw(ctx context.Cont
 	return c.createFlexibleRoundRobinDraw.CallUnary(ctx, req)
 }
 
+// GetFlexibleRoundRobinDraw calls draw.v1.private.PrivateDrawService.GetFlexibleRoundRobinDraw.
+func (c *privateDrawServiceClient) GetFlexibleRoundRobinDraw(ctx context.Context, req *connect_go.Request[flexible_round_robin.GetFlexibleRoundRobinDrawRequest]) (*connect_go.Response[flexible_round_robin.GetFlexibleRoundRobinDrawResponse], error) {
+	return c.getFlexibleRoundRobinDraw.CallUnary(ctx, req)
+}
+
 // UpdateFlexibleRoundRobinDraw calls
 // draw.v1.private.PrivateDrawService.UpdateFlexibleRoundRobinDraw.
 func (c *privateDrawServiceClient) UpdateFlexibleRoundRobinDraw(ctx context.Context, req *connect_go.Request[flexible_round_robin.UpdateFlexibleRoundRobinDrawRequest]) (*connect_go.Response[flexible_round_robin.UpdateFlexibleRoundRobinDrawResponse], error) {
@@ -160,6 +175,7 @@ type PrivateDrawServiceHandler interface {
 	ListDraws(context.Context, *connect_go.Request[private.ListDrawsRequest]) (*connect_go.Response[private.ListDrawsResponse], error)
 	// Flexible round robin
 	CreateFlexibleRoundRobinDraw(context.Context, *connect_go.Request[flexible_round_robin.CreateFlexibleRoundRobinDrawRequest]) (*connect_go.Response[flexible_round_robin.CreateFlexibleRoundRobinDrawResponse], error)
+	GetFlexibleRoundRobinDraw(context.Context, *connect_go.Request[flexible_round_robin.GetFlexibleRoundRobinDrawRequest]) (*connect_go.Response[flexible_round_robin.GetFlexibleRoundRobinDrawResponse], error)
 	UpdateFlexibleRoundRobinDraw(context.Context, *connect_go.Request[flexible_round_robin.UpdateFlexibleRoundRobinDrawRequest]) (*connect_go.Response[flexible_round_robin.UpdateFlexibleRoundRobinDrawResponse], error)
 	GetFlexibleRoundRobinDrawRound(context.Context, *connect_go.Request[flexible_round_robin.GetFlexibleRoundRobinDrawRoundRequest]) (*connect_go.Response[flexible_round_robin.GetFlexibleRoundRobinDrawRoundResponse], error)
 }
@@ -190,6 +206,11 @@ func NewPrivateDrawServiceHandler(svc PrivateDrawServiceHandler, opts ...connect
 		svc.CreateFlexibleRoundRobinDraw,
 		opts...,
 	)
+	privateDrawServiceGetFlexibleRoundRobinDrawHandler := connect_go.NewUnaryHandler(
+		PrivateDrawServiceGetFlexibleRoundRobinDrawProcedure,
+		svc.GetFlexibleRoundRobinDraw,
+		opts...,
+	)
 	privateDrawServiceUpdateFlexibleRoundRobinDrawHandler := connect_go.NewUnaryHandler(
 		PrivateDrawServiceUpdateFlexibleRoundRobinDrawProcedure,
 		svc.UpdateFlexibleRoundRobinDraw,
@@ -210,6 +231,8 @@ func NewPrivateDrawServiceHandler(svc PrivateDrawServiceHandler, opts ...connect
 			privateDrawServiceListDrawsHandler.ServeHTTP(w, r)
 		case PrivateDrawServiceCreateFlexibleRoundRobinDrawProcedure:
 			privateDrawServiceCreateFlexibleRoundRobinDrawHandler.ServeHTTP(w, r)
+		case PrivateDrawServiceGetFlexibleRoundRobinDrawProcedure:
+			privateDrawServiceGetFlexibleRoundRobinDrawHandler.ServeHTTP(w, r)
 		case PrivateDrawServiceUpdateFlexibleRoundRobinDrawProcedure:
 			privateDrawServiceUpdateFlexibleRoundRobinDrawHandler.ServeHTTP(w, r)
 		case PrivateDrawServiceGetFlexibleRoundRobinDrawRoundProcedure:
@@ -237,6 +260,10 @@ func (UnimplementedPrivateDrawServiceHandler) ListDraws(context.Context, *connec
 
 func (UnimplementedPrivateDrawServiceHandler) CreateFlexibleRoundRobinDraw(context.Context, *connect_go.Request[flexible_round_robin.CreateFlexibleRoundRobinDrawRequest]) (*connect_go.Response[flexible_round_robin.CreateFlexibleRoundRobinDrawResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.PrivateDrawService.CreateFlexibleRoundRobinDraw is not implemented"))
+}
+
+func (UnimplementedPrivateDrawServiceHandler) GetFlexibleRoundRobinDraw(context.Context, *connect_go.Request[flexible_round_robin.GetFlexibleRoundRobinDrawRequest]) (*connect_go.Response[flexible_round_robin.GetFlexibleRoundRobinDrawResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.PrivateDrawService.GetFlexibleRoundRobinDraw is not implemented"))
 }
 
 func (UnimplementedPrivateDrawServiceHandler) UpdateFlexibleRoundRobinDraw(context.Context, *connect_go.Request[flexible_round_robin.UpdateFlexibleRoundRobinDrawRequest]) (*connect_go.Response[flexible_round_robin.UpdateFlexibleRoundRobinDrawResponse], error) {
