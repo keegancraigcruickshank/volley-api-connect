@@ -48,6 +48,12 @@ const (
 	// PrivatePlayersServiceGetPlayerProcedure is the fully-qualified name of the
 	// PrivatePlayersService's GetPlayer RPC.
 	PrivatePlayersServiceGetPlayerProcedure = "/players.v1.private.PrivatePlayersService/GetPlayer"
+	// PrivatePlayersServiceAddPlayerExclusionProcedure is the fully-qualified name of the
+	// PrivatePlayersService's AddPlayerExclusion RPC.
+	PrivatePlayersServiceAddPlayerExclusionProcedure = "/players.v1.private.PrivatePlayersService/AddPlayerExclusion"
+	// PrivatePlayersServiceRemovePlayerExclusionProcedure is the fully-qualified name of the
+	// PrivatePlayersService's RemovePlayerExclusion RPC.
+	PrivatePlayersServiceRemovePlayerExclusionProcedure = "/players.v1.private.PrivatePlayersService/RemovePlayerExclusion"
 )
 
 // PrivatePlayersServiceClient is a client for the players.v1.private.PrivatePlayersService service.
@@ -57,6 +63,8 @@ type PrivatePlayersServiceClient interface {
 	ModifyPlayer(context.Context, *connect_go.Request[private.ModifyPlayerRequest]) (*connect_go.Response[private.ModifyPlayerResponse], error)
 	ListPlayers(context.Context, *connect_go.Request[private.ListPlayersRequest]) (*connect_go.Response[private.ListPlayersResponse], error)
 	GetPlayer(context.Context, *connect_go.Request[private.GetPlayerRequest]) (*connect_go.Response[private.GetPlayerResponse], error)
+	AddPlayerExclusion(context.Context, *connect_go.Request[private.AddPlayerExclusionRequest]) (*connect_go.Response[private.AddPlayerExclusionResponse], error)
+	RemovePlayerExclusion(context.Context, *connect_go.Request[private.RemovePlayerExclusionRequest]) (*connect_go.Response[private.RemovePlayerExclusionResponse], error)
 }
 
 // NewPrivatePlayersServiceClient constructs a client for the
@@ -94,16 +102,28 @@ func NewPrivatePlayersServiceClient(httpClient connect_go.HTTPClient, baseURL st
 			baseURL+PrivatePlayersServiceGetPlayerProcedure,
 			opts...,
 		),
+		addPlayerExclusion: connect_go.NewClient[private.AddPlayerExclusionRequest, private.AddPlayerExclusionResponse](
+			httpClient,
+			baseURL+PrivatePlayersServiceAddPlayerExclusionProcedure,
+			opts...,
+		),
+		removePlayerExclusion: connect_go.NewClient[private.RemovePlayerExclusionRequest, private.RemovePlayerExclusionResponse](
+			httpClient,
+			baseURL+PrivatePlayersServiceRemovePlayerExclusionProcedure,
+			opts...,
+		),
 	}
 }
 
 // privatePlayersServiceClient implements PrivatePlayersServiceClient.
 type privatePlayersServiceClient struct {
-	createPlayer  *connect_go.Client[private.CreatePlayerRequest, private.CreatePlayerResponse]
-	removePlayers *connect_go.Client[private.RemovePlayersRequest, private.RemovePlayersResponse]
-	modifyPlayer  *connect_go.Client[private.ModifyPlayerRequest, private.ModifyPlayerResponse]
-	listPlayers   *connect_go.Client[private.ListPlayersRequest, private.ListPlayersResponse]
-	getPlayer     *connect_go.Client[private.GetPlayerRequest, private.GetPlayerResponse]
+	createPlayer          *connect_go.Client[private.CreatePlayerRequest, private.CreatePlayerResponse]
+	removePlayers         *connect_go.Client[private.RemovePlayersRequest, private.RemovePlayersResponse]
+	modifyPlayer          *connect_go.Client[private.ModifyPlayerRequest, private.ModifyPlayerResponse]
+	listPlayers           *connect_go.Client[private.ListPlayersRequest, private.ListPlayersResponse]
+	getPlayer             *connect_go.Client[private.GetPlayerRequest, private.GetPlayerResponse]
+	addPlayerExclusion    *connect_go.Client[private.AddPlayerExclusionRequest, private.AddPlayerExclusionResponse]
+	removePlayerExclusion *connect_go.Client[private.RemovePlayerExclusionRequest, private.RemovePlayerExclusionResponse]
 }
 
 // CreatePlayer calls players.v1.private.PrivatePlayersService.CreatePlayer.
@@ -131,6 +151,16 @@ func (c *privatePlayersServiceClient) GetPlayer(ctx context.Context, req *connec
 	return c.getPlayer.CallUnary(ctx, req)
 }
 
+// AddPlayerExclusion calls players.v1.private.PrivatePlayersService.AddPlayerExclusion.
+func (c *privatePlayersServiceClient) AddPlayerExclusion(ctx context.Context, req *connect_go.Request[private.AddPlayerExclusionRequest]) (*connect_go.Response[private.AddPlayerExclusionResponse], error) {
+	return c.addPlayerExclusion.CallUnary(ctx, req)
+}
+
+// RemovePlayerExclusion calls players.v1.private.PrivatePlayersService.RemovePlayerExclusion.
+func (c *privatePlayersServiceClient) RemovePlayerExclusion(ctx context.Context, req *connect_go.Request[private.RemovePlayerExclusionRequest]) (*connect_go.Response[private.RemovePlayerExclusionResponse], error) {
+	return c.removePlayerExclusion.CallUnary(ctx, req)
+}
+
 // PrivatePlayersServiceHandler is an implementation of the players.v1.private.PrivatePlayersService
 // service.
 type PrivatePlayersServiceHandler interface {
@@ -139,6 +169,8 @@ type PrivatePlayersServiceHandler interface {
 	ModifyPlayer(context.Context, *connect_go.Request[private.ModifyPlayerRequest]) (*connect_go.Response[private.ModifyPlayerResponse], error)
 	ListPlayers(context.Context, *connect_go.Request[private.ListPlayersRequest]) (*connect_go.Response[private.ListPlayersResponse], error)
 	GetPlayer(context.Context, *connect_go.Request[private.GetPlayerRequest]) (*connect_go.Response[private.GetPlayerResponse], error)
+	AddPlayerExclusion(context.Context, *connect_go.Request[private.AddPlayerExclusionRequest]) (*connect_go.Response[private.AddPlayerExclusionResponse], error)
+	RemovePlayerExclusion(context.Context, *connect_go.Request[private.RemovePlayerExclusionRequest]) (*connect_go.Response[private.RemovePlayerExclusionResponse], error)
 }
 
 // NewPrivatePlayersServiceHandler builds an HTTP handler from the service implementation. It
@@ -172,6 +204,16 @@ func NewPrivatePlayersServiceHandler(svc PrivatePlayersServiceHandler, opts ...c
 		svc.GetPlayer,
 		opts...,
 	)
+	privatePlayersServiceAddPlayerExclusionHandler := connect_go.NewUnaryHandler(
+		PrivatePlayersServiceAddPlayerExclusionProcedure,
+		svc.AddPlayerExclusion,
+		opts...,
+	)
+	privatePlayersServiceRemovePlayerExclusionHandler := connect_go.NewUnaryHandler(
+		PrivatePlayersServiceRemovePlayerExclusionProcedure,
+		svc.RemovePlayerExclusion,
+		opts...,
+	)
 	return "/players.v1.private.PrivatePlayersService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PrivatePlayersServiceCreatePlayerProcedure:
@@ -184,6 +226,10 @@ func NewPrivatePlayersServiceHandler(svc PrivatePlayersServiceHandler, opts ...c
 			privatePlayersServiceListPlayersHandler.ServeHTTP(w, r)
 		case PrivatePlayersServiceGetPlayerProcedure:
 			privatePlayersServiceGetPlayerHandler.ServeHTTP(w, r)
+		case PrivatePlayersServiceAddPlayerExclusionProcedure:
+			privatePlayersServiceAddPlayerExclusionHandler.ServeHTTP(w, r)
+		case PrivatePlayersServiceRemovePlayerExclusionProcedure:
+			privatePlayersServiceRemovePlayerExclusionHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -211,4 +257,12 @@ func (UnimplementedPrivatePlayersServiceHandler) ListPlayers(context.Context, *c
 
 func (UnimplementedPrivatePlayersServiceHandler) GetPlayer(context.Context, *connect_go.Request[private.GetPlayerRequest]) (*connect_go.Response[private.GetPlayerResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("players.v1.private.PrivatePlayersService.GetPlayer is not implemented"))
+}
+
+func (UnimplementedPrivatePlayersServiceHandler) AddPlayerExclusion(context.Context, *connect_go.Request[private.AddPlayerExclusionRequest]) (*connect_go.Response[private.AddPlayerExclusionResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("players.v1.private.PrivatePlayersService.AddPlayerExclusion is not implemented"))
+}
+
+func (UnimplementedPrivatePlayersServiceHandler) RemovePlayerExclusion(context.Context, *connect_go.Request[private.RemovePlayerExclusionRequest]) (*connect_go.Response[private.RemovePlayerExclusionResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("players.v1.private.PrivatePlayersService.RemovePlayerExclusion is not implemented"))
 }
