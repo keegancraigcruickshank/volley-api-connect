@@ -21,8 +21,8 @@ import (
 const _ = connect_go.IsAtLeastVersion0_1_0
 
 const (
-	// PrivateUsersServiceName is the fully-qualified name of the PrivateUsersService service.
-	PrivateUsersServiceName = "users.v1.public.PrivateUsersService"
+	// PublicUsersServiceName is the fully-qualified name of the PublicUsersService service.
+	PublicUsersServiceName = "users.v1.public.PublicUsersService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -33,74 +33,73 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// PrivateUsersServiceGetTokenProcedure is the fully-qualified name of the PrivateUsersService's
+	// PublicUsersServiceGetTokenProcedure is the fully-qualified name of the PublicUsersService's
 	// GetToken RPC.
-	PrivateUsersServiceGetTokenProcedure = "/users.v1.public.PrivateUsersService/GetToken"
+	PublicUsersServiceGetTokenProcedure = "/users.v1.public.PublicUsersService/GetToken"
 )
 
-// PrivateUsersServiceClient is a client for the users.v1.public.PrivateUsersService service.
-type PrivateUsersServiceClient interface {
+// PublicUsersServiceClient is a client for the users.v1.public.PublicUsersService service.
+type PublicUsersServiceClient interface {
 	GetToken(context.Context, *connect_go.Request[public.GetTokenRequest]) (*connect_go.Response[public.GetTokenResponse], error)
 }
 
-// NewPrivateUsersServiceClient constructs a client for the users.v1.public.PrivateUsersService
+// NewPublicUsersServiceClient constructs a client for the users.v1.public.PublicUsersService
 // service. By default, it uses the Connect protocol with the binary Protobuf Codec, asks for
 // gzipped responses, and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply
 // the connect.WithGRPC() or connect.WithGRPCWeb() options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) PrivateUsersServiceClient {
+func NewPublicUsersServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) PublicUsersServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	return &privateUsersServiceClient{
+	return &publicUsersServiceClient{
 		getToken: connect_go.NewClient[public.GetTokenRequest, public.GetTokenResponse](
 			httpClient,
-			baseURL+PrivateUsersServiceGetTokenProcedure,
+			baseURL+PublicUsersServiceGetTokenProcedure,
 			opts...,
 		),
 	}
 }
 
-// privateUsersServiceClient implements PrivateUsersServiceClient.
-type privateUsersServiceClient struct {
+// publicUsersServiceClient implements PublicUsersServiceClient.
+type publicUsersServiceClient struct {
 	getToken *connect_go.Client[public.GetTokenRequest, public.GetTokenResponse]
 }
 
-// GetToken calls users.v1.public.PrivateUsersService.GetToken.
-func (c *privateUsersServiceClient) GetToken(ctx context.Context, req *connect_go.Request[public.GetTokenRequest]) (*connect_go.Response[public.GetTokenResponse], error) {
+// GetToken calls users.v1.public.PublicUsersService.GetToken.
+func (c *publicUsersServiceClient) GetToken(ctx context.Context, req *connect_go.Request[public.GetTokenRequest]) (*connect_go.Response[public.GetTokenResponse], error) {
 	return c.getToken.CallUnary(ctx, req)
 }
 
-// PrivateUsersServiceHandler is an implementation of the users.v1.public.PrivateUsersService
-// service.
-type PrivateUsersServiceHandler interface {
+// PublicUsersServiceHandler is an implementation of the users.v1.public.PublicUsersService service.
+type PublicUsersServiceHandler interface {
 	GetToken(context.Context, *connect_go.Request[public.GetTokenRequest]) (*connect_go.Response[public.GetTokenResponse], error)
 }
 
-// NewPrivateUsersServiceHandler builds an HTTP handler from the service implementation. It returns
+// NewPublicUsersServiceHandler builds an HTTP handler from the service implementation. It returns
 // the path on which to mount the handler and the handler itself.
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	privateUsersServiceGetTokenHandler := connect_go.NewUnaryHandler(
-		PrivateUsersServiceGetTokenProcedure,
+func NewPublicUsersServiceHandler(svc PublicUsersServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
+	publicUsersServiceGetTokenHandler := connect_go.NewUnaryHandler(
+		PublicUsersServiceGetTokenProcedure,
 		svc.GetToken,
 		opts...,
 	)
-	return "/users.v1.public.PrivateUsersService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return "/users.v1.public.PublicUsersService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case PrivateUsersServiceGetTokenProcedure:
-			privateUsersServiceGetTokenHandler.ServeHTTP(w, r)
+		case PublicUsersServiceGetTokenProcedure:
+			publicUsersServiceGetTokenHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
 	})
 }
 
-// UnimplementedPrivateUsersServiceHandler returns CodeUnimplemented from all methods.
-type UnimplementedPrivateUsersServiceHandler struct{}
+// UnimplementedPublicUsersServiceHandler returns CodeUnimplemented from all methods.
+type UnimplementedPublicUsersServiceHandler struct{}
 
-func (UnimplementedPrivateUsersServiceHandler) GetToken(context.Context, *connect_go.Request[public.GetTokenRequest]) (*connect_go.Response[public.GetTokenResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.public.PrivateUsersService.GetToken is not implemented"))
+func (UnimplementedPublicUsersServiceHandler) GetToken(context.Context, *connect_go.Request[public.GetTokenRequest]) (*connect_go.Response[public.GetTokenResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.public.PublicUsersService.GetToken is not implemented"))
 }
