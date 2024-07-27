@@ -33,9 +33,6 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// PrivateUsersServiceGetTokenProcedure is the fully-qualified name of the PrivateUsersService's
-	// GetToken RPC.
-	PrivateUsersServiceGetTokenProcedure = "/users.v1.private.PrivateUsersService/GetToken"
 	// PrivateUsersServiceGetMeProcedure is the fully-qualified name of the PrivateUsersService's GetMe
 	// RPC.
 	PrivateUsersServiceGetMeProcedure = "/users.v1.private.PrivateUsersService/GetMe"
@@ -82,7 +79,6 @@ const (
 
 // PrivateUsersServiceClient is a client for the users.v1.private.PrivateUsersService service.
 type PrivateUsersServiceClient interface {
-	GetToken(context.Context, *connect_go.Request[private.GetTokenRequest]) (*connect_go.Response[private.GetTokenResponse], error)
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
 	GetBillingLink(context.Context, *connect_go.Request[private.GetBillingLinkRequest]) (*connect_go.Response[private.GetBillingLinkResponse], error)
 	GetSubscription(context.Context, *connect_go.Request[private.GetSubscriptionRequest]) (*connect_go.Response[private.GetSubscriptionResponse], error)
@@ -109,11 +105,6 @@ type PrivateUsersServiceClient interface {
 func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) PrivateUsersServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
 	return &privateUsersServiceClient{
-		getToken: connect_go.NewClient[private.GetTokenRequest, private.GetTokenResponse](
-			httpClient,
-			baseURL+PrivateUsersServiceGetTokenProcedure,
-			opts...,
-		),
 		getMe: connect_go.NewClient[private.GetMeRequest, private.GetMeResponse](
 			httpClient,
 			baseURL+PrivateUsersServiceGetMeProcedure,
@@ -189,7 +180,6 @@ func NewPrivateUsersServiceClient(httpClient connect_go.HTTPClient, baseURL stri
 
 // privateUsersServiceClient implements PrivateUsersServiceClient.
 type privateUsersServiceClient struct {
-	getToken              *connect_go.Client[private.GetTokenRequest, private.GetTokenResponse]
 	getMe                 *connect_go.Client[private.GetMeRequest, private.GetMeResponse]
 	getBillingLink        *connect_go.Client[private.GetBillingLinkRequest, private.GetBillingLinkResponse]
 	getSubscription       *connect_go.Client[private.GetSubscriptionRequest, private.GetSubscriptionResponse]
@@ -204,11 +194,6 @@ type privateUsersServiceClient struct {
 	freshUserSetup        *connect_go.Client[private.FreshUserSetupRequest, private.FreshUserSetupResponse]
 	deleteOrganisation    *connect_go.Client[private.DeleteOrganisationRequest, private.DeleteOrganisationResponse]
 	resendVerification    *connect_go.Client[private.ResendVerificationRequest, private.ResendVerificationResponse]
-}
-
-// GetToken calls users.v1.private.PrivateUsersService.GetToken.
-func (c *privateUsersServiceClient) GetToken(ctx context.Context, req *connect_go.Request[private.GetTokenRequest]) (*connect_go.Response[private.GetTokenResponse], error) {
-	return c.getToken.CallUnary(ctx, req)
 }
 
 // GetMe calls users.v1.private.PrivateUsersService.GetMe.
@@ -284,7 +269,6 @@ func (c *privateUsersServiceClient) ResendVerification(ctx context.Context, req 
 // PrivateUsersServiceHandler is an implementation of the users.v1.private.PrivateUsersService
 // service.
 type PrivateUsersServiceHandler interface {
-	GetToken(context.Context, *connect_go.Request[private.GetTokenRequest]) (*connect_go.Response[private.GetTokenResponse], error)
 	GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error)
 	GetBillingLink(context.Context, *connect_go.Request[private.GetBillingLinkRequest]) (*connect_go.Response[private.GetBillingLinkResponse], error)
 	GetSubscription(context.Context, *connect_go.Request[private.GetSubscriptionRequest]) (*connect_go.Response[private.GetSubscriptionResponse], error)
@@ -307,11 +291,6 @@ type PrivateUsersServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	privateUsersServiceGetTokenHandler := connect_go.NewUnaryHandler(
-		PrivateUsersServiceGetTokenProcedure,
-		svc.GetToken,
-		opts...,
-	)
 	privateUsersServiceGetMeHandler := connect_go.NewUnaryHandler(
 		PrivateUsersServiceGetMeProcedure,
 		svc.GetMe,
@@ -384,8 +363,6 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 	)
 	return "/users.v1.private.PrivateUsersService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case PrivateUsersServiceGetTokenProcedure:
-			privateUsersServiceGetTokenHandler.ServeHTTP(w, r)
 		case PrivateUsersServiceGetMeProcedure:
 			privateUsersServiceGetMeHandler.ServeHTTP(w, r)
 		case PrivateUsersServiceGetBillingLinkProcedure:
@@ -422,10 +399,6 @@ func NewPrivateUsersServiceHandler(svc PrivateUsersServiceHandler, opts ...conne
 
 // UnimplementedPrivateUsersServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedPrivateUsersServiceHandler struct{}
-
-func (UnimplementedPrivateUsersServiceHandler) GetToken(context.Context, *connect_go.Request[private.GetTokenRequest]) (*connect_go.Response[private.GetTokenResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.GetToken is not implemented"))
-}
 
 func (UnimplementedPrivateUsersServiceHandler) GetMe(context.Context, *connect_go.Request[private.GetMeRequest]) (*connect_go.Response[private.GetMeResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("users.v1.private.PrivateUsersService.GetMe is not implemented"))
