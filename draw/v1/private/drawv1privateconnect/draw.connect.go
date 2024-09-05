@@ -61,6 +61,9 @@ const (
 	// PrivateDrawServiceFlexibleRoundRobinDrawChangeRoundDateProcedure is the fully-qualified name of
 	// the PrivateDrawService's FlexibleRoundRobinDrawChangeRoundDate RPC.
 	PrivateDrawServiceFlexibleRoundRobinDrawChangeRoundDateProcedure = "/draw.v1.private.PrivateDrawService/FlexibleRoundRobinDrawChangeRoundDate"
+	// PrivateDrawServiceSetFlexibleRoundRobinDrawFixtureScoreProcedure is the fully-qualified name of
+	// the PrivateDrawService's SetFlexibleRoundRobinDrawFixtureScore RPC.
+	PrivateDrawServiceSetFlexibleRoundRobinDrawFixtureScoreProcedure = "/draw.v1.private.PrivateDrawService/SetFlexibleRoundRobinDrawFixtureScore"
 )
 
 // PrivateDrawServiceClient is a client for the draw.v1.private.PrivateDrawService service.
@@ -76,6 +79,7 @@ type PrivateDrawServiceClient interface {
 	GetFlexibleRoundRobinDrawRound(context.Context, *connect_go.Request[flexible_round_robin.GetFlexibleRoundRobinDrawRoundRequest]) (*connect_go.Response[flexible_round_robin.GetFlexibleRoundRobinDrawRoundResponse], error)
 	GetFlexibleRoundRobinDrawLeaderboard(context.Context, *connect_go.Request[flexible_round_robin.GetFlexibleRoundRobinDrawLeaderboardRequest]) (*connect_go.Response[flexible_round_robin.GetFlexibleRoundRobinDrawLeaderboardResponse], error)
 	FlexibleRoundRobinDrawChangeRoundDate(context.Context, *connect_go.Request[flexible_round_robin.FlexibleRoundRobinDrawChangeRoundDateRequest]) (*connect_go.Response[flexible_round_robin.FlexibleRoundRobinDrawChangeRoundDateResponse], error)
+	SetFlexibleRoundRobinDrawFixtureScore(context.Context, *connect_go.Request[flexible_round_robin.SetFlexibleRoundRobinDrawFixtureScoreRequest]) (*connect_go.Response[flexible_round_robin.SetFlexibleRoundRobinDrawFixtureScoreResponse], error)
 }
 
 // NewPrivateDrawServiceClient constructs a client for the draw.v1.private.PrivateDrawService
@@ -133,6 +137,11 @@ func NewPrivateDrawServiceClient(httpClient connect_go.HTTPClient, baseURL strin
 			baseURL+PrivateDrawServiceFlexibleRoundRobinDrawChangeRoundDateProcedure,
 			opts...,
 		),
+		setFlexibleRoundRobinDrawFixtureScore: connect_go.NewClient[flexible_round_robin.SetFlexibleRoundRobinDrawFixtureScoreRequest, flexible_round_robin.SetFlexibleRoundRobinDrawFixtureScoreResponse](
+			httpClient,
+			baseURL+PrivateDrawServiceSetFlexibleRoundRobinDrawFixtureScoreProcedure,
+			opts...,
+		),
 	}
 }
 
@@ -147,6 +156,7 @@ type privateDrawServiceClient struct {
 	getFlexibleRoundRobinDrawRound        *connect_go.Client[flexible_round_robin.GetFlexibleRoundRobinDrawRoundRequest, flexible_round_robin.GetFlexibleRoundRobinDrawRoundResponse]
 	getFlexibleRoundRobinDrawLeaderboard  *connect_go.Client[flexible_round_robin.GetFlexibleRoundRobinDrawLeaderboardRequest, flexible_round_robin.GetFlexibleRoundRobinDrawLeaderboardResponse]
 	flexibleRoundRobinDrawChangeRoundDate *connect_go.Client[flexible_round_robin.FlexibleRoundRobinDrawChangeRoundDateRequest, flexible_round_robin.FlexibleRoundRobinDrawChangeRoundDateResponse]
+	setFlexibleRoundRobinDrawFixtureScore *connect_go.Client[flexible_round_robin.SetFlexibleRoundRobinDrawFixtureScoreRequest, flexible_round_robin.SetFlexibleRoundRobinDrawFixtureScoreResponse]
 }
 
 // GetDraw calls draw.v1.private.PrivateDrawService.GetDraw.
@@ -199,6 +209,12 @@ func (c *privateDrawServiceClient) FlexibleRoundRobinDrawChangeRoundDate(ctx con
 	return c.flexibleRoundRobinDrawChangeRoundDate.CallUnary(ctx, req)
 }
 
+// SetFlexibleRoundRobinDrawFixtureScore calls
+// draw.v1.private.PrivateDrawService.SetFlexibleRoundRobinDrawFixtureScore.
+func (c *privateDrawServiceClient) SetFlexibleRoundRobinDrawFixtureScore(ctx context.Context, req *connect_go.Request[flexible_round_robin.SetFlexibleRoundRobinDrawFixtureScoreRequest]) (*connect_go.Response[flexible_round_robin.SetFlexibleRoundRobinDrawFixtureScoreResponse], error) {
+	return c.setFlexibleRoundRobinDrawFixtureScore.CallUnary(ctx, req)
+}
+
 // PrivateDrawServiceHandler is an implementation of the draw.v1.private.PrivateDrawService service.
 type PrivateDrawServiceHandler interface {
 	// Common endpoints
@@ -212,6 +228,7 @@ type PrivateDrawServiceHandler interface {
 	GetFlexibleRoundRobinDrawRound(context.Context, *connect_go.Request[flexible_round_robin.GetFlexibleRoundRobinDrawRoundRequest]) (*connect_go.Response[flexible_round_robin.GetFlexibleRoundRobinDrawRoundResponse], error)
 	GetFlexibleRoundRobinDrawLeaderboard(context.Context, *connect_go.Request[flexible_round_robin.GetFlexibleRoundRobinDrawLeaderboardRequest]) (*connect_go.Response[flexible_round_robin.GetFlexibleRoundRobinDrawLeaderboardResponse], error)
 	FlexibleRoundRobinDrawChangeRoundDate(context.Context, *connect_go.Request[flexible_round_robin.FlexibleRoundRobinDrawChangeRoundDateRequest]) (*connect_go.Response[flexible_round_robin.FlexibleRoundRobinDrawChangeRoundDateResponse], error)
+	SetFlexibleRoundRobinDrawFixtureScore(context.Context, *connect_go.Request[flexible_round_robin.SetFlexibleRoundRobinDrawFixtureScoreRequest]) (*connect_go.Response[flexible_round_robin.SetFlexibleRoundRobinDrawFixtureScoreResponse], error)
 }
 
 // NewPrivateDrawServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -265,6 +282,11 @@ func NewPrivateDrawServiceHandler(svc PrivateDrawServiceHandler, opts ...connect
 		svc.FlexibleRoundRobinDrawChangeRoundDate,
 		opts...,
 	)
+	privateDrawServiceSetFlexibleRoundRobinDrawFixtureScoreHandler := connect_go.NewUnaryHandler(
+		PrivateDrawServiceSetFlexibleRoundRobinDrawFixtureScoreProcedure,
+		svc.SetFlexibleRoundRobinDrawFixtureScore,
+		opts...,
+	)
 	return "/draw.v1.private.PrivateDrawService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PrivateDrawServiceGetDrawProcedure:
@@ -285,6 +307,8 @@ func NewPrivateDrawServiceHandler(svc PrivateDrawServiceHandler, opts ...connect
 			privateDrawServiceGetFlexibleRoundRobinDrawLeaderboardHandler.ServeHTTP(w, r)
 		case PrivateDrawServiceFlexibleRoundRobinDrawChangeRoundDateProcedure:
 			privateDrawServiceFlexibleRoundRobinDrawChangeRoundDateHandler.ServeHTTP(w, r)
+		case PrivateDrawServiceSetFlexibleRoundRobinDrawFixtureScoreProcedure:
+			privateDrawServiceSetFlexibleRoundRobinDrawFixtureScoreHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -328,4 +352,8 @@ func (UnimplementedPrivateDrawServiceHandler) GetFlexibleRoundRobinDrawLeaderboa
 
 func (UnimplementedPrivateDrawServiceHandler) FlexibleRoundRobinDrawChangeRoundDate(context.Context, *connect_go.Request[flexible_round_robin.FlexibleRoundRobinDrawChangeRoundDateRequest]) (*connect_go.Response[flexible_round_robin.FlexibleRoundRobinDrawChangeRoundDateResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.PrivateDrawService.FlexibleRoundRobinDrawChangeRoundDate is not implemented"))
+}
+
+func (UnimplementedPrivateDrawServiceHandler) SetFlexibleRoundRobinDrawFixtureScore(context.Context, *connect_go.Request[flexible_round_robin.SetFlexibleRoundRobinDrawFixtureScoreRequest]) (*connect_go.Response[flexible_round_robin.SetFlexibleRoundRobinDrawFixtureScoreResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("draw.v1.private.PrivateDrawService.SetFlexibleRoundRobinDrawFixtureScore is not implemented"))
 }
