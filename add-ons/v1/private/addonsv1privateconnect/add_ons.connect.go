@@ -36,11 +36,15 @@ const (
 	// PrivateAddonsServiceEnableAddonProcedure is the fully-qualified name of the
 	// PrivateAddonsService's EnableAddon RPC.
 	PrivateAddonsServiceEnableAddonProcedure = "/addons.v1.private.PrivateAddonsService/EnableAddon"
+	// PrivateAddonsServiceListAddonsProcedure is the fully-qualified name of the PrivateAddonsService's
+	// ListAddons RPC.
+	PrivateAddonsServiceListAddonsProcedure = "/addons.v1.private.PrivateAddonsService/ListAddons"
 )
 
 // PrivateAddonsServiceClient is a client for the addons.v1.private.PrivateAddonsService service.
 type PrivateAddonsServiceClient interface {
 	EnableAddon(context.Context, *connect_go.Request[private.EnableAddonRequest]) (*connect_go.Response[private.EnableAddonResponse], error)
+	ListAddons(context.Context, *connect_go.Request[private.ListAddonsRequest]) (*connect_go.Response[private.ListAddonsResponse], error)
 }
 
 // NewPrivateAddonsServiceClient constructs a client for the addons.v1.private.PrivateAddonsService
@@ -58,12 +62,18 @@ func NewPrivateAddonsServiceClient(httpClient connect_go.HTTPClient, baseURL str
 			baseURL+PrivateAddonsServiceEnableAddonProcedure,
 			opts...,
 		),
+		listAddons: connect_go.NewClient[private.ListAddonsRequest, private.ListAddonsResponse](
+			httpClient,
+			baseURL+PrivateAddonsServiceListAddonsProcedure,
+			opts...,
+		),
 	}
 }
 
 // privateAddonsServiceClient implements PrivateAddonsServiceClient.
 type privateAddonsServiceClient struct {
 	enableAddon *connect_go.Client[private.EnableAddonRequest, private.EnableAddonResponse]
+	listAddons  *connect_go.Client[private.ListAddonsRequest, private.ListAddonsResponse]
 }
 
 // EnableAddon calls addons.v1.private.PrivateAddonsService.EnableAddon.
@@ -71,10 +81,16 @@ func (c *privateAddonsServiceClient) EnableAddon(ctx context.Context, req *conne
 	return c.enableAddon.CallUnary(ctx, req)
 }
 
+// ListAddons calls addons.v1.private.PrivateAddonsService.ListAddons.
+func (c *privateAddonsServiceClient) ListAddons(ctx context.Context, req *connect_go.Request[private.ListAddonsRequest]) (*connect_go.Response[private.ListAddonsResponse], error) {
+	return c.listAddons.CallUnary(ctx, req)
+}
+
 // PrivateAddonsServiceHandler is an implementation of the addons.v1.private.PrivateAddonsService
 // service.
 type PrivateAddonsServiceHandler interface {
 	EnableAddon(context.Context, *connect_go.Request[private.EnableAddonRequest]) (*connect_go.Response[private.EnableAddonResponse], error)
+	ListAddons(context.Context, *connect_go.Request[private.ListAddonsRequest]) (*connect_go.Response[private.ListAddonsResponse], error)
 }
 
 // NewPrivateAddonsServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -88,10 +104,17 @@ func NewPrivateAddonsServiceHandler(svc PrivateAddonsServiceHandler, opts ...con
 		svc.EnableAddon,
 		opts...,
 	)
+	privateAddonsServiceListAddonsHandler := connect_go.NewUnaryHandler(
+		PrivateAddonsServiceListAddonsProcedure,
+		svc.ListAddons,
+		opts...,
+	)
 	return "/addons.v1.private.PrivateAddonsService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PrivateAddonsServiceEnableAddonProcedure:
 			privateAddonsServiceEnableAddonHandler.ServeHTTP(w, r)
+		case PrivateAddonsServiceListAddonsProcedure:
+			privateAddonsServiceListAddonsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -103,4 +126,8 @@ type UnimplementedPrivateAddonsServiceHandler struct{}
 
 func (UnimplementedPrivateAddonsServiceHandler) EnableAddon(context.Context, *connect_go.Request[private.EnableAddonRequest]) (*connect_go.Response[private.EnableAddonResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("addons.v1.private.PrivateAddonsService.EnableAddon is not implemented"))
+}
+
+func (UnimplementedPrivateAddonsServiceHandler) ListAddons(context.Context, *connect_go.Request[private.ListAddonsRequest]) (*connect_go.Response[private.ListAddonsResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("addons.v1.private.PrivateAddonsService.ListAddons is not implemented"))
 }
