@@ -40,6 +40,9 @@ const (
 	// PrivateRemoteScoringServiceListScoresProcedure is the fully-qualified name of the
 	// PrivateRemoteScoringService's ListScores RPC.
 	PrivateRemoteScoringServiceListScoresProcedure = "/remote_scoring.v1.private.PrivateRemoteScoringService/ListScores"
+	// PrivateRemoteScoringServiceDeleteScoreProcedure is the fully-qualified name of the
+	// PrivateRemoteScoringService's DeleteScore RPC.
+	PrivateRemoteScoringServiceDeleteScoreProcedure = "/remote_scoring.v1.private.PrivateRemoteScoringService/DeleteScore"
 )
 
 // PrivateRemoteScoringServiceClient is a client for the
@@ -47,6 +50,7 @@ const (
 type PrivateRemoteScoringServiceClient interface {
 	UploadScore(context.Context, *connect_go.Request[private.UploadScoreRequest]) (*connect_go.Response[private.UploadScoreResponse], error)
 	ListScores(context.Context, *connect_go.Request[private.ListScoresRequest]) (*connect_go.Response[private.ListScoresResponse], error)
+	DeleteScore(context.Context, *connect_go.Request[private.DeleteScoreRequest]) (*connect_go.Response[private.DeleteScoreResponse], error)
 }
 
 // NewPrivateRemoteScoringServiceClient constructs a client for the
@@ -70,6 +74,11 @@ func NewPrivateRemoteScoringServiceClient(httpClient connect_go.HTTPClient, base
 			baseURL+PrivateRemoteScoringServiceListScoresProcedure,
 			opts...,
 		),
+		deleteScore: connect_go.NewClient[private.DeleteScoreRequest, private.DeleteScoreResponse](
+			httpClient,
+			baseURL+PrivateRemoteScoringServiceDeleteScoreProcedure,
+			opts...,
+		),
 	}
 }
 
@@ -77,6 +86,7 @@ func NewPrivateRemoteScoringServiceClient(httpClient connect_go.HTTPClient, base
 type privateRemoteScoringServiceClient struct {
 	uploadScore *connect_go.Client[private.UploadScoreRequest, private.UploadScoreResponse]
 	listScores  *connect_go.Client[private.ListScoresRequest, private.ListScoresResponse]
+	deleteScore *connect_go.Client[private.DeleteScoreRequest, private.DeleteScoreResponse]
 }
 
 // UploadScore calls remote_scoring.v1.private.PrivateRemoteScoringService.UploadScore.
@@ -89,11 +99,17 @@ func (c *privateRemoteScoringServiceClient) ListScores(ctx context.Context, req 
 	return c.listScores.CallUnary(ctx, req)
 }
 
+// DeleteScore calls remote_scoring.v1.private.PrivateRemoteScoringService.DeleteScore.
+func (c *privateRemoteScoringServiceClient) DeleteScore(ctx context.Context, req *connect_go.Request[private.DeleteScoreRequest]) (*connect_go.Response[private.DeleteScoreResponse], error) {
+	return c.deleteScore.CallUnary(ctx, req)
+}
+
 // PrivateRemoteScoringServiceHandler is an implementation of the
 // remote_scoring.v1.private.PrivateRemoteScoringService service.
 type PrivateRemoteScoringServiceHandler interface {
 	UploadScore(context.Context, *connect_go.Request[private.UploadScoreRequest]) (*connect_go.Response[private.UploadScoreResponse], error)
 	ListScores(context.Context, *connect_go.Request[private.ListScoresRequest]) (*connect_go.Response[private.ListScoresResponse], error)
+	DeleteScore(context.Context, *connect_go.Request[private.DeleteScoreRequest]) (*connect_go.Response[private.DeleteScoreResponse], error)
 }
 
 // NewPrivateRemoteScoringServiceHandler builds an HTTP handler from the service implementation. It
@@ -112,12 +128,19 @@ func NewPrivateRemoteScoringServiceHandler(svc PrivateRemoteScoringServiceHandle
 		svc.ListScores,
 		opts...,
 	)
+	privateRemoteScoringServiceDeleteScoreHandler := connect_go.NewUnaryHandler(
+		PrivateRemoteScoringServiceDeleteScoreProcedure,
+		svc.DeleteScore,
+		opts...,
+	)
 	return "/remote_scoring.v1.private.PrivateRemoteScoringService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PrivateRemoteScoringServiceUploadScoreProcedure:
 			privateRemoteScoringServiceUploadScoreHandler.ServeHTTP(w, r)
 		case PrivateRemoteScoringServiceListScoresProcedure:
 			privateRemoteScoringServiceListScoresHandler.ServeHTTP(w, r)
+		case PrivateRemoteScoringServiceDeleteScoreProcedure:
+			privateRemoteScoringServiceDeleteScoreHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -133,4 +156,8 @@ func (UnimplementedPrivateRemoteScoringServiceHandler) UploadScore(context.Conte
 
 func (UnimplementedPrivateRemoteScoringServiceHandler) ListScores(context.Context, *connect_go.Request[private.ListScoresRequest]) (*connect_go.Response[private.ListScoresResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("remote_scoring.v1.private.PrivateRemoteScoringService.ListScores is not implemented"))
+}
+
+func (UnimplementedPrivateRemoteScoringServiceHandler) DeleteScore(context.Context, *connect_go.Request[private.DeleteScoreRequest]) (*connect_go.Response[private.DeleteScoreResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("remote_scoring.v1.private.PrivateRemoteScoringService.DeleteScore is not implemented"))
 }
