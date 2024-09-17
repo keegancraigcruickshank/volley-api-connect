@@ -36,6 +36,9 @@ const (
 	// PrivateAddonsServiceEnableAddonProcedure is the fully-qualified name of the
 	// PrivateAddonsService's EnableAddon RPC.
 	PrivateAddonsServiceEnableAddonProcedure = "/addons.v1.private.PrivateAddonsService/EnableAddon"
+	// PrivateAddonsServiceDisableAddonProcedure is the fully-qualified name of the
+	// PrivateAddonsService's DisableAddon RPC.
+	PrivateAddonsServiceDisableAddonProcedure = "/addons.v1.private.PrivateAddonsService/DisableAddon"
 	// PrivateAddonsServiceListAddonsProcedure is the fully-qualified name of the PrivateAddonsService's
 	// ListAddons RPC.
 	PrivateAddonsServiceListAddonsProcedure = "/addons.v1.private.PrivateAddonsService/ListAddons"
@@ -44,6 +47,7 @@ const (
 // PrivateAddonsServiceClient is a client for the addons.v1.private.PrivateAddonsService service.
 type PrivateAddonsServiceClient interface {
 	EnableAddon(context.Context, *connect_go.Request[private.EnableAddonRequest]) (*connect_go.Response[private.EnableAddonResponse], error)
+	DisableAddon(context.Context, *connect_go.Request[private.DisableAddonRequest]) (*connect_go.Response[private.DisableAddonResponse], error)
 	ListAddons(context.Context, *connect_go.Request[private.ListAddonsRequest]) (*connect_go.Response[private.ListAddonsResponse], error)
 }
 
@@ -62,6 +66,11 @@ func NewPrivateAddonsServiceClient(httpClient connect_go.HTTPClient, baseURL str
 			baseURL+PrivateAddonsServiceEnableAddonProcedure,
 			opts...,
 		),
+		disableAddon: connect_go.NewClient[private.DisableAddonRequest, private.DisableAddonResponse](
+			httpClient,
+			baseURL+PrivateAddonsServiceDisableAddonProcedure,
+			opts...,
+		),
 		listAddons: connect_go.NewClient[private.ListAddonsRequest, private.ListAddonsResponse](
 			httpClient,
 			baseURL+PrivateAddonsServiceListAddonsProcedure,
@@ -72,13 +81,19 @@ func NewPrivateAddonsServiceClient(httpClient connect_go.HTTPClient, baseURL str
 
 // privateAddonsServiceClient implements PrivateAddonsServiceClient.
 type privateAddonsServiceClient struct {
-	enableAddon *connect_go.Client[private.EnableAddonRequest, private.EnableAddonResponse]
-	listAddons  *connect_go.Client[private.ListAddonsRequest, private.ListAddonsResponse]
+	enableAddon  *connect_go.Client[private.EnableAddonRequest, private.EnableAddonResponse]
+	disableAddon *connect_go.Client[private.DisableAddonRequest, private.DisableAddonResponse]
+	listAddons   *connect_go.Client[private.ListAddonsRequest, private.ListAddonsResponse]
 }
 
 // EnableAddon calls addons.v1.private.PrivateAddonsService.EnableAddon.
 func (c *privateAddonsServiceClient) EnableAddon(ctx context.Context, req *connect_go.Request[private.EnableAddonRequest]) (*connect_go.Response[private.EnableAddonResponse], error) {
 	return c.enableAddon.CallUnary(ctx, req)
+}
+
+// DisableAddon calls addons.v1.private.PrivateAddonsService.DisableAddon.
+func (c *privateAddonsServiceClient) DisableAddon(ctx context.Context, req *connect_go.Request[private.DisableAddonRequest]) (*connect_go.Response[private.DisableAddonResponse], error) {
+	return c.disableAddon.CallUnary(ctx, req)
 }
 
 // ListAddons calls addons.v1.private.PrivateAddonsService.ListAddons.
@@ -90,6 +105,7 @@ func (c *privateAddonsServiceClient) ListAddons(ctx context.Context, req *connec
 // service.
 type PrivateAddonsServiceHandler interface {
 	EnableAddon(context.Context, *connect_go.Request[private.EnableAddonRequest]) (*connect_go.Response[private.EnableAddonResponse], error)
+	DisableAddon(context.Context, *connect_go.Request[private.DisableAddonRequest]) (*connect_go.Response[private.DisableAddonResponse], error)
 	ListAddons(context.Context, *connect_go.Request[private.ListAddonsRequest]) (*connect_go.Response[private.ListAddonsResponse], error)
 }
 
@@ -104,6 +120,11 @@ func NewPrivateAddonsServiceHandler(svc PrivateAddonsServiceHandler, opts ...con
 		svc.EnableAddon,
 		opts...,
 	)
+	privateAddonsServiceDisableAddonHandler := connect_go.NewUnaryHandler(
+		PrivateAddonsServiceDisableAddonProcedure,
+		svc.DisableAddon,
+		opts...,
+	)
 	privateAddonsServiceListAddonsHandler := connect_go.NewUnaryHandler(
 		PrivateAddonsServiceListAddonsProcedure,
 		svc.ListAddons,
@@ -113,6 +134,8 @@ func NewPrivateAddonsServiceHandler(svc PrivateAddonsServiceHandler, opts ...con
 		switch r.URL.Path {
 		case PrivateAddonsServiceEnableAddonProcedure:
 			privateAddonsServiceEnableAddonHandler.ServeHTTP(w, r)
+		case PrivateAddonsServiceDisableAddonProcedure:
+			privateAddonsServiceDisableAddonHandler.ServeHTTP(w, r)
 		case PrivateAddonsServiceListAddonsProcedure:
 			privateAddonsServiceListAddonsHandler.ServeHTTP(w, r)
 		default:
@@ -126,6 +149,10 @@ type UnimplementedPrivateAddonsServiceHandler struct{}
 
 func (UnimplementedPrivateAddonsServiceHandler) EnableAddon(context.Context, *connect_go.Request[private.EnableAddonRequest]) (*connect_go.Response[private.EnableAddonResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("addons.v1.private.PrivateAddonsService.EnableAddon is not implemented"))
+}
+
+func (UnimplementedPrivateAddonsServiceHandler) DisableAddon(context.Context, *connect_go.Request[private.DisableAddonRequest]) (*connect_go.Response[private.DisableAddonResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("addons.v1.private.PrivateAddonsService.DisableAddon is not implemented"))
 }
 
 func (UnimplementedPrivateAddonsServiceHandler) ListAddons(context.Context, *connect_go.Request[private.ListAddonsRequest]) (*connect_go.Response[private.ListAddonsResponse], error) {
