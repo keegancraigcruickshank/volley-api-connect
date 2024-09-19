@@ -1,19 +1,60 @@
-name: main
+name: Create Release on Push to Main
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
-    name: 🆙 Increase version
+  release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Create an incremental release
-        uses: aurestic/incrementarl-create-release@master
+      - name: Checkout code
+        uses: actions/checkout@v3
         with:
-          flag_branch: false
-          message: Create release tag
-          prev_tag: 'v'
-          update_odoo_module_version: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Get latest tag
+        id: get-latest-tag
+        run: |
+          git fetch --tags
+          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
+
+      - name: Parse version and increment
+        id: version
+        run: |
+          latest_tag=${{ steps.get-latest-tag.outputs.latest_tag }}
+          IFS='.' read -ra VERSION_PARTS <<< "${latest_tag#v}"
+          major=${VERSION_PARTS[0]}
+          minor=${VERSION_PARTS[1]}
+          patch=${VERSION_PARTS[2]}
+          
+          commit_message=$(git log -1 --pretty=%B)
+          if [[ $commit_message == \[Major\]* ]]; then
+            major=$((major + 1))
+            minor=0
+            patch=0
+          elif [[ $commit_message == \[Minor\]* ]]; then
+            minor=$((minor + 1))
+            patch=0
+          else
+            patch=$((patch + 1))
+          fi
+          
+          new_version="v$major.$minor.$patch"
+          echo "new_version=$new_version" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.version.outputs.new_version }}
+          name: Release ${{ steps.version.outputs.new_version }}
+          body: |
+            This is an automated release for version ${{ steps.version.outputs.new_version }}
+            
+            Commit message: ${{ github.event.head_commit.message }}
+          draft: false
+          prerelease: false
+          makeLatest: true
+          token: ${{ secrets.GITHUB_TOKEN }}
