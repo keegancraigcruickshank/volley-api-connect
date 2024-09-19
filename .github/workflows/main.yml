@@ -1,9 +1,6 @@
 name: Create Release on Push to Main
 
-on:
-  push:
-    branches:
-      - main
+on: push
 
 jobs:
   release:
