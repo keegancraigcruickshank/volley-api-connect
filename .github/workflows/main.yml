@@ -2,20 +2,14 @@ name: main
 
 on: push
 
-jobs:
-  build:
+jobs:      
+  create_release:
     name: 🆙 Increase version
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Create an incremental release
-        uses: aurestic/incrementarl-create-release@master
+      - uses: actions/checkout@v4
+      
+      - name: Create Release
+        uses: lgvalle/create-release-action@release/v0.4.3
         with:
-          flag_branch: false
-          message: Create release tag
-          prev_tag: 'v'
-          update_odoo_module_version: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
