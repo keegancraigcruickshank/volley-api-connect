@@ -7,6 +7,7 @@ on:
 
 jobs:
   release:
+    name: 🆙 Update and Publish Version
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -14,44 +15,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get latest tag
-        id: get-latest-tag
+      - name: Extract version from commit message
+        id: extract-version
         run: |
-          git fetch --tags
-          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
-
-      - name: Parse version and increment
-        id: version
-        run: |
-          latest_tag=${{ steps.get-latest-tag.outputs.latest_tag }}
-          IFS='.' read -ra VERSION_PARTS <<< "${latest_tag#v}"
-          major=${VERSION_PARTS[0]}
-          minor=${VERSION_PARTS[1]}
-          patch=${VERSION_PARTS[2]}
-          
           commit_message=$(git log -1 --pretty=%B)
-          if [[ $commit_message == \[Major\]* ]]; then
-            major=$((major + 1))
-            minor=0
-            patch=0
-          elif [[ $commit_message == \[Minor\]* ]]; then
-            minor=$((minor + 1))
-            patch=0
+          if [[ $commit_message =~ \[v([0-9]+\.[0-9]+\.[0-9]+)\] ]]; then
+            version="${BASH_REMATCH[1]}"
+            echo "version=v$version" >> $GITHUB_OUTPUT
           else
-            patch=$((patch + 1))
+            echo "No version found in commit message. Exiting."
+            exit 1
           fi
-          
-          new_version="v$major.$minor.$patch"
-          echo "new_version=$new_version" >> $GITHUB_OUTPUT
 
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.version.outputs.new_version }}
-          name: Release ${{ steps.version.outputs.new_version }}
+          tag: ${{ steps.extract-version.outputs.version }}
+          name: Release ${{ steps.extract-version.outputs.version }}
           body: |
-            This is an automated release for version ${{ steps.version.outputs.new_version }}
+            This is an automated release for version ${{ steps.extract-version.outputs.version }}
             
             Commit message: ${{ github.event.head_commit.message }}
           draft: false
