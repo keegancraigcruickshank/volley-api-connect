@@ -28,7 +28,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.extract-version.outputs.version }}
-          name: Release ${{ steps.extract-version.outputs.version }}
+          name: ${{ steps.extract-version.outputs.version }}
           body: |
             This is an automated release for version ${{ steps.extract-version.outputs.version }}
             
