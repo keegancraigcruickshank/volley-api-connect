@@ -147,7 +147,7 @@ func (x *UploadScoreResponse) GetScoreId() string {
 	return ""
 }
 
-type ListScoresRequest struct {
+type ListScoresFilter struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -155,10 +155,60 @@ type ListScoresRequest struct {
 	Date *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty"`
 }
 
+func (x *ListScoresFilter) Reset() {
+	*x = ListScoresFilter{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListScoresFilter) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListScoresFilter) ProtoMessage() {}
+
+func (x *ListScoresFilter) ProtoReflect() protoreflect.Message {
+	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListScoresFilter.ProtoReflect.Descriptor instead.
+func (*ListScoresFilter) Descriptor() ([]byte, []int) {
+	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ListScoresFilter) GetDate() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Date
+	}
+	return nil
+}
+
+type ListScoresRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Query    string            `protobuf:"bytes,1,opt,name=query,proto3" json:"query,omitempty"`
+	Page     *int32            `protobuf:"varint,2,opt,name=page,proto3,oneof" json:"page,omitempty"`
+	PageSize *int32            `protobuf:"varint,3,opt,name=pageSize,proto3,oneof" json:"pageSize,omitempty"`
+	Filter   *ListScoresFilter `protobuf:"bytes,5,opt,name=filter,proto3,oneof" json:"filter,omitempty"`
+}
+
 func (x *ListScoresRequest) Reset() {
 	*x = ListScoresRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[2]
+		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -171,7 +221,7 @@ func (x *ListScoresRequest) String() string {
 func (*ListScoresRequest) ProtoMessage() {}
 
 func (x *ListScoresRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[2]
+	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -184,12 +234,33 @@ func (x *ListScoresRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListScoresRequest.ProtoReflect.Descriptor instead.
 func (*ListScoresRequest) Descriptor() ([]byte, []int) {
-	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{2}
+	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ListScoresRequest) GetDate() *timestamppb.Timestamp {
+func (x *ListScoresRequest) GetQuery() string {
 	if x != nil {
-		return x.Date
+		return x.Query
+	}
+	return ""
+}
+
+func (x *ListScoresRequest) GetPage() int32 {
+	if x != nil && x.Page != nil {
+		return *x.Page
+	}
+	return 0
+}
+
+func (x *ListScoresRequest) GetPageSize() int32 {
+	if x != nil && x.PageSize != nil {
+		return *x.PageSize
+	}
+	return 0
+}
+
+func (x *ListScoresRequest) GetFilter() *ListScoresFilter {
+	if x != nil {
+		return x.Filter
 	}
 	return nil
 }
@@ -205,7 +276,7 @@ type ListScoresResponse struct {
 func (x *ListScoresResponse) Reset() {
 	*x = ListScoresResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[3]
+		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -218,7 +289,7 @@ func (x *ListScoresResponse) String() string {
 func (*ListScoresResponse) ProtoMessage() {}
 
 func (x *ListScoresResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[3]
+	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -231,7 +302,7 @@ func (x *ListScoresResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListScoresResponse.ProtoReflect.Descriptor instead.
 func (*ListScoresResponse) Descriptor() ([]byte, []int) {
-	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{3}
+	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ListScoresResponse) GetScores() []*ListScoresResponse_Score {
@@ -252,7 +323,7 @@ type DeleteScoreRequest struct {
 func (x *DeleteScoreRequest) Reset() {
 	*x = DeleteScoreRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[4]
+		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -265,7 +336,7 @@ func (x *DeleteScoreRequest) String() string {
 func (*DeleteScoreRequest) ProtoMessage() {}
 
 func (x *DeleteScoreRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[4]
+	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -278,7 +349,7 @@ func (x *DeleteScoreRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteScoreRequest.ProtoReflect.Descriptor instead.
 func (*DeleteScoreRequest) Descriptor() ([]byte, []int) {
-	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{4}
+	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *DeleteScoreRequest) GetScoreId() string {
@@ -297,7 +368,7 @@ type DeleteScoreResponse struct {
 func (x *DeleteScoreResponse) Reset() {
 	*x = DeleteScoreResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[5]
+		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -310,7 +381,7 @@ func (x *DeleteScoreResponse) String() string {
 func (*DeleteScoreResponse) ProtoMessage() {}
 
 func (x *DeleteScoreResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[5]
+	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -323,7 +394,7 @@ func (x *DeleteScoreResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteScoreResponse.ProtoReflect.Descriptor instead.
 func (*DeleteScoreResponse) Descriptor() ([]byte, []int) {
-	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{5}
+	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{6}
 }
 
 type UpdateScoreRequest struct {
@@ -342,7 +413,7 @@ type UpdateScoreRequest struct {
 func (x *UpdateScoreRequest) Reset() {
 	*x = UpdateScoreRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[6]
+		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -355,7 +426,7 @@ func (x *UpdateScoreRequest) String() string {
 func (*UpdateScoreRequest) ProtoMessage() {}
 
 func (x *UpdateScoreRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[6]
+	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -368,7 +439,7 @@ func (x *UpdateScoreRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateScoreRequest.ProtoReflect.Descriptor instead.
 func (*UpdateScoreRequest) Descriptor() ([]byte, []int) {
-	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{6}
+	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *UpdateScoreRequest) GetScoreId() string {
@@ -422,7 +493,7 @@ type UpdateScoreResponse struct {
 func (x *UpdateScoreResponse) Reset() {
 	*x = UpdateScoreResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[7]
+		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -435,7 +506,7 @@ func (x *UpdateScoreResponse) String() string {
 func (*UpdateScoreResponse) ProtoMessage() {}
 
 func (x *UpdateScoreResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[7]
+	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -448,7 +519,7 @@ func (x *UpdateScoreResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateScoreResponse.ProtoReflect.Descriptor instead.
 func (*UpdateScoreResponse) Descriptor() ([]byte, []int) {
-	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{7}
+	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{8}
 }
 
 type ListScoresResponse_Score struct {
@@ -467,7 +538,7 @@ type ListScoresResponse_Score struct {
 func (x *ListScoresResponse_Score) Reset() {
 	*x = ListScoresResponse_Score{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[8]
+		mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -480,7 +551,7 @@ func (x *ListScoresResponse_Score) String() string {
 func (*ListScoresResponse_Score) ProtoMessage() {}
 
 func (x *ListScoresResponse_Score) ProtoReflect() protoreflect.Message {
-	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[8]
+	mi := &file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -493,7 +564,7 @@ func (x *ListScoresResponse_Score) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListScoresResponse_Score.ProtoReflect.Descriptor instead.
 func (*ListScoresResponse_Score) Descriptor() ([]byte, []int) {
-	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{3, 0}
+	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP(), []int{4, 0}
 }
 
 func (x *ListScoresResponse_Score) GetScoreId() string {
@@ -564,11 +635,24 @@ var file_remote_scoring_v1_private_remote_scoring_proto_rawDesc = []byte{
 	0x70, 0x6c, 0x61, 0x79, 0x65, 0x64, 0x41, 0x74, 0x22, 0x30, 0x0a, 0x13, 0x55, 0x70, 0x6c, 0x6f,
 	0x61, 0x64, 0x53, 0x63, 0x6f, 0x72, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
 	0x19, 0x0a, 0x08, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x07, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x49, 0x64, 0x22, 0x43, 0x0a, 0x11, 0x4c, 0x69,
-	0x73, 0x74, 0x53, 0x63, 0x6f, 0x72, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
-	0x2e, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e,
-	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x04, 0x64, 0x61, 0x74, 0x65, 0x22,
+	0x09, 0x52, 0x07, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x49, 0x64, 0x22, 0x42, 0x0a, 0x10, 0x4c, 0x69,
+	0x73, 0x74, 0x53, 0x63, 0x6f, 0x72, 0x65, 0x73, 0x46, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x12, 0x2e,
+	0x0a, 0x04, 0x64, 0x61, 0x74, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54,
+	0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x04, 0x64, 0x61, 0x74, 0x65, 0x22, 0xce,
+	0x01, 0x0a, 0x11, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x63, 0x6f, 0x72, 0x65, 0x73, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x71, 0x75, 0x65, 0x72, 0x79, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x05, 0x71, 0x75, 0x65, 0x72, 0x79, 0x12, 0x17, 0x0a, 0x04, 0x70, 0x61,
+	0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x48, 0x00, 0x52, 0x04, 0x70, 0x61, 0x67, 0x65,
+	0x88, 0x01, 0x01, 0x12, 0x1f, 0x0a, 0x08, 0x70, 0x61, 0x67, 0x65, 0x53, 0x69, 0x7a, 0x65, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x05, 0x48, 0x01, 0x52, 0x08, 0x70, 0x61, 0x67, 0x65, 0x53, 0x69, 0x7a,
+	0x65, 0x88, 0x01, 0x01, 0x12, 0x48, 0x0a, 0x06, 0x66, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x18, 0x05,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x72, 0x65, 0x6d, 0x6f, 0x74, 0x65, 0x5f, 0x73, 0x63,
+	0x6f, 0x72, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65,
+	0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x63, 0x6f, 0x72, 0x65, 0x73, 0x46, 0x69, 0x6c, 0x74, 0x65,
+	0x72, 0x48, 0x02, 0x52, 0x06, 0x66, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x88, 0x01, 0x01, 0x42, 0x07,
+	0x0a, 0x05, 0x5f, 0x70, 0x61, 0x67, 0x65, 0x42, 0x0b, 0x0a, 0x09, 0x5f, 0x70, 0x61, 0x67, 0x65,
+	0x53, 0x69, 0x7a, 0x65, 0x42, 0x09, 0x0a, 0x07, 0x5f, 0x66, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x22,
 	0xcb, 0x02, 0x0a, 0x12, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x63, 0x6f, 0x72, 0x65, 0x73, 0x52, 0x65,
 	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4b, 0x0a, 0x06, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x73,
 	0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x33, 0x2e, 0x72, 0x65, 0x6d, 0x6f, 0x74, 0x65, 0x5f,
@@ -662,38 +746,40 @@ func file_remote_scoring_v1_private_remote_scoring_proto_rawDescGZIP() []byte {
 	return file_remote_scoring_v1_private_remote_scoring_proto_rawDescData
 }
 
-var file_remote_scoring_v1_private_remote_scoring_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_remote_scoring_v1_private_remote_scoring_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_remote_scoring_v1_private_remote_scoring_proto_goTypes = []interface{}{
 	(*UploadScoreRequest)(nil),       // 0: remote_scoring.v1.private.UploadScoreRequest
 	(*UploadScoreResponse)(nil),      // 1: remote_scoring.v1.private.UploadScoreResponse
-	(*ListScoresRequest)(nil),        // 2: remote_scoring.v1.private.ListScoresRequest
-	(*ListScoresResponse)(nil),       // 3: remote_scoring.v1.private.ListScoresResponse
-	(*DeleteScoreRequest)(nil),       // 4: remote_scoring.v1.private.DeleteScoreRequest
-	(*DeleteScoreResponse)(nil),      // 5: remote_scoring.v1.private.DeleteScoreResponse
-	(*UpdateScoreRequest)(nil),       // 6: remote_scoring.v1.private.UpdateScoreRequest
-	(*UpdateScoreResponse)(nil),      // 7: remote_scoring.v1.private.UpdateScoreResponse
-	(*ListScoresResponse_Score)(nil), // 8: remote_scoring.v1.private.ListScoresResponse.Score
-	(*timestamppb.Timestamp)(nil),    // 9: google.protobuf.Timestamp
+	(*ListScoresFilter)(nil),         // 2: remote_scoring.v1.private.ListScoresFilter
+	(*ListScoresRequest)(nil),        // 3: remote_scoring.v1.private.ListScoresRequest
+	(*ListScoresResponse)(nil),       // 4: remote_scoring.v1.private.ListScoresResponse
+	(*DeleteScoreRequest)(nil),       // 5: remote_scoring.v1.private.DeleteScoreRequest
+	(*DeleteScoreResponse)(nil),      // 6: remote_scoring.v1.private.DeleteScoreResponse
+	(*UpdateScoreRequest)(nil),       // 7: remote_scoring.v1.private.UpdateScoreRequest
+	(*UpdateScoreResponse)(nil),      // 8: remote_scoring.v1.private.UpdateScoreResponse
+	(*ListScoresResponse_Score)(nil), // 9: remote_scoring.v1.private.ListScoresResponse.Score
+	(*timestamppb.Timestamp)(nil),    // 10: google.protobuf.Timestamp
 }
 var file_remote_scoring_v1_private_remote_scoring_proto_depIdxs = []int32{
-	9, // 0: remote_scoring.v1.private.UploadScoreRequest.played_at:type_name -> google.protobuf.Timestamp
-	9, // 1: remote_scoring.v1.private.ListScoresRequest.date:type_name -> google.protobuf.Timestamp
-	8, // 2: remote_scoring.v1.private.ListScoresResponse.scores:type_name -> remote_scoring.v1.private.ListScoresResponse.Score
-	9, // 3: remote_scoring.v1.private.UpdateScoreRequest.played_at:type_name -> google.protobuf.Timestamp
-	9, // 4: remote_scoring.v1.private.ListScoresResponse.Score.played_at:type_name -> google.protobuf.Timestamp
-	0, // 5: remote_scoring.v1.private.PrivateRemoteScoringService.UploadScore:input_type -> remote_scoring.v1.private.UploadScoreRequest
-	2, // 6: remote_scoring.v1.private.PrivateRemoteScoringService.ListScores:input_type -> remote_scoring.v1.private.ListScoresRequest
-	4, // 7: remote_scoring.v1.private.PrivateRemoteScoringService.DeleteScore:input_type -> remote_scoring.v1.private.DeleteScoreRequest
-	6, // 8: remote_scoring.v1.private.PrivateRemoteScoringService.UpdateScore:input_type -> remote_scoring.v1.private.UpdateScoreRequest
-	1, // 9: remote_scoring.v1.private.PrivateRemoteScoringService.UploadScore:output_type -> remote_scoring.v1.private.UploadScoreResponse
-	3, // 10: remote_scoring.v1.private.PrivateRemoteScoringService.ListScores:output_type -> remote_scoring.v1.private.ListScoresResponse
-	5, // 11: remote_scoring.v1.private.PrivateRemoteScoringService.DeleteScore:output_type -> remote_scoring.v1.private.DeleteScoreResponse
-	7, // 12: remote_scoring.v1.private.PrivateRemoteScoringService.UpdateScore:output_type -> remote_scoring.v1.private.UpdateScoreResponse
-	9, // [9:13] is the sub-list for method output_type
-	5, // [5:9] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	10, // 0: remote_scoring.v1.private.UploadScoreRequest.played_at:type_name -> google.protobuf.Timestamp
+	10, // 1: remote_scoring.v1.private.ListScoresFilter.date:type_name -> google.protobuf.Timestamp
+	2,  // 2: remote_scoring.v1.private.ListScoresRequest.filter:type_name -> remote_scoring.v1.private.ListScoresFilter
+	9,  // 3: remote_scoring.v1.private.ListScoresResponse.scores:type_name -> remote_scoring.v1.private.ListScoresResponse.Score
+	10, // 4: remote_scoring.v1.private.UpdateScoreRequest.played_at:type_name -> google.protobuf.Timestamp
+	10, // 5: remote_scoring.v1.private.ListScoresResponse.Score.played_at:type_name -> google.protobuf.Timestamp
+	0,  // 6: remote_scoring.v1.private.PrivateRemoteScoringService.UploadScore:input_type -> remote_scoring.v1.private.UploadScoreRequest
+	3,  // 7: remote_scoring.v1.private.PrivateRemoteScoringService.ListScores:input_type -> remote_scoring.v1.private.ListScoresRequest
+	5,  // 8: remote_scoring.v1.private.PrivateRemoteScoringService.DeleteScore:input_type -> remote_scoring.v1.private.DeleteScoreRequest
+	7,  // 9: remote_scoring.v1.private.PrivateRemoteScoringService.UpdateScore:input_type -> remote_scoring.v1.private.UpdateScoreRequest
+	1,  // 10: remote_scoring.v1.private.PrivateRemoteScoringService.UploadScore:output_type -> remote_scoring.v1.private.UploadScoreResponse
+	4,  // 11: remote_scoring.v1.private.PrivateRemoteScoringService.ListScores:output_type -> remote_scoring.v1.private.ListScoresResponse
+	6,  // 12: remote_scoring.v1.private.PrivateRemoteScoringService.DeleteScore:output_type -> remote_scoring.v1.private.DeleteScoreResponse
+	8,  // 13: remote_scoring.v1.private.PrivateRemoteScoringService.UpdateScore:output_type -> remote_scoring.v1.private.UpdateScoreResponse
+	10, // [10:14] is the sub-list for method output_type
+	6,  // [6:10] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_remote_scoring_v1_private_remote_scoring_proto_init() }
@@ -727,7 +813,7 @@ func file_remote_scoring_v1_private_remote_scoring_proto_init() {
 			}
 		}
 		file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListScoresRequest); i {
+			switch v := v.(*ListScoresFilter); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -739,7 +825,7 @@ func file_remote_scoring_v1_private_remote_scoring_proto_init() {
 			}
 		}
 		file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListScoresResponse); i {
+			switch v := v.(*ListScoresRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -751,7 +837,7 @@ func file_remote_scoring_v1_private_remote_scoring_proto_init() {
 			}
 		}
 		file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteScoreRequest); i {
+			switch v := v.(*ListScoresResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -763,7 +849,7 @@ func file_remote_scoring_v1_private_remote_scoring_proto_init() {
 			}
 		}
 		file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteScoreResponse); i {
+			switch v := v.(*DeleteScoreRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -775,7 +861,7 @@ func file_remote_scoring_v1_private_remote_scoring_proto_init() {
 			}
 		}
 		file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateScoreRequest); i {
+			switch v := v.(*DeleteScoreResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -787,7 +873,7 @@ func file_remote_scoring_v1_private_remote_scoring_proto_init() {
 			}
 		}
 		file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateScoreResponse); i {
+			switch v := v.(*UpdateScoreRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -799,6 +885,18 @@ func file_remote_scoring_v1_private_remote_scoring_proto_init() {
 			}
 		}
 		file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateScoreResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ListScoresResponse_Score); i {
 			case 0:
 				return &v.state
@@ -811,13 +909,14 @@ func file_remote_scoring_v1_private_remote_scoring_proto_init() {
 			}
 		}
 	}
+	file_remote_scoring_v1_private_remote_scoring_proto_msgTypes[3].OneofWrappers = []interface{}{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_remote_scoring_v1_private_remote_scoring_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
