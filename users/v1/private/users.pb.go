@@ -27,18 +27,30 @@ type User struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId        string   `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	FirstName     string   `protobuf:"bytes,2,opt,name=first_name,json=firstName,proto3" json:"first_name,omitempty"`
-	LastName      string   `protobuf:"bytes,3,opt,name=last_name,json=lastName,proto3" json:"last_name,omitempty"`
-	Email         string   `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
-	OrgIds        []string `protobuf:"bytes,5,rep,name=org_ids,json=orgIds,proto3" json:"org_ids,omitempty"`
-	LastLogout    int32    `protobuf:"varint,6,opt,name=last_logout,json=lastLogout,proto3" json:"last_logout,omitempty"`
-	CreatedAt     int32    `protobuf:"varint,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     int32    `protobuf:"varint,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	DefaultOrg    string   `protobuf:"bytes,9,opt,name=default_org,json=defaultOrg,proto3" json:"default_org,omitempty"`
-	ActiveOrg     string   `protobuf:"bytes,10,opt,name=active_org,json=activeOrg,proto3" json:"active_org,omitempty"`
-	ActiveOrgName string   `protobuf:"bytes,11,opt,name=active_org_name,json=activeOrgName,proto3" json:"active_org_name,omitempty"`
-	Verified      bool     `protobuf:"varint,12,opt,name=verified,proto3" json:"verified,omitempty"`
+	// The user's unique identifier
+	UserId string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// The user's first name
+	FirstName string `protobuf:"bytes,2,opt,name=first_name,json=firstName,proto3" json:"first_name,omitempty"`
+	// The user's last name
+	LastName string `protobuf:"bytes,3,opt,name=last_name,json=lastName,proto3" json:"last_name,omitempty"`
+	// The user's email address
+	Email string `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
+	// The organisations the user is a member of
+	OrgIds []string `protobuf:"bytes,5,rep,name=org_ids,json=orgIds,proto3" json:"org_ids,omitempty"`
+	// The user's last login time
+	LastLogout int32 `protobuf:"varint,6,opt,name=last_logout,json=lastLogout,proto3" json:"last_logout,omitempty"`
+	// The time the user was created
+	CreatedAt int32 `protobuf:"varint,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// The time the user was last updated
+	UpdatedAt int32 `protobuf:"varint,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	// The user's default organisation
+	DefaultOrg string `protobuf:"bytes,9,opt,name=default_org,json=defaultOrg,proto3" json:"default_org,omitempty"`
+	// The user's active organisation
+	ActiveOrg string `protobuf:"bytes,10,opt,name=active_org,json=activeOrg,proto3" json:"active_org,omitempty"`
+	// The name of the user's active organisation
+	ActiveOrgName string `protobuf:"bytes,11,opt,name=active_org_name,json=activeOrgName,proto3" json:"active_org_name,omitempty"`
+	// Whether the user has verified their email address
+	Verified bool `protobuf:"varint,12,opt,name=verified,proto3" json:"verified,omitempty"`
 }
 
 func (x *User) Reset() {
